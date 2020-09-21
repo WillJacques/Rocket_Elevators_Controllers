@@ -1,0 +1,20 @@
+-----Residential services from floor 1(RC) to floor 10(MAX)
+-----Controlled features : -Column -Cage -Call Button -Doors -Floor Call Button
+-----Exigences complémentaires:
+"Logique de priorisation des ascenceurs"
+--En cas d’appel sur une cage en mouvement, quel ascenseur envoyer?
+--En fonction de la direction
+--En fonction d’appels et de requêtes à plusieurs étages
+"Logique de retour à l’origine"
+--Est-il préférable d’avoir un ascenseur en attente au rez-de-chaussée?
+"Logique de sécurité"
+Routines de vérification de l’état des systèmes avant de les utiliser
+Comportements sécuritaire des équipements (Délais, décisions)
+"Logique temporelle"
+Fournir au système une conscience des horaires pour affecter des ascenceurs aux étages les plus susceptibles d’être 
+utilisés à des moments spécifiques de la journée, de la semaine…
+Mesurer les temps d’attente des appels pour assurer que chaque usager atteint sa destination dans des délais acceptable
+"Logique de chargement"
+Détecter un ascenseur plein
+Mis en corrélation avec le temps d’attente, comment assurer un service aux étages lorsque les cages quittent l’origine 
+systématiquement pleines?
