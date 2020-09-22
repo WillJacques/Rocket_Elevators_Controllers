@@ -1,43 +1,75 @@
-"Logique de priorisation des ascenceurs"
-'En cas d’appel sur une cage en mouvement, quel ascenseur envoyer?
-'En fonction de la direction
-'En fonction d’appels et de requêtes à plusieurs étages
-"Logique de retour à l’origine"
-'Est-il préférable d’avoir un ascenseur en attente au rez-de-chaussée?
-"Logique de sécurité"
-'Routines de vérification de l’état des systèmes avant de les utiliser
-'Comportements sécuritaire des équipements (Délais, décisions)
-"Logique temporelle"
-'Fournir au système une conscience des horaires pour affecter des ascenceurs aux étages les plus susceptibles d’être utilisés à des moments spécifiques de la journée, de la semaine…
-'Mesurer les temps d’attente des appels pour assurer que chaque usager atteint sa destination dans des délais acceptable
-"Logique de chargement"
-'Détecter un ascenseur plein
-'Mis en corrélation avec le temps d’attente, comment assurer un service aux étages lorsque les cages quittent l’origine systématiquement pleines?
---------------------
 
-DEFINE Column USING id AND status:
+DEFINE Column USING id, status, floor_quantity and elevator_amount:
     column_ID: id,
     column_Status: [Online, Offline]
     elevator_amount: 2,
-    QueueOfFloorRequest : [],
+    queue_FloorRequestUP : [EMPTY ARRAY],
+    queue_FloorRequestDOWN : [EMPTY ARRAY],
     minimumFloorNumber : 1,
-    maximumFloorNumber : 10,
-    numberOfFloors : 10,
-    powered : TRUE/FALSE,
-    Clock : Actual Time,
+    maximumFloorNumber : floor_quantity,
+    powered : TRUE,
+    preferedFloor : 1,
+    clock : Actual Time,
+
+    SEQUENCE "setpreferedFloor" USING clock
+        IF clock > 7.5 and < 8.5 THEN
+            SET preferedfloor to maximumFloorNumber
+        IF clock > 12.5 and < 13.5 THEN
+            SET preferedfloor to maximumFloorNumber
+        ELSE THEN
+            SET preferedFloor to 1
+        ENDIF
 
     SEQUENCE "createElevatorList" USING elevator_amount
-        SET Elevator1 TO INSTANTIATE Elevator WITH 1 AND online
-        SET Elevator2 TO INSTANTIATE Elevator WITH 2 AND online
+        FOR i <= Columm.elevator_amount, 
+            SET Elevator(i) TO INSTANTIATE Elevator WITH elevator_ID : i AND status : Online THEN 
+            increment i
     ENDSEQUENCE
 
-    SEQUENCE "createFloorList" USING numberOfFloors
-        FOR i < Columm.numberOfFloors, 
-        SET Floor(i) TO INSTANTIATE Floor WITH floor_ID : i
+    SEQUENCE "createFloorList" USING maximumFloorNumber
+        FOR i <= Columm.maximumFloorNumber, 
+            SET Floor(i) TO INSTANTIATE Floor WITH floor_ID : i THEN 
+            increment i
     ENDSEQUENCE
     
-    SEQUENCE "Delegate" USING QueueofFloorRequest
-    '[ENVOYER LE BON SIGNAL AU BON ASCENCEUR QUI VIENT DES BOUTONS ETAGES]
+    SEQUENCE "Delegate" USING queue_FloorRequestUP, queue_FloorRequestDOWN, Floor.buttonUp, Floor.buttonDown
+        IF user press Floor.buttonUp THEN
+            IF (ElevatorX.direction = "UP" AND ElevatorX.currentFloor < floor_ID) OR (ElevatorX.direction = "IDLE") THEN
+                IF both Elevators fits in condition THEN
+                    IF |Elevator1.currentFloor - floor_ID| < |Elevator2.currentFloor - floor_ID| THEN '|x| is use to make value absolute (remove negatives)'
+                        ADD floor_ID to Elevator1.queueToFloor
+                    ELSE THEN
+                        ADD floor_ID to Elevator2.queueToFloor
+                    ENDIF
+                ENDIF
+            ADD floor_ID to ElevatorX.queueToFloor
+            ELSE IF ElevatorX.queueToFloor = EMPTY
+            ADD floor_ID to ElevatorX.queueToFloor
+            ELSE 
+            ADD floor_ID to queue_FloorRequestUP
+            ENDIF
+        ELSE IF user press Floor.buttonDown THEN
+            IF (ElevatorX.direction = "DOWN" AND ElevatorX.currentFloor > floor_ID) OR (ElevatorX.direction = "IDLE") THEN
+                IF both Elevators fits in condition THEN
+                    IF |Elevator1.currentFloor - floor_ID| < |Elevator2.currentFloor - floor_ID| THEN '|x| is use to make value absolute (remove negatives)'
+                        ADD floor_ID to Elevator1.queueToFloor
+                    ELSE THEN
+                        ADD floor_ID to Elevator2.queueToFloor
+                    ENDIF
+                ENDIF
+            ADD floor_ID to ElevatorX.queueToFloor
+            ELSE IF ElevatorX.queueToFloor = EMPTY
+            ADD floor_ID to ElevatorX.queueToFloor
+            ELSE 
+            ADD floor_ID to queue_FloorRequestDOWN
+            ENDIF
+        ENDIF
+
+        WHEN Elevator.direction switch direction
+            IF Elevator.direction = "UP"
+            ADD Column.queue_FloorRequestUP to Elevator.queueToFloor
+            ELSE IF Elevator.direction = "DOWN"
+            ADD Column.queue_FloorRequestDOWN to Elevator.queueToFloor
     ENDSEQUENCE
 
     SEQUENCE "Halt" USING powered OR emergencyButtonPushed
@@ -49,36 +81,55 @@ DEFINE Column USING id AND status:
             SET Column status TO offline
         ENDIF    
     ENDSEQUENCE
+
 ENDDEFINE
     
 DEFINE Floor USING id:
     floor_ID: id,
-    floorCallBouttonUp : TRUE/FALSE (not for last floor),
-    floorCallButtonDown : TRUE/FALSE (not for first floor),
+    buttonUp : TRUE/FALSE (not for last floor),
+    buttonDown : TRUE/FALSE (not for first floor),
     upLight : TRUE/FALSE (not for last floor),
     downLight : TRUE/FALSE (not for first floor),
     floorDoorClose : TRUE/FALSE,
     floorDoorOpen : TRUE/FALSE,
+    buttonUpClockStart :
+    buttonUpClockStop :
+    buttonDownClockStart :
+    buttonDownClockStop :
+
+    SEQUENCE "waitingTime"
+    WHEN buttonUp TRUE THEN
+        buttonUpClockStart = Column.clock
+    WHEN 
 ENDDEFINE
 
 
 DEFINE Elevator USING id
     ID: id,
-    direction : [UP, DOWN, WAIT, IDLE, MAINTENANCE]
-    cageCallButton : [1 TO 10]
-    currentFloor : [1]
-    goingToFloor : []
-    queueToFloor : []
-    pendingQueue : []
-    elevatorDoor : TRUE/FALSE
-    elevatorDoorOpen : TRUE/FALSE
-    emergencyButtonPushed : TRUE/FALSE
-    preferedFloor : []
-    Status: [Online, Offline]
+    direction : [UP, DOWN, WAIT, IDLE, MAINTENANCE],
+    buttonNumber : [1 TO 10],
+    currentFloor : [1],
+    goingToFloor : [],
+    queueToFloor : [],
+    pendingQueue : [],
+    weightMesure : [] 'kg',
+    weightCapacity : 2000 'Kg',
+    elevatorDoor : TRUE/FALSE,
+    elevatorDoorOpen : TRUE/FALSE,
+    emergencyButtonPushed : TRUE/FALSE,
+    Status: [Online, Offline],
     
+    SEQUENCE "elevatorCapacity"
+        IF weightMesure < weightCapacity
+            SET status TO online
+        ELSE IF weightMesure > weightCapacity
+            SET status TO offline THEN
+            Display message : "You are exceeding weight capacity"
+        ENDIF
+
     SEQUENCE "operate" USING goingToFloor
 
-        IF Column SEQUENCE "delegate" New Floor THEN  
+        IF Column SEQUENCE "delegate" New Floors THEN  
             IF Elevator.direction = "UP" THEN
                 ADD Column.newFloor to Elevator.queueToFloor THEN
                 SORT Ascending Elevator.queueToFloor[] THEN
@@ -90,7 +141,7 @@ DEFINE Elevator USING id
             ENDIF
         ENDIF
 
-        WHILE (Elevator.currentFloor NOT EQUAL Elevator.goingToFloor) 
+        WHILE Elevator.currentFloor NOT EQUAL Elevator.goingToFloor THEN
             IF Elevator.direction == "UP" THEN
                 Elevator.currentFloor + 1 
             ELSE IF Elevator.direction == "DOWN" THEN
@@ -107,25 +158,25 @@ DEFINE Elevator USING id
         Elevator.direction = "IDLE"
         WAIT 7 seconds 'with open door'
 
-        Listen to Elevator.cageCallButton THEN 'Waiting for user to press floor buttons inside elevator'
+        Listen to Elevator.ButtonNumber THEN 'Waiting for user to press floor buttons inside elevator'
                     
         IF Elevator.direction = "UP" THEN
-            IF Elevator.cageCallButton > Elevator.currentFloor THEN
-                ADD Elevator.cageCallButton to Elevator.queueToFloor THEN
+            IF Elevator.ButtonNumber > Elevator.currentFloor THEN
+                ADD Elevator.ButtonNumber to Elevator.queueToFloor THEN
                 SORT Ascending Elevator.queueToFloor[] THEN
             ENDIF
-            ELSE IF Elevator.cageCallButton < Elevator.currentFloor THEN
-                ADD Elevator.cageCallButton to Elevator.pendingQueue 'the user board on the opposite side wanted'
+            ELSE IF Elevator.ButtonNumber < Elevator.currentFloor THEN
+                ADD Elevator.ButtonNumber to Elevator.pendingQueue 'the user board on the opposite side wanted'
             ENDIF
         ENDIF
 
         ELSE IF Elevator.direction = "DOWN" THEN
-                IF Elevator.cageCallButton < Elevator.currentFloor THEN
-                ADD Elevator.cageCallButton to Elevator.queueToFloor THEN
+                IF Elevator.ButtonNumber < Elevator.currentFloor THEN
+                ADD Elevator.ButtonNumber to Elevator.queueToFloor THEN
                 SORT Descending Elevator.queueToFloor[] THEN
             ENDIF
-            ELSE IF Elevator.cageCallButton > Elevator.currentFloor THEN
-                ADD Elevator.cageCallButton to Elevator.pendingQueue 'the user board on the opposite side wanted'
+            ELSE IF Elevator.ButtonNumber > Elevator.currentFloor THEN
+                ADD Elevator.ButtonNumber to Elevator.pendingQueue 'the user board on the opposite side wanted'
             ENDIF
         ENDIF
 
@@ -148,7 +199,8 @@ DEFINE Elevator USING id
             Elevator.goingToFloor = NEXT Elevator.queueToFloor
             RESTART SEQUENCE "operate"
         ELSE IF Elevator.QueueToFloor is EMPTY AND Elevator.pendingQueue is EMPTY THEN
-            FOR 30 seconds WAIT for Column to send new Elevator.goingToFloor
+            FOR 30 seconds Elevator.direction = "IDLE" THEN
+                WAIT Column SEQUENCE "delegate" New Floors to Elevator.goingToFloor
             ENDFOR THEN 
             Elevator.goingToFloor = Column.preferedFloor
             IF Elevator.goingToFloor < Elevator.currentFloor
@@ -161,5 +213,19 @@ DEFINE Elevator USING id
     ENDSEQUENCE
 ENDDEFINE
 
-SET Column TO INSTANTIATE Column WITH column_ID : 1 AND column_Status : Online
-Elevator start SEQUENCE "operate"
+SET Column1 TO INSTANTIATE Column WITH column_ID : 1, column_Status : Online, floor_quantity: 10,  elevator_amount : 2
+Each Elevator start SEQUENCE "operate"
+
+
+
+
+-------------------
+"Logique de sécurité"
+'Routines de vérification de l’état des systèmes avant de les utiliser
+'Comportements sécuritaire des équipements (Délais, décisions)
+"Logique temporelle"
+'Fournir au système une conscience des horaires pour affecter des ascenceurs aux étages les plus susceptibles d’être utilisés à des moments spécifiques de la journée, de la semaine…
+'Mesurer les temps d’attente des appels pour assurer que chaque usager atteint sa destination dans des délais acceptable
+"Logique de chargement"
+'Mis en corrélation avec le temps d’attente, comment assurer un service aux étages lorsque les cages quittent l’origine systématiquement pleines?
+--------------------
