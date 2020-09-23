@@ -1,22 +1,21 @@
 
-DEFINE Column USING id, totalfloor_quantity, lowFloor, highFloor and elevator_amount
+DEFINE Column USING id, lowFloor, highFloor and elevator_amount
     column_ID: id,
     column_Online: TRUE,
     elevator_amount: elevator_amount,
     lowFloor : lowFloor
     highFloor : highFloor
-    queue_FloorRequestUP : [EMPTY ARRAY],
-    queue_FloorRequestDOWN : [EMPTY ARRAY],
-    maximumFloorNumber : totalfloor_quantity,
+    queue_FloorRequestUP : [EMPTY LIST],
+    queue_FloorRequestDOWN : [EMPTY LIST],
     powered : TRUE,
     preferedFloor : 1,
     clock : Actual_Time,
 
     SEQUENCE "setpreferedFloor" USING clock
-        IF clock > 7.5 and < 8.5 THEN
-            SET preferedfloor to highFloor
-        ELSE IF clock > 12.5 and < 13.5 THEN
-            SET preferedfloor to highFloor
+        IF clock is between 7.5 and 8.5 THEN
+            SET preferedfloor to highFloor value
+        ELSE IF clock is between 12.5 and 13.5 THEN
+            SET preferedfloor to highFloor value
         ELSE THEN
             SET preferedFloor to 1
         ENDIF
@@ -25,248 +24,270 @@ DEFINE Column USING id, totalfloor_quantity, lowFloor, highFloor and elevator_am
     Column CALL "setpreferedFloor"
 
     DEFINE Elevator USING id,
-    ID: id,
-    direction : [UP, DOWN, IDLE, SERVICE, MAINTENANCE],
-    buttonNumber : [1],
-    currentFloor : [1],
-    goingToFloor : [],
-    queueToFloor : [],
-    pendingQueue : [],
-    weightMesure : [] 'kg',
-    weightCapacity : 2000 'Kg',
-    elevatorDoorClose : TRUE,
-    elevatorDoorOpen : FALSE,
-    emergencyButtonPushed : FALSE,
-    elevator_Online : TRUE,
+        ID: id,
+        direction : "IDLE"
+        buttonNumber : [1],         'inside elevator buttonlist LIST'
+        currentFloor : 1,           'actual elevator's position'
+        goingToFloor : 1,           'target elevator floor value'
+        queueToFloor : EMPTY,       'list of assignated floors to elevator'
+        pendingQueue : EMPTY,       'list of floor button pressed in error (opposite to elevator direction)'
+        weightMesure : 0,           'kg'       
+        weightCapacity : 2000,      'Kg'
+        elevatorDoorClose : TRUE,
+        elevatorDoorOpen : FALSE,
+        emergencyButtonPushed : FALSE,
+        elevator_Online : TRUE,
 
         SEQUENCE "createbuttonNumberList" USING Column.lowFloor and Column.highFloor
-        FOR i = Column.lowFloor WHILE i <= Column.highFloor, 
-            IF i > 1 or i < 0
-                ADD i to buttonNumber array
+        FOR all numbers between Column.lowFloor and Column.highFloor, 
+            IF number greater than 1 or number smaller than 0
+                ADD number to buttonNumber list
             ENDIF
-            increment i
         ENDFOR
         ENDSEQUENCE
 
         Elevator CALL "createbuttonNumberlist"
     
         SEQUENCE "verifyWeight" USING weightMesure and weightCapacity
-            WHILE weightMesure > weightCapacity THEN
+            WHILE weightMesure greater than weightCapacity THEN
                 SET elevator_Online TO FALSE THEN
-                Display message : "You are exceeding weight capacity"
+                Display message : "You are exceeding weight capacity !"
             ENDWHILE
             SET elevator_Online TO TRUE
         ENDSEQUENCE
 
+        SEQUENCE "verifyDoorClose" USING elevatorDoorOpen and floorDoorOpen
+            WHILE elevatorDoorOpen and floorDoorOpen are not both FALSE THEN
+                SET elevator.direction to "IDLE"
+                Display message : "Something's blocking the door !"
+            ENDWHILE
+        ENDSEQUENCE
+
         SEQUENCE "operate" USING goingToFloor
-            IF Column SEQUENCE "delegate" New Floors THEN  
-                IF Elevator.direction = "UP" THEN
+            IF Column CALL "delegate" to elevator THEN  
+                IF Elevator.direction is "UP" THEN
                     ADD Column.newFloor to Elevator.queueToFloor THEN
-                    SORT Ascending Elevator.queueToFloor[] THEN
+                    SORT Ascending Elevator.queueToFloor THEN
                     Elevator.goingToFloor becomes first number in Elevator.queueToFloor[]
                 ELSE IF Elevator.direction = "DOWN" THEN
                     ADD Column.newFloor to Elevator.queueToFloor THEN
                     SORT Descending Elevator.queueToFloor[] THEN
-                    Elevator.goingToFloor = First number in Elevator.queueToFloor[]
+                    Elevator.goingToFloor becomes first number in Elevator.queueToFloor[]
                 ENDIF
             ENDIF
-            WHILE Elevator.currentFloor NOT EQUAL Elevator.goingToFloor THEN
+
+            WHILE Elevator.currentFloor is not Elevator.goingToFloor THEN
                 IF Elevator.direction == "UP" THEN
-                    Elevator.currentFloor + 1 
+                    increment Elevator.currentFloor 
                 ELSE IF Elevator.direction == "DOWN" THEN
-                    Elevator.currentFloor - 1
+                    decrement Elevator.currentFloor
                 ENDIF
             ENDWHILE
 
-            Elevator.goingToFloor = [empty]
-            Elevator.queueToFloor = remove first number in Elevator.queueToFloor
+            Elevator.goingToFloor becomes empty
+            REMOVE first number in list Elevator.queueToFloor
             
-            Elevator.openDoor()
+            SET elevatorDoorOpen to TRUE
+            SET floorDoorOpen to TRUE
             WAIT 4 seconds 'door opening'
-
-            Elevator.direction = "IDLE"
+            
+            SET Elevator.direction to "IDLE"
             WAIT 7 seconds 'with open door'
 
-            Listen to Elevator.ButtonNumber THEN 'Waiting for user to press floor buttons inside elevator'
-                        
-            IF Elevator.direction = "UP" THEN
-                IF Elevator.ButtonNumber > Elevator.currentFloor THEN
-                    ADD Elevator.ButtonNumber to Elevator.queueToFloor THEN
-                    SORT Ascending Elevator.queueToFloor[] THEN
-                ENDIF
-                ELSE IF Elevator.ButtonNumber < Elevator.currentFloor THEN
-                    ADD Elevator.ButtonNumber to Elevator.pendingQueue 'the user board on the opposite side wanted'
-                ENDIF
-            ENDIF
-
-            ELSE IF Elevator.direction = "DOWN" THEN
-                    IF Elevator.ButtonNumber < Elevator.currentFloor THEN
-                    ADD Elevator.ButtonNumber to Elevator.queueToFloor THEN
-                    SORT Descending Elevator.queueToFloor[] THEN
-                ENDIF
-                ELSE IF Elevator.ButtonNumber > Elevator.currentFloor THEN
-                    ADD Elevator.ButtonNumber to Elevator.pendingQueue 'the user board on the opposite side wanted'
-                ENDIF
-            ENDIF
-
-            Elevator.goingToFloor = Extract the next number FROM Elevator.queueToFloor
-
-            Elevator.closeDoor();
+            SET elevatorDoorOpen to FALSE
+            SET floorDoorOpen to FALSE
             WAIT 4 seconds 'door closing'
+            
+            CALL "verifyDoorClose"
             CALL "verifyWeight"
+
+            IF there is a number in Elevator.queueToFloor and is greater than Elevator.currentFloor THEN
+                SET Elevator.direction to "UP"
+            ELSE IF there is a number in Elevator.queueToFloor and is smaller than Elevator.currentFloor THEN
+                SET Elevator.direction to "DOWN"
+            ENDIF
+
+            Listen to Elevator.ButtonNumber 'Waiting for user to press floor buttons inside elevator'
+
+            IF Elevator.direction is "UP" THEN
+                IF Elevator.ButtonNumber greater than Elevator.currentFloor THEN
+                    ADD Elevator.ButtonNumber to Elevator.queueToFloor list THEN
+                    SORT Ascending Elevator.queueToFloor list
+                ENDIF
+                ELSE IF Elevator.ButtonNumber smaller than Elevator.currentFloor THEN
+                    ADD Elevator.ButtonNumber to Elevator.pendingQueue list 'if the user board on the opposite side wanted'
+                ENDIF
+            ELSE IF Elevator.direction is "DOWN" THEN
+                IF Elevator.ButtonNumber smaller than Elevator.currentFloor THEN
+                    ADD Elevator.ButtonNumber to Elevator.queueToFloor list THEN
+                    SORT Descending Elevator.queueToFloor list
+                ENDIF
+                ELSE IF Elevator.ButtonNumber greater than Elevator.currentFloor THEN
+                    ADD Elevator.ButtonNumber to Elevator.pendingQueue list 'if the user board on the opposite side wanted'
+                ENDIF
+            ENDIF
+
+            SET Elevator.goingToFloor to the next number FROM Elevator.queueToFloor list
 
             IF Elevator.goingToFloor NOT EMPTY THEN
                 RESTART SEQUENCE "operate"
-            ELSE IF Elevator.goingToFloor is EMPTY AND Elevator.pendingQueue is NOT EMPTY THEN
-                Elevator.QueueToFloor = Elevator.pendingQueue
-                    IF Elevator.direction = "UP" THEN
-                        Elevator.direction = "DOWN"
-                        SORT Descending Elevator.queueToFloor[]
-                    ELSE IF Elevator.direction = "DOWN" THEN
-                        Elevator.direction = "UP"
-                        SORT Ascending Elevator.queueToFloor[]
+            ELSE IF Elevator.goingToFloor list is EMPTY AND Elevator.pendingQueue list is NOT EMPTY THEN
+                SEND Elevator.pendingQueue list to Elevator.QueueToFloor list
+                    IF Elevator.direction is "UP" THEN
+                        SET Elevator.direction to "DOWN"
+                        SORT Descending Elevator.queueToFloor list
+                    ELSE IF Elevator.direction is "DOWN" THEN
+                        SET Elevator.direction to "UP"
+                        SORT Ascending Elevator.queueToFloor list
                     ENDIF
-                Elevator.goingToFloor = NEXT Elevator.queueToFloor
+                SET Elevator.goingToFloor to the next number FROM Elevator.queueToFloor list
                 RESTART SEQUENCE "operate"
             ELSE IF Elevator.QueueToFloor is EMPTY AND Elevator.pendingQueue is EMPTY THEN
-                FOR 30 seconds Elevator.direction = "IDLE" THEN
-                    WAIT Column SEQUENCE "delegate" New Floors to Elevator.goingToFloor
-                ENDFOR THEN 
-                Elevator.goingToFloor = Column.preferedFloor
-                IF Elevator.goingToFloor < Elevator.currentFloor
-                    Elevator.direction = "DOWN"
-                ELSE IF Elevator.goingToFloor > Elevator.currentFloor
-                    Elevator.direction = "UP"
+                WAIT 30 seconds for Column CALL "delegate" New Floors to Elevator.queueToFloor list THEN
+                ADD Column.preferedFloor to Elevator.queueToFloor list
+                IF Elevator.goingToFloor is smaller than Elevator.currentFloor
+                    SET Elevator.direction to "DOWN"
+                ELSE IF Elevator.goingToFloor greater than Elevator.currentFloor
+                    SET Elevator.direction to "UP"
                 ENDIF
                 RESTART SEQUENCE "operate"
             ENDIF
         ENDSEQUENCE
     ENDDEFINE
-
+    
     SEQUENCE "createElevatorList" USING elevator_amount, lowFloor, highFloor
-        FOR i = 1 WHILE i <= Columm.elevator_amount, 
+        FOR elevator_amout in Column 
+            BEGIN with i = 1
             SET Elevator_i TO INSTANTIATE Elevator WITH elevator_ID : i, status : Online, lowFloor : lowFloor, highFloor : highFloor THEN 
-            increment i
+            increment i at each elevator
         ENDFOR
     ENDSEQUENCE
 
-    DEFINE Floor USING id:
-    floor_ID: id,
-    buttonUp : FALSE, 
-    buttonDown : FALSE, 
-    upLight : FALSE, 
-    downLight : FALSE, 
-    floorDoorClose : TRUE,
-    floorDoorOpen : FALSE,
+    Column CALL "createElevatorList"
 
-    SEQUENCE "createFloorList" USING maximumFloorNumber
-        FOR i = 1 WHILE i <= Columm.maximumFloorNumber, 
+    DEFINE Floor USING id:
+        floor_ID: id,
+        buttonUp : FALSE, 
+        buttonDown : FALSE, 
+        upLight : FALSE, 
+        downLight : FALSE, 
+        floorDoorClose : TRUE,
+        floorDoorOpen : FALSE,
+    ENDDEFINE
+
+    SEQUENCE "createFloorList" USING lowFloor and highFloor
+        SET Floor_1 TO INSTANTIATE Floor WITH floor_ID : 1 THEN 
+        FOR each Floor between lowFloor and highFloor that doesnt equal 1
+            BEGIN with i = lowfloor
             SET Floor_i TO INSTANTIATE Floor WITH floor_ID : i THEN 
             increment i
         ENDFOR
     ENDSEQUENCE
+
+    Column CALL "createFloorList"
     
     SEQUENCE "Delegate" USING queue_FloorRequestUP, queue_FloorRequestDOWN, Floor.buttonUp, Floor.buttonDown, Floor.floor_ID
         IF user press Floor.buttonUp THEN
-            SET resultArray as an ARRAY
-            SET scoreArray as an ARRAY
-            SET bestElevatorID as an INT
-            FOR i = 1 REPEAT-UNTIL i = Columm.elevator_amount
-                IF Elevator_#i.direction = "UP" AND Elevator_#i.currentFloor < Floor.floor_ID
-                    ADD Elevator_#i.ID to resultArray
-                    ADD |Elevator_#i.currentFloor - Floor.floor_ID| to scoreArray '|x| is use to make value absolute (remove negatives)'
+            SET resultArray as a list
+            SET scoreArray as a list
+            SET bestElevatorID as a number
+            FOR all elevators in Column
+                BEGIN with i = 1
+                IF Elevator#i.direction is "UP" AND Elevator#i.currentFloor is smaller than Floor.floor_ID
+                    ADD i to resultArray list
+                    ADD |Elevator_#i.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
                 ENDIF
                 increment i
             ENDFOR
-            IF resultArray.Length = 0 THEN
-                FOR j = 1 REPEAT-UNTIL j = Columm.elevator_amount
-                    IF Elevator_#j.direction = "IDLE"
-                        ADD Elevator_#j.ID to resultArray
-                        ADD |Elevator_#j.currentFloor - Floor.floor_ID| to scoreArray THEN '|x| is use to make value absolute (remove negatives)'
+            IF resultArray list is empty THEN
+                FOR all elevators in Column
+                    BEGIN with j = 1
+                    IF Elevator#j.direction is "IDLE"
+                        ADD j to resultArray list
+                        ADD |Elevator#j.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
                     ENDIF
                     increment j
                 ENDFOR
             ENDIF             
-            IF resultArray.Length = 0 THEN
-                ADD floor_ID to queue_FloorRequestDOWN
+            IF resultArray list is empty THEN
+                ADD Floor.floor_ID to queue_FloorRequestDOWN list
             ELSE THEN
-                SET minimum = READ first number in scoreArray;
-                SET location = 0
-                FOR k = 1 REPEAT-UNTIL k < scoreArray.size
-                    IF scoreArray position k < minimum
-                        SET minimum = scoreArray position k
-                        SET location = k
+                READ first number in scoreArray list and SET it to lowValue
+                SET location to 0
+                FOR each score in scoreArray
+                    BEGIN with k = 1
+                    IF scoreArray position k is smaller than lowValue
+                        SET scoreArray position k to lowValue
+                        SET k to location
                         INCREMENT k
                     ENDIF
-                    RETURN bestElevatorID = ResultArray[location] 'AKA Elevator_i.ID'
+                    RETURN bestElevatorID = ResultArray[scoreArray.location] 'AKA Elevator_i.ID'
                 ENDFOR
                 ADD Floor.floor_ID to Elevator_#bestElevatorID.queueToFloor
             ENDIF
         ELSE IF user press Floor.buttonDown THEN
-            SET resultArray as an ARRAY
-            SET scoreArray as an ARRAY
-            SET bestElevatorID as an INT
-            FOR i = 1 REPEAT-UNTIL i = Columm.elevator_amount
-                IF Elevator_#i.direction = "DOWN" AND Elevator_#i.currentFloor > Floor.floor_ID
-                    ADD Elevator_#i.ID to resultArray
-                    ADD |Elevator_#i.currentFloor - Floor.floor_ID| to scoreArray '|x| is use to make value absolute (remove negatives)'
+            SET resultArray as a list
+            SET scoreArray as a list
+            SET bestElevatorID as a number
+            FOR all elevators in Column
+                BEGIN with i = 1
+                IF Elevator#i.direction is "DOWN" AND Elevator_#i.currentFloor is greater than Floor.floor_ID
+                    ADD i to resultArray list
+                    ADD |Elevator#i.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
                 ENDIF
                 increment i
             ENDFOR
-            IF resultArray.Length = 0 THEN
-                FOR j = 1 REPEAT-UNTIL j = Columm.elevator_amount
-                    IF Elevator_#j.direction = "IDLE"
-                        ADD Elevator_#j.ID to resultArray
-                        ADD |Elevator_#j.currentFloor - Floor.floor_ID| to scoreArray THEN '|x| is use to make value absolute (remove negatives)'
+            IF resultArray list is empty THEN
+                FOR all elevators in Column
+                    BEGIN with j = 1
+                    IF Elevator#j.direction is "IDLE"
+                        ADD j to resultArray list
+                        ADD |Elevator_#j.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
                     ENDIF
                     increment j
                 ENDFOR
             ENDIF    
-            IF resultArray.Length = 0 THEN
-                ADD floor_ID to queue_FloorRequestDOWN
-            ENDIF
-            IF resultArray.length > 0 THEN
-                SET minimum = array[0];
-                SET location = 0
-                FOR k = 1 REPEAT-UNTIL k < scoreArray.size
-                    IF scoreArray position k < minimum
-                        SET minimum = scoreArray position k
-                        SET location = k
+            IF resultArray list is empty THEN
+                ADD Floor.floor_ID to queue_FloorRequestUP list
+            ELSE THEN
+                READ first number in scoreArray list and SET it to lowValue
+                SET location to 0
+                FOR each score in scoreArray
+                    BEGIN with k = 1
+                    IF scoreArray position k is smaller than lowValue
+                        SET scoreArray position k to lowValue
+                        SET k to location
                         INCREMENT k
                     ENDIF
-                    RETURN bestElevatorID = ResultArray[location] 'AKA Elevator_i.ID'
+                    RETURN bestElevatorID = ResultArray[scoreArray.location] 'AKA Elevator_i.ID'
                 ENDFOR
                 ADD Floor.floor_ID to Elevator_#bestElevatorID.queueToFloor
             ENDIF
         ENDIF
 
-        WHEN Elevator.direction switch direction
-            IF Elevator.direction = "UP"
+        IF Elevator.direction = "UP"
             ADD Column.queue_FloorRequestUP to Elevator.queueToFloor
-            ELSE IF Elevator.direction = "DOWN"
+        ELSE IF Elevator.direction = "DOWN"
             ADD Column.queue_FloorRequestDOWN to Elevator.queueToFloor
-    ENDSEQUENCE
-
-    SEQUENCE "Halt" USING powered OR emergencyButtonPushed
-        IF Elevator.emergencyButtonPushed = TRUE THEN
-            SET Column status TO offline
         ENDIF
-
-        IF Column.powered = FALSE THEN
-            SET Column status TO offline
-        ENDIF    
     ENDSEQUENCE
 
 ENDDEFINE
     
-SET Column1 TO INSTANTIATE Column WITH column_ID : 1, totalfloor_quantity: 10, lowFloor: 1, highFloor:10   elevator_amount : 2
+SET Column1 TO INSTANTIATE Column WITH column_ID : 1, lowFloor: 1, highFloor:10, elevator_amount : 2
 
-Each Elevator CALL "operate"
+Each Elevators CALL "operate"
 
 IF Elevator.emergencyButtonPushed = TRUE THEN
-    SET Column status TO offline
+    WHILE Elevator.emergencyButtonPushed = TRUE
+    SET column_Online: FALSE
+    ENDWHILE
+    SET column_Online: TRUE
 ENDIF
 
 IF Column.powered = FALSE THEN
-    SET Column status TO offline
+    WHILE column.powered = FALSE
+    SET column_Online: FALSE
+    ENDWHILE
+    SET column_Online: TRUE
 ENDIF    
