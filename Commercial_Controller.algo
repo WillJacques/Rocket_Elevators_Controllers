@@ -1,3 +1,7 @@
+'lowfloor = lowest service point excluding RC'
+'highfloor = Highest service point excluding RC'
+'N.B. This elevator has RC = 0 so if in your scenario RC=1 substract wanted floor by 1 :)'
+
 DEFINE Battery USING id
     battery_ID : id,
 
@@ -11,39 +15,27 @@ DEFINE Battery USING id
         queue_FloorRequestDOWN : [EMPTY LIST],
         powered : TRUE,
         preferedFloor : 0,
-        clock : Actual_Time,
-
-        SEQUENCE "setpreferedFloor" USING clock
-            IF clock is between 7:30 and 8:30 THEN
-                SET preferedfloor to highFloor value
-            ELSE IF clock is between 12:30 and 13:30 THEN
-                SET preferedfloor to highFloor value
-            ELSE THEN
-                SET preferedFloor to 0
-            ENDIF
-        ENDSEQUENCE
-
-        Column CALL "setpreferedFloor"
-
+        
         DEFINE Elevator USING id,
             ID: id,
             direction : "IDLE"
-            buttonNumber : [0],         'inside elevator buttonlist LIST'
-            currentFloor : 0,           'actual elevator's position'
-            goingToFloor : EMPTY,           'target elevator floor value'
-            queueToFloor : EMPTY,       'list of assignated floors to elevator'
-            pendingQueue : EMPTY,       'list of floor button pressed in error (opposite to elevator direction)'
-            weightMesure : 0,           'kg'       
-            weightCapacity : 2000,      'Kg'
+            buttonNumber : [0],                     'inside elevator buttonlist LIST'
+            currentFloor : Column.preferedFloor,    'actual elevator's position'
+            goingToFloor : EMPTY,                   'target elevator floor value'
+            queueToFloor : EMPTY,                   'list of assignated floors to elevator'
+            pendingQueue : EMPTY,                   'list of floor button pressed in error (opposite to elevator direction)'
+            weightMesure : 0,                       'kg'       
+            weightCapacity : 2000,                  'Kg'
             elevatorDoorClose : TRUE,
             elevatorDoorOpen : FALSE,
             emergencyButtonPushed : FALSE,
             elevator_Online : TRUE,
+            clock : Actual_Time (00:00),
 
             SEQUENCE "addbuttonNumbertoList" USING Column.lowFloor and Column.highFloor
-                IF lowFloor is smaller than 0
+                IF Column.lowFloor is smaller than 0
                     FOR all numbers between Column.lowFloor and 0 excluded, 
-                    ADD number to buttonNumber list '|x| is use to make value absolute (remove negatives)'
+                    ADD number to buttonNumber list
                     ENDFOR
                     FOR all numbers between 0 excluded and Column.highFloor
                     ADD number to buttonNumber list 
@@ -55,7 +47,17 @@ DEFINE Battery USING id
             ENDSEQUENCE
 
             Elevator CALL "addbuttonNumbertolist"
-        
+
+            SEQUENCE "setpreferedFloor" USING clock
+                IF clock is between 7:30 and 8:30 THEN
+                    SET preferedfloor to highFloor value
+                ELSE IF clock is between 12:30 and 13:30 THEN
+                    SET preferedfloor to highFloor value
+                ELSE THEN
+                    SET preferedFloor to 0
+                ENDIF
+            ENDSEQUENCE
+
             SEQUENCE "verifyWeight" USING weightMesure and weightCapacity
                 WHILE weightMesure greater than weightCapacity THEN
                     SET elevator_Online TO FALSE THEN
@@ -66,13 +68,12 @@ DEFINE Battery USING id
 
             SEQUENCE "verifyDoorClose" USING elevatorDoorOpen and floorDoorOpen
                 WHILE elevatorDoorOpen and floorDoorOpen are not both FALSE THEN
-                    SET elevator.direction to "IDLE"
                     Display message : "Something's blocking the door !"
                 ENDWHILE
             ENDSEQUENCE
 
-            SEQUENCE "operate" USING goingToFloor
-                IF Column CALL "delegate" to elevator THEN  
+            SEQUENCE "operate"
+                IF Column send new call to elevator THEN  
                     IF Elevator.direction is "UP" THEN
                         ADD Column.newFloor to Elevator.queueToFloor THEN
                         SORT Ascending Elevator.queueToFloor THEN
@@ -81,25 +82,31 @@ DEFINE Battery USING id
                         ADD Column.newFloor to Elevator.queueToFloor THEN
                         SORT Descending Elevator.queueToFloor[] THEN
                         Elevator.goingToFloor becomes first number in Elevator.queueToFloor[]
+                    ELSE 
+                        ADD Column.newFloor to Elevator.goingToFloor 
+                        IF Elevator.goingToFloor < Elevator.currentFloor
+                            SET Elevator.direction to "DOWN"
+                        ELSE
+                            SET Elevator.direciton to "UP"
+                        ENDIF
                     ENDIF
                 ENDIF
 
                 WHILE Elevator.currentFloor is not Elevator.goingToFloor THEN
-                    IF Elevator.direction == "UP" THEN
-                        increment Elevator.currentFloor 
-                    ELSE IF Elevator.direction == "DOWN" THEN
+                    IF Elevator.direction is "UP" THEN
+                        increment Elevator.currentFloor
+                    ELSE IF Elevator.direction is "DOWN" THEN
                         decrement Elevator.currentFloor
                     ENDIF
                 ENDWHILE
 
-                Elevator.goingToFloor becomes empty
+                REMOVE value from Elevator.goingToFloor
                 REMOVE first number in list Elevator.queueToFloor
                 
                 SET elevatorDoorOpen to TRUE
                 SET floorDoorOpen to TRUE
                 WAIT 4 seconds 'door opening'
-                
-                SET Elevator.direction to "IDLE"
+            
                 WAIT 7 seconds 'with open door'
 
                 SET elevatorDoorOpen to FALSE
@@ -108,6 +115,7 @@ DEFINE Battery USING id
                 
                 CALL "verifyDoorClose"
                 CALL "verifyWeight"
+                CALL "setpreferedFloor"
 
                 IF there is a number in Elevator.queueToFloor and is greater than Elevator.currentFloor THEN
                     SET Elevator.direction to "UP"
@@ -121,7 +129,6 @@ DEFINE Battery USING id
                     IF Elevator.ButtonNumber greater than Elevator.currentFloor THEN
                         ADD Elevator.ButtonNumber to Elevator.queueToFloor list THEN
                         SORT Ascending Elevator.queueToFloor list
-                    ENDIF
                     ELSE IF Elevator.ButtonNumber smaller than Elevator.currentFloor THEN
                         ADD Elevator.ButtonNumber to Elevator.pendingQueue list 'if the user board on the opposite side wanted'
                     ENDIF
@@ -129,7 +136,6 @@ DEFINE Battery USING id
                     IF Elevator.ButtonNumber smaller than Elevator.currentFloor THEN
                         ADD Elevator.ButtonNumber to Elevator.queueToFloor list THEN
                         SORT Descending Elevator.queueToFloor list
-                    ENDIF
                     ELSE IF Elevator.ButtonNumber greater than Elevator.currentFloor THEN
                         ADD Elevator.ButtonNumber to Elevator.pendingQueue list 'if the user board on the opposite side wanted'
                     ENDIF
@@ -138,7 +144,7 @@ DEFINE Battery USING id
                 SET Elevator.goingToFloor to the next number FROM Elevator.queueToFloor list
 
                 IF Elevator.goingToFloor NOT EMPTY THEN
-                    RESTART SEQUENCE "operate"
+                    Elevator CALL "operate"
                 ELSE IF Elevator.goingToFloor list is EMPTY AND Elevator.pendingQueue list is NOT EMPTY THEN
                     SEND Elevator.pendingQueue list to Elevator.QueueToFloor list
                         IF Elevator.direction is "UP" THEN
@@ -149,7 +155,7 @@ DEFINE Battery USING id
                             SORT Ascending Elevator.queueToFloor list
                         ENDIF
                     SET Elevator.goingToFloor to the next number FROM Elevator.queueToFloor list
-                    RESTART SEQUENCE "operate"
+                    Elevator CALL "operate"
                 ELSE IF Elevator.QueueToFloor is EMPTY AND Elevator.pendingQueue is EMPTY THEN
                     WAIT 30 seconds for Column CALL "delegate" New Floors to Elevator.queueToFloor list THEN
                     ADD Column.preferedFloor to Elevator.queueToFloor list
@@ -158,13 +164,13 @@ DEFINE Battery USING id
                     ELSE IF Elevator.goingToFloor greater than Elevator.currentFloor
                         SET Elevator.direction to "UP"
                     ENDIF
-                    RESTART SEQUENCE "operate"
+                    Elevator CALL "operate"
                 ENDIF
             ENDSEQUENCE
         ENDDEFINE
         
         SEQUENCE "createElevatorList" USING elevator_amount, lowFloor, highFloor
-            FOR elevator_amout in Column 
+            FOR elevator_amount in Column 
                 BEGIN with i = 1
                 SET Elevator_i TO INSTANTIATE Elevator WITH elevator_ID : i, status : Online, lowFloor : lowFloor, highFloor : highFloor THEN 
                 increment i at each elevator
@@ -183,103 +189,107 @@ DEFINE Battery USING id
             floorDoorOpen : FALSE,
         ENDDEFINE
 
-        SEQUENCE "createFloorList" USING lowFloor and highFloor
-            SET Floor_1 TO INSTANTIATE Floor WITH floor_ID : 1 THEN 
-            FOR each Floor between lowFloor and highFloor that doesnt equal 1
-                BEGIN with i = lowfloor
-                SET Floor_i TO INSTANTIATE Floor WITH floor_ID : i THEN 
-                increment i
-            ENDFOR
+        SEQUENCE "createFloorList" USING Column.lowFloor and Column.highFloor
+            IF Column.lowFloor is smaller than 0
+                FOR all numbers between Column.lowFloor and 0 excluded,
+                SET Floor_number TO INSTANTIATE Floor WITH floor_ID : number
+                ENDFOR
+                FOR all numbers between 0 excluded and Column.highFloor
+                SET Floor_number TO INSTANTIATE Floor WITH floor_ID : number
+                ENDFOR
+            ELSE IF lowFloor greater than 0
+                FOR all numbers between Column.lowFloor and Column.highFloor, 
+                SET Floor_number TO INSTANTIATE Floor WITH floor_ID : number 
+                ENDFOR
+            ENDIF
         ENDSEQUENCE
 
         Column CALL "createFloorList"
         
-        SEQUENCE "Delegate" USING queue_FloorRequestUP, queue_FloorRequestDOWN, Floor.buttonUp, Floor.buttonDown, Floor.floor_ID
-            IF user press Floor.buttonUp THEN
-                SET resultArray as a list
-                SET scoreArray as a list
-                SET bestElevatorID as a number
-                FOR all elevators in Column
-                    BEGIN with i = 1
-                    IF Elevator#i.direction is "UP" AND Elevator#i.currentFloor is smaller than Floor.floor_ID
-                        ADD i to resultArray list
-                        ADD |Elevator_#i.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
-                    ENDIF
-                    increment i
-                ENDFOR
-                IF resultArray list is empty THEN
-                    FOR all elevators in Column
-                        BEGIN with j = 1
-                        IF Elevator#j.direction is "IDLE"
-                            ADD j to resultArray list
-                            ADD |Elevator#j.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
-                        ENDIF
-                        increment j
-                    ENDFOR
-                ENDIF             
-                IF resultArray list is empty THEN
-                    ADD Floor.floor_ID to queue_FloorRequestDOWN list
-                ELSE THEN
-                    READ first number in scoreArray list and SET it to lowValue
-                    SET location to 0
-                    FOR each score in scoreArray
-                        BEGIN with k = 1
-                        IF scoreArray position k is smaller than lowValue
-                            SET scoreArray position k to lowValue
-                            SET k to location
-                            INCREMENT k
-                        ENDIF
-                        RETURN bestElevatorID = ResultArray[scoreArray.location] 'AKA Elevator_i.ID'
-                    ENDFOR
-                    ADD Floor.floor_ID to Elevator_#bestElevatorID.queueToFloor
+        IF user press Floor.buttonUp THEN
+            SET resultArray as a list
+            SET scoreArray as a list
+            SET bestElevatorID as a number
+            FOR all elevators in Column
+                BEGIN with i = 1
+                IF Elevator#i.direction is "UP" AND Elevator#i.currentFloor is smaller than Floor.floor_ID
+                    ADD i to resultArray list
+                    ADD |Elevator_#i.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
                 ENDIF
-            ELSE IF user press Floor.buttonDown THEN
-                SET resultArray as a list
-                SET scoreArray as a list
-                SET bestElevatorID as a number
+                increment i
+            ENDFOR
+            IF resultArray list is empty THEN
                 FOR all elevators in Column
-                    BEGIN with i = 1
-                    IF Elevator#i.direction is "DOWN" AND Elevator_#i.currentFloor is greater than Floor.floor_ID
-                        ADD i to resultArray list
-                        ADD |Elevator#i.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
+                    BEGIN with j = 1
+                    IF Elevator#j.direction is "IDLE"
+                        ADD j to resultArray list
+                        ADD |Elevator#j.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
                     ENDIF
-                    increment i
+                    increment j
                 ENDFOR
-                IF resultArray list is empty THEN
-                    FOR all elevators in Column
-                        BEGIN with j = 1
-                        IF Elevator#j.direction is "IDLE"
-                            ADD j to resultArray list
-                            ADD |Elevator_#j.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
-                        ENDIF
-                        increment j
-                    ENDFOR
-                ENDIF    
-                IF resultArray list is empty THEN
-                    ADD Floor.floor_ID to queue_FloorRequestUP list
-                ELSE THEN
-                    READ first number in scoreArray list and SET it to lowValue
-                    SET location to 0
-                    FOR each score in scoreArray
-                        BEGIN with k = 1
-                        IF scoreArray position k is smaller than lowValue
-                            SET scoreArray position k to lowValue
-                            SET k to location
-                            INCREMENT k
-                        ENDIF
-                        RETURN bestElevatorID = ResultArray[scoreArray.location] 'AKA Elevator_i.ID'
-                    ENDFOR
-                    ADD Floor.floor_ID to Elevator_#bestElevatorID.queueToFloor
+            ENDIF             
+            IF resultArray list is empty THEN
+                ADD Floor.floor_ID to queue_FloorRequestDOWN list
+            ELSE THEN
+                READ first number in scoreArray list and SET it to lowValue
+                SET location to 0
+                FOR each score in scoreArray
+                    BEGIN with k = 1
+                    IF scoreArray position k is smaller than lowValue
+                        SET scoreArray position k to lowValue
+                        SET k to location
+                        INCREMENT k
+                    ENDIF
+                    RETURN bestElevatorID = ResultArray[scoreArray.location] 'AKA Elevator_i.ID'
+                ENDFOR
+                ADD Floor.floor_ID to Elevator_#bestElevatorID.queueToFloor
+            ENDIF
+        ELSE IF user press Floor.buttonDown THEN
+            SET resultArray as a list
+            SET scoreArray as a list
+            SET bestElevatorID as a number
+            FOR all elevators in Column
+                BEGIN with i = 1
+                IF Elevator#i.direction is "DOWN" AND Elevator_#i.currentFloor is greater than Floor.floor_ID
+                    ADD i to resultArray list
+                    ADD |Elevator#i.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
                 ENDIF
+                increment i
+            ENDFOR
+            IF resultArray list is empty THEN
+                FOR all elevators in Column
+                    BEGIN with j = 1
+                    IF Elevator#j.direction is "IDLE"
+                        ADD j to resultArray list
+                        ADD |Elevator_#j.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
+                    ENDIF
+                    increment j
+                ENDFOR
+            ENDIF    
+            IF resultArray list is empty THEN
+                ADD Floor.floor_ID to queue_FloorRequestUP list
+            ELSE THEN
+                READ first number in scoreArray list and SET it to lowValue
+                SET location to 0
+                FOR each score in scoreArray
+                    BEGIN with k = 1
+                    IF scoreArray position k is smaller than lowValue
+                        SET scoreArray position k to lowValue
+                        SET k to location
+                        INCREMENT k
+                    ENDIF
+                    RETURN bestElevatorID = ResultArray[scoreArray.location] 'AKA Elevator_i.ID'
+                ENDFOR
+                ADD Floor.floor_ID to Elevator_#bestElevatorID.queueToFloor
             ENDIF
+        ENDIF
 
-            IF Elevator.direction = "UP"
-                ADD Column.queue_FloorRequestUP to Elevator.queueToFloor
-            ELSE IF Elevator.direction = "DOWN"
-                ADD Column.queue_FloorRequestDOWN to Elevator.queueToFloor
-            ENDIF
-        ENDSEQUENCE
-
+        IF Elevator.direction = "UP"
+            ADD Column.queue_FloorRequestUP to Elevator.queueToFloor
+        ELSE IF Elevator.direction = "DOWN"
+            ADD Column.queue_FloorRequestDOWN to Elevator.queueToFloor
+        ENDIF
+        
     ENDDEFINE
         
     SET Column1 TO INSTANTIATE Column WITH id : 1, lowFloor: -6, highFloor:0   elevator_amount : 5
@@ -293,9 +303,9 @@ Each Elevators CALL "operate"
 
 IF Elevator.emergencyButtonPushed = TRUE THEN
     WHILE Elevator.emergencyButtonPushed = TRUE
-    SET column_Online: FALSE
+    SET elevator_Online: FALSE
     ENDWHILE
-    SET column_Online: TRUE
+    SET elevator_Online: TRUE
 ENDIF
 
 IF Column.powered = FALSE THEN
