@@ -1,20 +1,18 @@
-'lowfloor = lowest service point excluding RC'
-'highfloor = Highest service point excluding RC'
-'N.B. This elevator has RC = 0 so if in your scenario RC=1 substract wanted floor by 1 :)'
+'N.B. THIS ELEVATOR HAS RC = 0 SO IF IN YOUR SCENARIO RC=1 SUBSTRACT WANTED FLOOR BY 1 :)'
 
 DEFINE Battery USING id
     battery_ID : id,
 
     DEFINE Column USING id, lowFloor, highFloor and elevator_amount
-        column_ID: id,
-        column_Online: TRUE,
-        elevator_amount: elevator_amount,
-        lowFloor : lowFloor
-        highFloor : highFloor
-        queue_FloorRequestUP : [EMPTY LIST],
-        queue_FloorRequestDOWN : [EMPTY LIST],
-        powered : TRUE,
-        preferedFloor : 0,
+        column_ID: id,                              'makes an idividual ID for each column'
+        column_Online: TRUE,                        'determine if column can operate'
+        elevator_amount: elevator_amount,           'determine how many elevators in column'
+        lowFloor : lowFloor                         'lowfloor = lowest service point excluding RC'
+        highFloor : highFloor                       'highfloor = Highest service point excluding RC'
+        queue_FloorRequestUP : [EMPTY LIST],        'waiting list for a up elevator'
+        queue_FloorRequestDOWN : [EMPTY LIST],      'waiting list for a down elevator'
+        powered : TRUE,                             'if theres power in elevator'
+        preferedFloor : 0,                          'prefered floor given by setpreferedfloor sequence'
         
         DEFINE Elevator USING id,
             ID: id,
