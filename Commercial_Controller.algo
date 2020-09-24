@@ -282,10 +282,10 @@ DEFINE Battery USING id
 
     ENDDEFINE
         
-    SET Column1 TO INSTANTIATE Column WITH column_ID : 1, lowFloor: -6, highFloor:0   elevator_amount : 3
-    SET Column2 TO INSTANTIATE Column WITH column_ID : 2, lowFloor: 0, highFloor:19   elevator_amount : 3
-    SET Column3 TO INSTANTIATE Column WITH column_ID : 3, lowFloor: 20, highFloor:39   elevator_amount : 3
-    SET Column4 TO INSTANTIATE Column WITH column_ID : 4, lowFloor: 40, highFloor:59   elevator_amount : 3
+    SET Column1 TO INSTANTIATE Column WITH id : 1, lowFloor: -6, highFloor:0   elevator_amount : 5
+    SET Column2 TO INSTANTIATE Column WITH id : 2, lowFloor: 0, highFloor:19   elevator_amount : 5
+    SET Column3 TO INSTANTIATE Column WITH id : 3, lowFloor: 20, highFloor:39   elevator_amount : 5
+    SET Column4 TO INSTANTIATE Column WITH id : 4, lowFloor: 40, highFloor:59   elevator_amount : 5
 
 ENDDEFINE
 

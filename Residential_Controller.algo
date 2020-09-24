@@ -283,7 +283,7 @@ DEFINE Column USING id, lowFloor, highFloor and elevator_amount
 
 ENDDEFINE
     
-SET Column1 TO INSTANTIATE Column WITH column_ID : 1, lowFloor: 1, highFloor:10, elevator_amount : 2
+SET Column1 TO INSTANTIATE Column WITH id : 1, lowFloor: 0, highFloor: 9, elevator_amount : 2
 
 Each Elevators CALL "operate"
 
