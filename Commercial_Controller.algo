@@ -19,8 +19,8 @@ DEFINE Battery USING id
     
         DEFINE Floor USING id:
             floor_ID: id,
-            buttonUp : FALSE, 
-            buttonDown : FALSE, 
+            buttonUp : FALSE, 'still have to remove down button on highest floor to send the call to a UP elevator'
+            buttonDown : FALSE, 'still have to remove up button on lowest floor to send the call to a DOWN elevator'
             upLight : FALSE, 
             downLight : FALSE, 
             floorDoorClose : TRUE,
@@ -43,6 +43,18 @@ DEFINE Battery USING id
                 SET Floor_number TO INSTANTIATE Floor WITH floor_ID : number 
                 THEN add Floor to Floorlist
                 ENDFOR
+            ENDIF
+            'remove up button to call for a down elevator when on minimum floor'
+            IF Column.lowFloor is smaller than 0
+                REMOVE Column.lowFloor buttonUp
+            ELSE
+                REMOVE Floor_0 buttonUp
+            ENDIF
+            'remove down button to call for a up elevator when on minimum floor'
+            IF Column.HighFloor is higher than 0
+                REMOVE Column.HighFloor buttonDown
+            ELSE
+                REMOVE Floor_0 buttonDown
             ENDIF
         ENDSEQUENCE
 
@@ -119,12 +131,12 @@ DEFINE Battery USING id
                     IF Column send new call to elevator THEN  
                         IF Elevator.direction is "UP" THEN
                             ADD Column.newFloor to Elevator.queueToFloor THEN
-                            SORT Ascending Elevator.queueToFloor THEN
-                            Elevator.goingToFloor becomes first number in Elevator.queueToFloor[]
+                            SORT Ascending Elevator.queueToFloor list THEN
+                            Elevator.goingToFloor becomes first number in Elevator.queueToFloor list
                         ELSE IF Elevator.direction = "DOWN" THEN
                             ADD Column.newFloor to Elevator.queueToFloor THEN
-                            SORT Descending Elevator.queueToFloor[] THEN
-                            Elevator.goingToFloor becomes first number in Elevator.queueToFloor[]
+                            SORT Descending Elevator.queueToFloor list THEN
+                            Elevator.goingToFloor becomes first number in Elevator.queueToFloor list
                         ELSE 
                             ADD Column.newFloor to Elevator.goingToFloor 
                             IF Elevator.goingToFloor < Elevator.currentFloor
@@ -222,10 +234,10 @@ DEFINE Battery USING id
         
         SEQUENCE "createElevatorList" USING elevator_amount, lowFloor, highFloor
             FOR elevator_amount in Column 
-                BEGIN with i = 1
-                SET Elevator_i TO INSTANTIATE Elevator WITH elevator_ID : i, status : Online, lowFloor : lowFloor, highFloor : highFloor THEN 
+                BEGIN with iterator equal 1
+                SET Elevator_iterator TO INSTANTIATE Elevator WITH elevator_ID : iterator, status : Online, lowFloor : lowFloor, highFloor : highFloor THEN 
                 ADD Elevator to Column.elevatorList
-                increment i at each elevator
+                increment iterator
             ENDFOR
         ENDSEQUENCE
 
@@ -237,34 +249,39 @@ DEFINE Battery USING id
             SET scoreArray as a list
             SET bestElevatorID as a number
             FOR all elevators in Column
-                BEGIN with i = 1
-                IF Elevator#i.direction is "UP" AND Elevator#i.currentFloor is smaller than Floor.floor_ID
-                    ADD i to resultArray list
-                    ADD |Elevator_#i.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
+                BEGIN with iterator equal 1
+                IF Elevator#iterator.direction is "UP" AND Elevator#iterator.currentFloor is smaller than Floor.floor_ID
+                    ADD iterator to resultArray list
+                    ADD |Elevator_#iterator.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
                 ENDIF
-                increment i
+                increment iterator
             ENDFOR
             IF resultArray list is empty THEN
                 FOR all elevators in Column
-                    BEGIN with j = 1
-                    IF Elevator#j.direction is "IDLE"
-                        ADD j to resultArray list
-                        ADD |Elevator#j.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
+                    BEGIN with iterator = 1
+                    IF Elevator#iterator.direction is "IDLE"
+                        ADD iterator to resultArray list
+                        ADD |Elevator#iterator.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
                     ENDIF
-                    increment j
+                    increment iterator
                 ENDFOR
             ENDIF             
             IF resultArray list is empty THEN
                 ADD Floor.floor_ID to queue_FloorRequestDOWN list
             ELSE THEN
+                'algorithm to decide which of the elevators is nearest from the call'
+                'if my scorearray as multiple value like {2,3,1,6},'
+                'my result array list the id when it sends a score {1,3,4,5}'
+                'after algorithm look for minimum value in score array and save position'
+                'after algorithm send the ID from the result array position'
                 READ first number in scoreArray list and SET it to lowValue
                 SET location to 0
                 FOR each score in scoreArray
-                    BEGIN with k = 1
-                    IF scoreArray position k is smaller than lowValue
-                        SET scoreArray position k to lowValue
-                        SET k to location
-                        INCREMENT k
+                    BEGIN with iterator = 1
+                    IF scoreArray at position iterator is smaller than lowValue
+                        SET scoreArray at position iterator to lowValue
+                        SET iterator to location
+                        INCREMENT iterator
                     ENDIF
                     RETURN bestElevatorID = ResultArray[scoreArray.location] 'AKA Elevator_i.ID'
                 ENDFOR
@@ -275,41 +292,47 @@ DEFINE Battery USING id
             SET scoreArray as a list
             SET bestElevatorID as a number
             FOR all elevators in Column
-                BEGIN with i = 1
-                IF Elevator#i.direction is "DOWN" AND Elevator_#i.currentFloor is greater than Floor.floor_ID
-                    ADD i to resultArray list
-                    ADD |Elevator#i.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
+                BEGIN with iterator = 1
+                IF Elevator#iterator.direction is "DOWN" AND Elevator_#iterator.currentFloor is greater than Floor.floor_ID
+                    ADD iterator to resultArray list
+                    ADD |Elevator#iterator.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
                 ENDIF
-                increment i
+                increment iterator
             ENDFOR
             IF resultArray list is empty THEN
                 FOR all elevators in Column
-                    BEGIN with j = 1
-                    IF Elevator#j.direction is "IDLE"
-                        ADD j to resultArray list
-                        ADD |Elevator_#j.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
+                    BEGIN with iterator = 1
+                    IF Elevator#iterator.direction is "IDLE"
+                        ADD iterator to resultArray list
+                        ADD |Elevator_#iterator.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
                     ENDIF
-                    increment j
+                    increment iterator
                 ENDFOR
             ENDIF    
             IF resultArray list is empty THEN
                 ADD Floor.floor_ID to queue_FloorRequestUP list
             ELSE THEN
+                'algorithm to decide which of the elevators is nearest from the call'
+                'if my scorearray as multiple value like {2,3,1,6},'
+                'my result array list the id when it sends a score {1,3,4,5}'
+                'after algorithm look for minimum value in score array and save position'
+                'after algorithm send the ID from the result array position'
                 READ first number in scoreArray list and SET it to lowValue
                 SET location to 0
                 FOR each score in scoreArray
-                    BEGIN with k = 1
-                    IF scoreArray position k is smaller than lowValue
-                        SET scoreArray position k to lowValue
-                        SET k to location
-                        INCREMENT k
+                    BEGIN with iterator = 1
+                    IF scoreArray at position iterator is smaller than lowValue
+                        SET scoreArray position iterator to lowValue
+                        SET iterator to location
+                        INCREMENT iterator
                     ENDIF
                     RETURN bestElevatorID = ResultArray[scoreArray.location] 'AKA Elevator_i.ID'
                 ENDFOR
                 ADD Floor.floor_ID to Elevator_#bestElevatorID.queueToFloor
             ENDIF
         ENDIF
-
+        
+        'if a user call is still not send to an elevator, it's send to an elevator'
         IF Elevator.direction = "UP"
             ADD Column.queue_FloorRequestUP to Elevator.queueToFloor
         ELSE IF Elevator.direction = "DOWN"
@@ -318,13 +341,13 @@ DEFINE Battery USING id
         
     ENDDEFINE
         
-    SET Column1 TO INSTANTIATE Column WITH id : 1, lowFloor: -6, highFloor:0   elevator_amount : 5
+    SET Column1 TO INSTANTIATE Column WITH 1, -6, 0 and 5
     THEN add Column1 to Columnlist 
-    SET Column2 TO INSTANTIATE Column WITH id : 2, lowFloor: 0, highFloor:19   elevator_amount : 5
+    SET Column2 TO INSTANTIATE Column WITH 2, 0, 19 and 5
     THEN add Column2 to Columnlist 
-    SET Column3 TO INSTANTIATE Column WITH id : 3, lowFloor: 20, highFloor:39   elevator_amount : 5
+    SET Column3 TO INSTANTIATE Column WITH 3, 20, 39 and 5
     THEN add Column3 to Columnlist 
-    SET Column4 TO INSTANTIATE Column WITH id : 4, lowFloor: 40, highFloor:59   elevator_amount : 5
+    SET Column4 TO INSTANTIATE Column WITH 4, 40, 59 and 5
     THEN add Column4 to Columnlist 
 
 ENDDEFINE
