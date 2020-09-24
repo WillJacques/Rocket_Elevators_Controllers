@@ -88,7 +88,9 @@ DEFINE Column USING id, lowFloor, highFloor and elevator_amount
             ENDIF
 
             WHILE Elevator.currentFloor is not Elevator.goingToFloor THEN
-                IF Elevator.direction is "UP" THEN
+                IF Column send new call to elevator and Column.newFloor is between Elevator.currentFloor and Elevator.goingToFloor
+                    Elevator CALL "operate"
+                ELSE IF Elevator.direction is "UP" THEN
                     increment Elevator.currentFloor
                 ELSE IF Elevator.direction is "DOWN" THEN
                     decrement Elevator.currentFloor
