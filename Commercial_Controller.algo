@@ -10,16 +10,16 @@ DEFINE Battery USING id
         queue_FloorRequestUP : [EMPTY LIST],
         queue_FloorRequestDOWN : [EMPTY LIST],
         powered : TRUE,
-        preferedFloor : 1,
+        preferedFloor : 0,
         clock : Actual_Time,
 
         SEQUENCE "setpreferedFloor" USING clock
-            IF clock is between 7.5 and 8.5 THEN
+            IF clock is between 7:30 and 8:30 THEN
                 SET preferedfloor to highFloor value
-            ELSE IF clock is between 12.5 and 13.5 THEN
+            ELSE IF clock is between 12:30 and 13:30 THEN
                 SET preferedfloor to highFloor value
             ELSE THEN
-                SET preferedFloor to 1
+                SET preferedFloor to 0
             ENDIF
         ENDSEQUENCE
 
@@ -28,9 +28,9 @@ DEFINE Battery USING id
         DEFINE Elevator USING id,
             ID: id,
             direction : "IDLE"
-            buttonNumber : [1],         'inside elevator buttonlist LIST'
-            currentFloor : 1,           'actual elevator's position'
-            goingToFloor : 1,           'target elevator floor value'
+            buttonNumber : [0],         'inside elevator buttonlist LIST'
+            currentFloor : 0,           'actual elevator's position'
+            goingToFloor : EMPTY,           'target elevator floor value'
             queueToFloor : EMPTY,       'list of assignated floors to elevator'
             pendingQueue : EMPTY,       'list of floor button pressed in error (opposite to elevator direction)'
             weightMesure : 0,           'kg'       
@@ -40,15 +40,21 @@ DEFINE Battery USING id
             emergencyButtonPushed : FALSE,
             elevator_Online : TRUE,
 
-            SEQUENCE "createbuttonNumberList" USING Column.lowFloor and Column.highFloor
-            FOR all numbers between Column.lowFloor and Column.highFloor, 
-                IF number greater than 1 or number smaller than 0
-                    ADD number to buttonNumber list
+            SEQUENCE "addbuttonNumbertoList" USING Column.lowFloor and Column.highFloor
+                IF lowFloor is smaller than 0
+                    FOR all numbers between Column.lowFloor and 0 excluded, 
+                    ADD number to buttonNumber list '|x| is use to make value absolute (remove negatives)'
+                    ENDFOR
+                    FOR all numbers between 0 excluded and Column.highFloor
+                    ADD number to buttonNumber list 
+                ELSE IF lowFloor greater than 0
+                    FOR all numbers between Column.lowFloor and Column.highFloor, 
+                    ADD number to buttonNumber list 
+                    ENDFOR
                 ENDIF
-            ENDFOR
             ENDSEQUENCE
 
-            Elevator CALL "createbuttonNumberlist"
+            Elevator CALL "addbuttonNumbertolist"
         
             SEQUENCE "verifyWeight" USING weightMesure and weightCapacity
                 WHILE weightMesure greater than weightCapacity THEN
@@ -276,10 +282,10 @@ DEFINE Battery USING id
 
     ENDDEFINE
         
-    SET Column1 TO INSTANTIATE Column WITH column_ID : 1, lowFloor: -6, highFloor:1   elevator_amount : 3
-    SET Column2 TO INSTANTIATE Column WITH column_ID : 2, lowFloor: 1, highFloor:20   elevator_amount : 3
-    SET Column3 TO INSTANTIATE Column WITH column_ID : 3, lowFloor: 21, highFloor:40   elevator_amount : 3
-    SET Column4 TO INSTANTIATE Column WITH column_ID : 4, lowFloor: 41, highFloor:60   elevator_amount : 3
+    SET Column1 TO INSTANTIATE Column WITH column_ID : 1, lowFloor: -6, highFloor:0   elevator_amount : 3
+    SET Column2 TO INSTANTIATE Column WITH column_ID : 2, lowFloor: 0, highFloor:19   elevator_amount : 3
+    SET Column3 TO INSTANTIATE Column WITH column_ID : 3, lowFloor: 20, highFloor:39   elevator_amount : 3
+    SET Column4 TO INSTANTIATE Column WITH column_ID : 4, lowFloor: 40, highFloor:59   elevator_amount : 3
 
 ENDDEFINE
 
