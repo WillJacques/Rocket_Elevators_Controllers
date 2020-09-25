@@ -426,8 +426,6 @@ DEFINE Battery USING id
     THEN add Column3 to Columnlist 
     SET Column4 TO INSTANTIATE Column WITH 4, 40, 59 and 5
     THEN add Column4 to Columnlist 
-    'SET Column1 TO INSTANTIATE Column WITH 1, 0, 9 and 2
-    'THEN add Column1 to Columnlist       RESIDENTIAL'
 
 ENDDEFINE
 
