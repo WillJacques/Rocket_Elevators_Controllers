@@ -79,7 +79,7 @@ DEFINE Column USING id, lowFloor, highFloor and elevator_amount
     DEFINE Elevator USING id,
         ID: id,
         direction : "IDLE"
-        buttonNumber : [0],                     'Inside elevator buttonlist LIST'
+        buttonNumber : EMPTY LIST,              'Inside elevator buttonlist LIST'
         currentFloor : Column.preferedFloor,    'Actual elevator's position'
         goingToFloor : EMPTY,                   'Target elevator floor value'
         queueToFloor : EMPTY,                   'List of assignated floors to elevator'
