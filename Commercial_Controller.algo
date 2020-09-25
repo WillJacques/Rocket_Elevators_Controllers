@@ -214,18 +214,6 @@ DEFINE Battery USING id
                 Elevator CALL "verifyDoorClose"
                 Column CALL "setpreferedFloor"
 
-                '---BACKUP---' '---If there's an elevator direction change to IDLE on an alarm---' '---NOT NECESSARY FOR THE MOMENT---'
-                '---Security line to be sure to continue on the same side as before an alarm during security verification---'
-                'IF there is a number in Elevator.queueToFloor
-                    'Elevator.goingToFloor becomes first number in Elevator.queueToFloor list
-                    'IF Elevator.goingToFloor is greater than Elevator.currentFloor THEN
-                        'SET Elevator.direction to "UP"
-                    'ELSE 
-                        'SET Elevator.direction to "DOWN"
-                    'ENDIF
-                'ENDIF
-                '---ENDBACKUP---'
-
                 'Waiting for user to press floor buttons inside elevator'
                 READ to Elevator.ButtonNumber pressed by user inside the elevator
         
@@ -325,7 +313,7 @@ DEFINE Battery USING id
                 IF resultArray list is empty THEN
                     FOR all elevators in Column
                         BEGIN with iterator = 1
-                        IF Elevator#iterator.direction is "IDLE" AND elevator.heavyLoad is FALSE AND elevator_Online is TRUE
+                        IF Elevator#iterator.direction is "IDLE" AND elevator_Online is TRUE
                             ADD iterator to resultArray list
                             ADD |Elevator#iterator.currentFloor - Floor.floor_ID| to scoreArray list '|x| is used to make value absolute (remove negatives)'
                         ENDIF
@@ -371,7 +359,7 @@ DEFINE Battery USING id
                 IF resultArray list is EMPTY THEN
                     FOR all elevators in Column
                         BEGIN with iterator = 1
-                        IF Elevator#iterator.direction is "IDLE" AND elevator.heavyLoad is FALSE AND elevator_Online is TRUE
+                        IF Elevator#iterator.direction is "IDLE" AND elevator_Online is TRUE
                             ADD iterator to resultArray list
                             ADD |Elevator_#iterator.currentFloor - Floor.floor_ID| to scoreArray list '|x| is use to make value absolute (remove negatives)'
                         ENDIF
