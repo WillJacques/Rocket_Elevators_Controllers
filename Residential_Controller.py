@@ -48,12 +48,15 @@ class Column:
             for i in range(len(self.elevator_list)):
                 elevator_i = self.elevator_list[i]
                 #print(elevator_i.elevator_direction)
-                #print(elevator_i.elevator_floor)
-                #print(FloorNumber)
+                print(elevator_i.elevator_floor)
+                print(FloorNumber)
                 if (elevator_i.elevator_direction == "UP") and (elevator_i.elevator_floor < FloorNumber) :
                     resultArray.append(i)
+                    print(resultArray)
                     score = abs(elevator_i.elevator_floor - FloorNumber)
+                    print(score)
                     scoreArray.append(score)
+                    print(scoreArray)
 
             if len(scoreArray) == 0 :
                 for i in range(len(self.elevator_list)):
