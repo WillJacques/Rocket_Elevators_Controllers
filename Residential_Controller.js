@@ -2,13 +2,13 @@ function test_elevator1() {
     var column = new Column(10, 2)
 
     console.log("##### Scenario 1 Started ! #####");
-  
+
     column.elevator_list[0].elevator_floor = 2;                 // set elevator 1 floor
     column.elevator_list[1].elevator_floor = 6;                 // set elevator 2 floor
 
     var called_elevator = column.RequestElevator(3, "UP");      // User call on floor with direction
     column.RequestFloor(called_elevator, 7);                    // User call inside elevator
-    
+
     console.log("##### Scenario 1 Ended ! #####");
 }
 
@@ -34,7 +34,7 @@ function test_elevator3() {
     var column = new Column(10, 2)
 
     console.log("##### Scenario 3 Started ! #####");
-  
+
     column.elevator_list[0].elevator_floor = 10;                // set elevator 1 floor
     column.elevator_list[1].elevator_floor = 6;                 // set elevator 2 floor
     column.elevator_list[1].elevator_direction = "UP";          // set elevator 2 direction
@@ -49,7 +49,7 @@ function test_elevator3() {
 
 // Column Class definition
 
-var Column = function(nb_of_floor, nb_of_elevator) {
+var Column = function (nb_of_floor, nb_of_elevator) {
     this.nb_of_floor = nb_of_floor;
     this.nb_of_elevator = nb_of_elevator;
     this.elevator_list = [];
@@ -61,12 +61,12 @@ var Column = function(nb_of_floor, nb_of_elevator) {
 
 //  Request elevator function with find best elevator
 
-Column.prototype.RequestElevator = function(FloorNumber, Direction) {
-    sleep(1);
+Column.prototype.RequestElevator = function (FloorNumber, Direction) {
+    sleep(1000);
     console.log(">>> User request an elevator at floor", FloorNumber, "to go", Direction, "<<<");
-    sleep(1);
+    sleep(1000);
     console.log("*Call Button Light On*");
-    sleep(1);
+    sleep(1000);
 
     var request_elevator = this.find_best_elevator(FloorNumber, Direction);
     request_elevator.send_request(FloorNumber);
@@ -75,25 +75,25 @@ Column.prototype.RequestElevator = function(FloorNumber, Direction) {
 
 // Request floor inside elevator
 
-Column.prototype.RequestFloor = function(elevator_object, RequestedFloor) {
-    sleep(1);
-    console.log(">>> User wants to go to floor", RequestedFloor,"<<<");
-    sleep(1);
+Column.prototype.RequestFloor = function (elevator_object, RequestedFloor) {
+    sleep(1000);
+    console.log(">>> User wants to go to floor", RequestedFloor, "<<<");
+    sleep(1000);
     console.log("*Request Button Light On*");
-    sleep(1);
+    sleep(1000);
     elevator_object.send_request(RequestedFloor);
 }
 
 // Best elevator Function()
 
-Column.prototype.find_best_elevator = function(FloorNumber, Direction) {
+Column.prototype.find_best_elevator = function (FloorNumber, Direction) {
     console.log("Searching for best elevator to go to floor", FloorNumber, "in", Direction, "direction.");
     if (FloorNumber === 10) {
         Direction = "UP"
     } else if (FloorNumber === 1) {
         Direction = "DOWN"
     }
-    if (Direction === "UP"){
+    if (Direction === "UP") {
         var resultArray = [];
         var scoreArray = [];
         var b_elevator = null;
@@ -102,7 +102,7 @@ Column.prototype.find_best_elevator = function(FloorNumber, Direction) {
             var elevator_i = this.elevator_list[i];
             if ((elevator_i.elevator_direction === "UP") && (elevator_i.elevator_floor < FloorNumber)) {
                 resultArray.push(i);
-                var score = Math.abs(elevator_i.elevator_floor-FloorNumber);
+                var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
                 scoreArray.push(score);
             };
         };
@@ -111,7 +111,7 @@ Column.prototype.find_best_elevator = function(FloorNumber, Direction) {
                 var elevator_i = this.elevator_list[i];
                 if (elevator_i.elevator_direction === "IDLE") {
                     resultArray.push(i);
-                    var score = Math.abs(elevator_i.elevator_floor-FloorNumber);
+                    var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
                     scoreArray.push(score);
                 };
             };
@@ -120,7 +120,7 @@ Column.prototype.find_best_elevator = function(FloorNumber, Direction) {
             for (var i = 0; i < this.elevator_list.length; i++) {
                 var elevator_i = this.elevator_list[i];
                 resultArray.push(i);
-                var score = Math.abs(elevator_i.elevator_floor-FloorNumber);
+                var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
                 scoreArray.push(score);
             };
         };
@@ -146,7 +146,7 @@ Column.prototype.find_best_elevator = function(FloorNumber, Direction) {
             var elevator_i = this.elevator_list[i];
             if ((elevator_i.elevator_direction === "DOWN") && (elevator_i.elevator_floor > FloorNumber)) {
                 resultArray.push(i);
-                var score = Math.abs(elevator_i.elevator_floor-FloorNumber);
+                var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
                 scoreArray.push(score);
             };
         };
@@ -155,7 +155,7 @@ Column.prototype.find_best_elevator = function(FloorNumber, Direction) {
                 var elevator_i = this.elevator_list[i];
                 if (elevator_i.elevator_direction === "IDLE") {
                     resultArray.push(i);
-                    var score = Math.abs(elevator_i.elevator_floor-FloorNumber);
+                    var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
                     scoreArray.push(score);
                 };
             };
@@ -164,7 +164,7 @@ Column.prototype.find_best_elevator = function(FloorNumber, Direction) {
             for (var i = 0; i < this.elevator_list.length; i++) {
                 var elevator_i = this.elevator_list[i];
                 resultArray.push(i);
-                var score = Math.abs(elevator_i.elevator_floor-FloorNumber);
+                var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
                 scoreArray.push(score);
             };
         };
@@ -187,7 +187,7 @@ Column.prototype.find_best_elevator = function(FloorNumber, Direction) {
 
 // Elevator Class definition
 
-var Elevator = function(elevator_no, status, elevator_floor, elevator_direction) {
+var Elevator = function (elevator_no, status, elevator_floor, elevator_direction) {
     this.elevator_no = elevator_no;
     this.elevator_letter = (String.fromCharCode(97 + elevator_no));
     this.status = status;
@@ -198,7 +198,7 @@ var Elevator = function(elevator_no, status, elevator_floor, elevator_direction)
 
 // Send Request then operate
 
-Elevator.prototype.send_request = function(RequestedFloor) {
+Elevator.prototype.send_request = function (RequestedFloor) {
     this.floor_list.push(RequestedFloor);
     this.compute_list();
     this.operate_elevator(RequestedFloor);
@@ -206,18 +206,18 @@ Elevator.prototype.send_request = function(RequestedFloor) {
 
 // Sort list if the elevator is going "UP" or "DOWN"
 
-Elevator.prototype.compute_list = function() {
+Elevator.prototype.compute_list = function () {
     if (this.elevator_direction === "UP") {
-    this.floor_list.sort(function(a, b){return a-b}); // NORMAL SORT
+        this.floor_list.sort(function (a, b) { return a - b }); // NORMAL SORT
     } else if (this.elevator_direction === "DOWN") {
-    this.floor_list.sort(function(a, b){return b-a}); // REVERSE SORT
+        this.floor_list.sort(function (a, b) { return b - a }); // REVERSE SORT
     }
     return this.floor_list;
 }
 
 // System operation
 
-Elevator.prototype.operate_elevator = function(RequestedFloor) {
+Elevator.prototype.operate_elevator = function (RequestedFloor) {
     while (this.floor_list > 0) {
         if (RequestedFloor === this.elevator_floor) {
             this.Open_door();
@@ -225,20 +225,20 @@ Elevator.prototype.operate_elevator = function(RequestedFloor) {
             this.floor_list.shift();
         } else if (RequestedFloor < this.elevator_floor) {
             this.status = "moving";
-            console.log("---Elevator " + this.elevator_letter.toUpperCase(), this.status,"---");
+            console.log("---Elevator " + this.elevator_letter.toUpperCase(), this.status, "---");
             this.elevator_direction = "DOWN";
             this.Move_down(RequestedFloor);
             this.status = "stopped";
-            console.log("---Elevator " + this.elevator_letter.toUpperCase(), this.status,"---");
+            console.log("---Elevator " + this.elevator_letter.toUpperCase(), this.status, "---");
             this.Open_door();
             this.floor_list.shift();
         } else if (RequestedFloor > this.elevator_floor) {
             this.status = "moving";
-            console.log("---Elevator " + this.elevator_letter.toUpperCase(), this.status,"---");
+            console.log("---Elevator " + this.elevator_letter.toUpperCase(), this.status, "---");
             this.elevator_direction = "UP";
             this.Move_up(RequestedFloor);
             this.status = "stopped";
-            console.log("---Elevator " + this.elevator_letter.toUpperCase(), this.status,"---");
+            console.log("---Elevator " + this.elevator_letter.toUpperCase(), this.status, "---");
             this.Open_door();
             this.floor_list.shift();
         }
@@ -248,65 +248,55 @@ Elevator.prototype.operate_elevator = function(RequestedFloor) {
     }
 }
 
-Elevator.prototype.Request_floor_button = function(RequestedFloor) {
-    this.RequestedFloor = RequestedFloor;
-    this.floor_light = floor_light;
-}
-
-Elevator.prototype.Call_floor_button = function(FloorNumber, Direction) {
-    this.FloorNumber = FloorNumber;
-    this.Direction = Direction;
-}
-
 // OPEN DOORS FUNCTION
 
-Elevator.prototype.Open_door = function() {
-    sleep(1);
+Elevator.prototype.Open_door = function () {
+    sleep(1000);
     console.log("Open Doors");
     console.log("---Opening Doors---");
-    sleep(1);
+    sleep(1000);
     console.log("*Button Light Off*");
     console.log("User enters/exits the elevator");
-    sleep(1);
+    sleep(1000);
     console.log("---Closing Doors---");
-    sleep(1);
+    sleep(1000);
     this.Close_door();
 }
 
 // CLOSE DOORS FUNCTION
 
-Elevator.prototype.Close_door = function() {
-        
+Elevator.prototype.Close_door = function () {
+
     console.log("Closed Doors");
-    sleep(1);
+    sleep(1000);
 }
 
 // MOVE THE ELEVATOR UP FUNCTION
 
-Elevator.prototype.Move_up = function(RequestedFloor) {
+Elevator.prototype.Move_up = function (RequestedFloor) {
     console.log("Floor : " + this.elevator_floor);
-    sleep(1);
+    sleep(1000);
     while (this.elevator_floor !== RequestedFloor) {
         this.elevator_floor += 1;
         console.log("Floor : " + this.elevator_floor);
-        sleep(1);
+        sleep(1000);
     }
 }
 
 // MOVE THE ELEVATOR DOWN FUNCTION
 
-Elevator.prototype.Move_down = function(RequestedFloor) {
+Elevator.prototype.Move_down = function (RequestedFloor) {
     console.log("Floor : " + this.elevator_floor);
-    sleep(1);
+    sleep(1000);
     while (this.elevator_floor !== RequestedFloor) {
         this.elevator_floor -= 1;
         console.log("Floor : " + this.elevator_floor);
-        sleep(1);
+        sleep(1000);
     }
 }
 
 // Creates a sleep function() to put waiting times in program
-  
+
 function sleep(milliseconds) {
     var start = new Date().getTime();
     while ((new Date().getTime() - start) < milliseconds) {
