@@ -231,7 +231,7 @@ Elevator.prototype.compute_list = function () {
 // System operation
 
 Elevator.prototype.operate_elevator = function (RequestedFloor) {
-    while (this.floor_list > 0) {
+    while (this.floor_list.length > 0) {
         if (RequestedFloor === this.elevator_floor) {
             this.Open_door();
             this.status = "moving";
