@@ -1,4 +1,8 @@
+# -------------------------------------------------------------------------------------------------------
+
 # SCENARIO CHOICES ARE AT THE END OF THE PROGRAM, YOU ONLY HAVE TO UNCOMMENT THE WANTED ONE ! THANK YOU !
+
+# -------------------------------------------------------------------------------------------------------
 
 class Column
   attr_accessor :nb_of_floor, :nb_of_elevator, :elevator_list
@@ -19,11 +23,14 @@ class Column
   # Request elevator function with find best elevator
 
   def request_elevator(floor_number, direction)
-    # time.sleep(1)
+    puts(Time.now)
+    sleep(5)
     puts(">>> User request an elevator at floor #{floor_number} to go #{direction} <<<")
-    # time.sleep(1)
+    puts(Time.now)
+    sleep(5)
     puts('*Call Button Light On*')
-    #  time.sleep(1)
+    puts(Time.now)
+    sleep(5)
 
     request_elevator = find_best_elevator(floor_number, direction)
     request_elevator.send_request(floor_number)
@@ -33,11 +40,11 @@ class Column
   # Request floor inside elevator
 
   def request_floor(elevator_object, requested_floor)
-    # time.sleep(1)
+    # sleep(1)
     puts(">>> User wants to go to floor #{requested_floor} <<<")
-    # time.sleep(1)
+    # sleep(1)
     puts('*Request Button Light On*')
-    # time.sleep(1)
+    # sleep(1)
     elevator_object.send_request(requested_floor)
   end
 
@@ -55,7 +62,6 @@ class Column
       result_array = []
       score_array = []
       b_elevator = nil
-      best_elevator = nil
       elevator_list.length.times do |i|
         elevator_i = elevator_list[i]
         if elevator_i.elevator_direction == 'UP' && elevator_i.elevator_floor < floor_number
@@ -85,7 +91,7 @@ class Column
         end
       end
 
-      if result_array.length > 1
+      if result_array.length > 0
         minimum = score_array[0]
         location = 0
         score_array.length.times do |i|
@@ -98,11 +104,10 @@ class Column
       end
       best_elevator = elevator_list[b_elevator]
       best_elevator
-    else
+    else # IF DIRECTION IS DOWN
       result_array = []
       score_array = []
       b_elevator = nil
-      best_elevator = nil
       elevator_list.length.times do |i|
         elevator_i = elevator_list[i]
         if elevator_i.elevator_direction == 'DOWN' && elevator_i.elevator_floor > floor_number
@@ -131,8 +136,8 @@ class Column
           score_array.append(score.abs)
         end
       end
-
-      if result_array.length > 1
+      
+      if score_array.length > 0
         minimum = score_array[0]
         location = 0
         score_array.length.times do |i|
@@ -144,8 +149,8 @@ class Column
         b_elevator = result_array[location]
       end
       best_elevator = elevator_list[b_elevator]
-      best_elevator
     end
+    best_elevator
   end
 end
 
@@ -209,7 +214,7 @@ class Elevator
         floor_list.pop
       end
     end
-    elevator_direction = 'IDLE'
+    @elevator_direction = 'IDLE'
   end
 
   # OPEN DOORS FUNCTION

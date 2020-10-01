@@ -14,8 +14,7 @@ class Column:
 
     def RequestElevator(self, FloorNumber, Direction):
         time.sleep(1)
-        print(f">>> User request an elevator at floor",
-              FloorNumber, "to go", Direction, "<<<")
+        print(f">>> User request an elevator at floor", FloorNumber, "to go", Direction, "<<<")
         time.sleep(1)
         print(f"*Call Button Light On*")
         time.sleep(1)
@@ -174,9 +173,7 @@ class Elevator:
                       self.elevator_letter.capitalize(), self.status, "---")
                 self.Open_door()
                 self.floor_list.pop()
-
-        if len(self.floor_list) == 0:
-            self.elevator_direction = "IDLE"
+        self.elevator_direction = "IDLE"
 
     # OPEN DOORS FUNCTION
 
@@ -224,15 +221,12 @@ def test_elevator1():
     column = Column(10, 2)
 
     print("##### Scenario 1 Started ! #####")
-    # set elevator 1 floor
-    column.elevator_list[0].elevator_floor = 2
-    # set elevator 2 floor
-    column.elevator_list[1].elevator_floor = 6
+    
+    column.elevator_list[0].elevator_floor = 2              # set elevator 1 floor
+    column.elevator_list[1].elevator_floor = 6              # set elevator 2 floor
 
-    # User call on floor with direction
-    called_elevator = column.RequestElevator(3, "UP")
-    # User call inside elevator
-    column.RequestFloor(called_elevator, 7)
+    called_elevator = column.RequestElevator(3, "UP")       # User call on floor with direction
+    column.RequestFloor(called_elevator, 7)                 # User call inside elevator
 
     print("##### Scenario 1 Ended ! #####")
 
@@ -241,46 +235,32 @@ def test_elevator2():
     column = Column(10, 2)
 
     print("##### Scenario 2 Started ! #####")
-    # set elevator 1 floor
-    column.elevator_list[0].elevator_floor = 10
-    # set elevator 2 floor
-    column.elevator_list[1].elevator_floor = 3
 
-    # User call on floor with direction
-    called_elevator = column.RequestElevator(1, "UP")
-    # User call inside elevator
-    column.RequestFloor(called_elevator, 6)
-    # User call on floor with direction
-    called_elevator = column.RequestElevator(3, "UP")
-    # User call inside elevator
-    column.RequestFloor(called_elevator, 5)
-    # User call on floor with direction
-    called_elevator = column.RequestElevator(9, "DOWN")
-    # User call inside elevator
-    column.RequestFloor(called_elevator, 2)
+    column.elevator_list[0].elevator_floor = 10             # set elevator 1 floor
+    column.elevator_list[1].elevator_floor = 3              # set elevator 2 floor
+
+    called_elevator = column.RequestElevator(1, "UP")       # User call on floor with direction
+    column.RequestFloor(called_elevator, 6)                 # User call inside elevator
+    called_elevator = column.RequestElevator(3, "UP")       # User call on floor with direction
+    column.RequestFloor(called_elevator, 5)                 # User call inside elevator
+    called_elevator = column.RequestElevator(9, "DOWN")     # User call on floor with direction
+    column.RequestFloor(called_elevator, 2)                 # User call inside elevator
 
     print("##### Scenario 2 Ended ! #####")
-
 
 def test_elevator3():
     column = Column(10, 2)
 
     print("##### Scenario 3 Started ! #####")
-    # set elevator 1 floor
-    column.elevator_list[0].elevator_floor = 10
-    # set elevator 2 floor
-    column.elevator_list[1].elevator_floor = 6
-    # set elevator 2 direction
-    column.elevator_list[1].elevator_direction = "UP"
+    
+    column.elevator_list[0].elevator_floor = 10             # set elevator 1 floor
+    column.elevator_list[1].elevator_floor = 6              # set elevator 2 floor
+    column.elevator_list[1].elevator_direction = "UP"       # set elevator 2 direction
 
-    # User call on floor with direction
-    called_elevator = column.RequestElevator(3, "DOWN")
-    # User call inside elevator
-    column.RequestFloor(called_elevator, 2)
-    # User call on floor with direction
-    called_elevator = column.RequestElevator(10, "DOWN")
-    # User call inside elevator
-    column.RequestFloor(called_elevator, 3)
+    called_elevator = column.RequestElevator(3, "DOWN")     # User call on floor with direction
+    column.RequestFloor(called_elevator, 2)                 # User call inside elevator
+    called_elevator = column.RequestElevator(10, "DOWN")    # User call on floor with direction
+    column.RequestFloor(called_elevator, 3)                 # User call inside elevator
 
     print("##### Scenario 3 Ended ! #####")
 
