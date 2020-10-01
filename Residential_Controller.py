@@ -269,7 +269,7 @@ def test_elevator3():
 
 ### UNCOMMENT, RUN and RELAX watching CONSOLE :) ###
 
-#test_elevator1()
+test_elevator1()
 #test_elevator2()
 #test_elevator3()
 

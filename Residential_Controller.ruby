@@ -2,6 +2,8 @@
 
 # SCENARIO CHOICES ARE AT THE END OF THE PROGRAM, YOU ONLY HAVE TO UNCOMMENT THE WANTED ONE ! THANK YOU !
 
+# Don't wait for the output in VS, you have to run it in the terminal...
+
 # -------------------------------------------------------------------------------------------------------
 
 class Column
@@ -23,14 +25,11 @@ class Column
   # Request elevator function with find best elevator
 
   def request_elevator(floor_number, direction)
-    puts(Time.now)
-    sleep(5)
+    sleep(1)
     puts(">>> User request an elevator at floor #{floor_number} to go #{direction} <<<")
-    puts(Time.now)
-    sleep(5)
+    sleep(1)
     puts('*Call Button Light On*')
-    puts(Time.now)
-    sleep(5)
+    sleep(1)
 
     request_elevator = find_best_elevator(floor_number, direction)
     request_elevator.send_request(floor_number)
@@ -40,11 +39,11 @@ class Column
   # Request floor inside elevator
 
   def request_floor(elevator_object, requested_floor)
-    # sleep(1)
+    sleep(1)
     puts(">>> User wants to go to floor #{requested_floor} <<<")
-    # sleep(1)
+    sleep(1)
     puts('*Request Button Light On*')
-    # sleep(1)
+    sleep(1)
     elevator_object.send_request(requested_floor)
   end
 
@@ -136,7 +135,7 @@ class Column
           score_array.append(score.abs)
         end
       end
-      
+
       if score_array.length > 0
         minimum = score_array[0]
         location = 0
@@ -220,15 +219,15 @@ class Elevator
   # OPEN DOORS FUNCTION
 
   def open_door
-    # time.sleep(1)
+    sleep(1)
     puts('Open Doors')
     puts('---Opening Doors---')
-    # time.sleep(1)
+    sleep(1)
     puts('*Button Light Off*')
     puts('User enters/exits the elevator')
-    # time.sleep(1)
+    sleep(1)
     puts('---Closing Doors---')
-    # time.sleep(1)
+    sleep(1)
     close_door
   end
 
@@ -236,18 +235,18 @@ class Elevator
 
   def close_door
     puts('Closed Doors')
-    # time.sleep(1)
+    sleep(1)
   end
 
   # MOVE THE ELEVATOR UP FUNCTION
 
   def move_up(requested_floor)
     puts("Floor : #{elevator_floor}")
-    # time.sleep(1)
+    sleep(1)
     while elevator_floor != requested_floor
       @elevator_floor += 1
       puts("Floor : #{elevator_floor}")
-      # time.sleep(1)
+      sleep(1)
     end
   end
 
@@ -255,11 +254,11 @@ class Elevator
 
   def move_down(requested_floor)
     puts("Floor : #{elevator_floor}")
-    # time.sleep(1)
+    sleep(1)
     while elevator_floor != requested_floor
       @elevator_floor -= 1
       puts("Floor : #{elevator_floor}")
-      # time.sleep(1)
+      sleep(1)
     end
   end
 end
