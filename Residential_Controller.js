@@ -2,16 +2,18 @@
 To run JavaScript application, download in same folder :
 
 1-Residential_Controller.html
-
 2-Residential_Controller.js
 
 Then open Residential_Controller.html
-
 Press a scenario Button and look at Console.
+
+---OR---
+
+Uncomment wanted scenario at the end of program
 */
 
 
-function test_elevator1() {
+function scenario1() {
     var column = new Column(10, 2)
 
     console.log("##### Scenario 1 Started ! #####");
@@ -25,7 +27,7 @@ function test_elevator1() {
     console.log("##### Scenario 1 Ended ! #####");
 }
 
-function test_elevator2() {
+function scenario2() {
     var column = new Column(10, 2)
 
     console.log("##### Scenario 2 Started ! #####");
@@ -43,7 +45,7 @@ function test_elevator2() {
     console.log("##### Scenario 2 ended ! #####");
 }
 
-function test_elevator3() {
+function scenario3() {
     var column = new Column(10, 2)
 
     console.log("##### Scenario 3 Started ! #####");
@@ -58,6 +60,39 @@ function test_elevator3() {
     column.RequestFloor(called_elevator, 3);                    // User call inside elevator
 
     console.log("##### Scenario 3 ended ! #####")
+}
+
+function scenariorandom() {
+    var numberbuildingfloors = Math.ceil(Math.random()*5+5);  //to have between 5 and 10 floors
+    var numberofelevators = Math.ceil(Math.random()*3+2);
+    var numberofcalls = Math.ceil(Math.random()*3+2);
+    console.log(numberofcalls)
+    var column = new Column(numberbuildingfloors, numberofelevators)
+
+    console.log("##### Scenario Random Started ! #####");
+    console.log(">>> Scenario with :", numberbuildingfloors, "floors, ", numberofelevators, "elevators and", numberofcalls, "calls <<<");
+    sleep(2000);
+    for (var i = 0; i < numberofelevators; i++) {
+        column.elevator_list[i].elevator_floor = Math.ceil(Math.random()*numberbuildingfloors)
+        console.log(">>> Elevator", column.elevator_list[i].elevator_letter, "is on :", column.elevator_list[i].elevator_floor, "<<<");
+    }
+    sleep(2000)
+    for (var i = 0; i < numberofcalls; i++) {
+        var startfloor = Math.ceil(Math.random()*numberbuildingfloors)
+        var wantedfloor = Math.ceil(Math.random()*numberbuildingfloors)
+        var wanteddirection = "IDLE"
+            while(wantedfloor === startfloor)
+            wantedfloor = Math.ceil(Math.random()*numberbuildingfloors)
+        if (startfloor > wantedfloor) {
+            wanteddirection = "DOWN";
+        } else {
+            wanteddirection = "UP";
+        }
+        var called_elevator = column.RequestElevator(startfloor, wanteddirection);     // User call on floor with direction
+        column.RequestFloor(called_elevator, wantedfloor);                                                            // User call inside elevator
+    }
+
+    console.log("##### Scenario Random Ended ! #####")
 }
 
 // Column Class definition
@@ -75,11 +110,11 @@ var Column = function (nb_of_floor, nb_of_elevator) {
 //  Request elevator function with find best elevator
 
 Column.prototype.RequestElevator = function (FloorNumber, Direction) {
-    sleep(1000);
+    sleep(400);
     console.log(">>> User request an elevator at floor", FloorNumber, "to go", Direction, "<<<");
-    sleep(1000);
+    sleep(400);
     console.log("*Call Button Light On*");
-    sleep(1000);
+    sleep(400);
 
     var request_elevator = this.find_best_elevator(FloorNumber, Direction);
     request_elevator.send_request(FloorNumber);
@@ -89,11 +124,11 @@ Column.prototype.RequestElevator = function (FloorNumber, Direction) {
 // Request floor inside elevator
 
 Column.prototype.RequestFloor = function (elevator_object, RequestedFloor) {
-    sleep(1000);
+    sleep(400);
     console.log(">>> User wants to go to floor", RequestedFloor, "<<<");
-    sleep(1000);
+    sleep(400);
     console.log("*Request Button Light On*");
-    sleep(1000);
+    sleep(400);
     elevator_object.send_request(RequestedFloor);
 }
 
@@ -181,6 +216,12 @@ Column.prototype.find_best_elevator = function (FloorNumber, Direction) {
                 scoreArray.push(score);
             };
         };
+        //Algorithm to decide which of the elevators is nearest from the call
+        //If my scorearray as multiple value like {2,3,1,6},
+        //My result array list the id when it sends a score {1,3,4,5}
+        //After algorithm look for minimum value in score array and save position
+        //After algorithm send the ID from the result array position
+        //QUICK SORT PRINCIPLE
         if (resultArray.length > 0) {
             var minimum = scoreArray[0];
             var location = 0
@@ -197,12 +238,11 @@ Column.prototype.find_best_elevator = function (FloorNumber, Direction) {
     };
 }
 
-
 // Elevator Class definition
 
 var Elevator = function (elevator_no, status, elevator_floor, elevator_direction) {
     this.elevator_no = elevator_no;
-    this.elevator_letter = (String.fromCharCode(97 + elevator_no));
+    this.elevator_letter = (String.fromCharCode(97 + elevator_no)).toUpperCase();
     this.status = status;
     this.elevator_floor = elevator_floor;
     this.elevator_direction = elevator_direction;
@@ -238,20 +278,20 @@ Elevator.prototype.operate_elevator = function (RequestedFloor) {
             this.floor_list.shift();
         } else if (RequestedFloor < this.elevator_floor) {
             this.status = "moving";
-            console.log("---Elevator " + this.elevator_letter.toUpperCase(), this.status, "---");
+            console.log("---Elevator " + this.elevator_letter, this.status, "---");
             this.elevator_direction = "DOWN";
             this.Move_down(RequestedFloor);
             this.status = "stopped";
-            console.log("---Elevator " + this.elevator_letter.toUpperCase(), this.status, "---");
+            console.log("---Elevator " + this.elevator_letter, this.status, "---");
             this.Open_door();
             this.floor_list.shift();
         } else if (RequestedFloor > this.elevator_floor) {
             this.status = "moving";
-            console.log("---Elevator " + this.elevator_letter.toUpperCase(), this.status, "---");
+            console.log("---Elevator " + this.elevator_letter, this.status, "---");
             this.elevator_direction = "UP";
             this.Move_up(RequestedFloor);
             this.status = "stopped";
-            console.log("---Elevator " + this.elevator_letter.toUpperCase(), this.status, "---");
+            console.log("---Elevator " + this.elevator_letter, this.status, "---");
             this.Open_door();
             this.floor_list.shift();
         }
@@ -264,15 +304,15 @@ Elevator.prototype.operate_elevator = function (RequestedFloor) {
 // OPEN DOORS FUNCTION
 
 Elevator.prototype.Open_door = function () {
-    sleep(1000);
+    sleep(400);
     console.log("Open Doors");
     console.log("---Opening Doors---");
-    sleep(1000);
+    sleep(400);
     console.log("*Button Light Off*");
     console.log("User enters/exits the elevator");
-    sleep(1000);
+    sleep(400);
     console.log("---Closing Doors---");
-    sleep(1000);
+    sleep(400);
     this.Close_door();
 }
 
@@ -281,18 +321,18 @@ Elevator.prototype.Open_door = function () {
 Elevator.prototype.Close_door = function () {
 
     console.log("Closed Doors");
-    sleep(1000);
+    sleep(400);
 }
 
 // MOVE THE ELEVATOR UP FUNCTION
 
 Elevator.prototype.Move_up = function (RequestedFloor) {
     console.log("Floor : " + this.elevator_floor);
-    sleep(1000);
+    sleep(400);
     while (this.elevator_floor !== RequestedFloor) {
         this.elevator_floor += 1;
         console.log("Floor : " + this.elevator_floor);
-        sleep(1000);
+        sleep(400);
     }
 }
 
@@ -300,11 +340,11 @@ Elevator.prototype.Move_up = function (RequestedFloor) {
 
 Elevator.prototype.Move_down = function (RequestedFloor) {
     console.log("Floor : " + this.elevator_floor);
-    sleep(1000);
+    sleep(400);
     while (this.elevator_floor !== RequestedFloor) {
         this.elevator_floor -= 1;
         console.log("Floor : " + this.elevator_floor);
-        sleep(1000);
+        sleep(400);
     }
 }
 
@@ -315,3 +355,14 @@ function sleep(milliseconds) {
     while ((new Date().getTime() - start) < milliseconds) {
     }
 }
+
+//######## SCENARIOS ########
+
+//### UNCOMMENT, RUN and RELAX watching CONSOLE :) ###
+
+//scenario1()
+//scenario2()
+//scenario3()
+scenariorandom()
+
+//#### HAVE A NICE DAY ! ####

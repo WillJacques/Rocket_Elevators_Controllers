@@ -217,7 +217,7 @@ class Elevator:
             time.sleep(1)
 
 
-def test_elevator1():
+def scenario1():
     column = Column(10, 2)
 
     print("##### Scenario 1 Started ! #####")
@@ -231,7 +231,7 @@ def test_elevator1():
     print("##### Scenario 1 Ended ! #####")
 
 
-def test_elevator2():
+def scenario2():
     column = Column(10, 2)
 
     print("##### Scenario 2 Started ! #####")
@@ -248,7 +248,7 @@ def test_elevator2():
 
     print("##### Scenario 2 Ended ! #####")
 
-def test_elevator3():
+def scenario3():
     column = Column(10, 2)
 
     print("##### Scenario 3 Started ! #####")
@@ -269,8 +269,8 @@ def test_elevator3():
 
 ### UNCOMMENT, RUN and RELAX watching CONSOLE :) ###
 
-test_elevator1()
-#test_elevator2()
-#test_elevator3()
+scenario1()
+#scenario2()
+#scenario3()
 
 #### HAVE A NICE DAY ! ####

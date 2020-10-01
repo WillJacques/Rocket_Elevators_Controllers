@@ -263,7 +263,7 @@ class Elevator
   end
 end
 
-def test_elevator1
+def scenario1
   column = Column.new(10, 2)
 
   puts '##### Scenario 1 Started ! #####'
@@ -277,7 +277,7 @@ def test_elevator1
   puts '##### Scenario 1 Ended ! #####'
 end
 
-def test_elevator2
+def scenario2
   column = Column.new(10, 2)
 
   puts '##### Scenario 2 Started ! #####'
@@ -295,7 +295,7 @@ def test_elevator2
   puts '##### Scenario 2 Ended ! #####'
 end
 
-def test_elevator3
+def scenario3
   column = Column.new(10, 2)
 
   puts '##### Scenario 3 Started ! #####'
@@ -316,8 +316,8 @@ end
 
 # UNCOMMENT, RUN and RELAX watching CONSOLE :)
 
-test_elevator1
-# test_elevator2
-# test_elevator3
+scenario1
+# scenario2
+# scenario3
 
 # HAVE A NICE DAY !
