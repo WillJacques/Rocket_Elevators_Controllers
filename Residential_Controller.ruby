@@ -57,98 +57,50 @@ class Column
     if floor_number == 1
       direction = 'DOWN'
     end
-    if direction == 'UP'
-      result_array = []
-      score_array = []
-      b_elevator = nil
-      elevator_list.length.times do |i|
-        elevator_i = elevator_list[i]
-        if elevator_i.elevator_direction == 'UP' && elevator_i.elevator_floor < floor_number
-          result_array.append(i)
-          score = elevator_i.elevator_floor - floor_number
-          score_array.append(score.abs)
-        end
+    result_array = []
+    score_array = []
+    b_elevator = nil
+    elevator_list.length.times do |i|
+      elevator_i = elevator_list[i]
+      if elevator_i.elevator_direction == direction && elevator_i.elevator_floor < floor_number
+        result_array.append(i)
+        score = elevator_i.elevator_floor - floor_number
+        score_array.append(score.abs)
       end
-
-      if score_array == []
-        elevator_list.length.times do |i|
-          elevator_i = elevator_list[i]
-            if elevator_i.elevator_direction == 'IDLE'
-              result_array.append(i)
-              score = elevator_i.elevator_floor - floor_number
-              score_array.append(score.abs)
-            end
-        end
-      end
-
-      if score_array == []
-        elevator_list.length.times do |i|
-          elevator_i = elevator_list[i]
-          result_array.append(i)
-          score = elevator_i.elevator_floor - floor_number
-          score_array.append(score.abs)
-        end
-      end
-
-      if result_array.length > 0
-        minimum = score_array[0]
-        location = 0
-        score_array.length.times do |i|
-          if score_array[i] < minimum
-            minimum = score_array[i]
-            location = i
-          end
-        end
-        b_elevator = result_array[location]
-      end
-      best_elevator = elevator_list[b_elevator]
-      best_elevator
-    else # IF DIRECTION IS DOWN
-      result_array = []
-      score_array = []
-      b_elevator = nil
-      elevator_list.length.times do |i|
-        elevator_i = elevator_list[i]
-        if elevator_i.elevator_direction == 'DOWN' && elevator_i.elevator_floor > floor_number
-          result_array.append(i)
-          score = elevator_i.elevator_floor - floor_number
-          score_array.append(score.abs)
-        end
-      end
-
-      if score_array == []
-        elevator_list.length.times do |i|
-          elevator_i = elevator_list[i]
-            if elevator_i.elevator_direction == 'IDLE'
-              result_array.append(i)
-              score = elevator_i.elevator_floor - floor_number
-              score_array.append(score.abs)
-            end
-        end
-      end
-
-      if score_array == []
-        elevator_list.length.times do |i|
-          elevator_i = elevator_list[i]
-          result_array.append(i)
-          score = elevator_i.elevator_floor - floor_number
-          score_array.append(score.abs)
-        end
-      end
-
-      if score_array.length > 0
-        minimum = score_array[0]
-        location = 0
-        score_array.length.times do |i|
-          if score_array[i] < minimum
-            minimum = score_array[i]
-            location = i
-          end
-        end
-        b_elevator = result_array[location]
-      end
-      best_elevator = elevator_list[b_elevator]
     end
+
+    if score_array == []
+      elevator_list.length.times do |i|
+        elevator_i = elevator_list[i]
+          if elevator_i.elevator_direction == 'IDLE'
+            result_array.append(i)
+            score = elevator_i.elevator_floor - floor_number
+            score_array.append(score.abs)
+          end
+      end
+    end
+
+    if score_array == []
+      elevator_list.length.times do |i|
+        elevator_i = elevator_list[i]
+        result_array.append(i)
+        score = elevator_i.elevator_floor - floor_number
+        score_array.append(score.abs)
+      end
+    end
+
+    if result_array.length > 0
+      minimum = score_array[0]
+      location = 0
+      score_array.length.times do |i|
+        if score_array[i] < minimum
+          minimum = score_array[i]
+          location = i
+        end
+      end
+      b_elevator = result_array[location]
+    end
+    best_elevator = elevator_list[b_elevator]
     best_elevator
   end
 end
@@ -158,7 +110,7 @@ class Elevator
   def initialize (elevator_no, status, elevator_floor, elevator_direction)
     @elevator_no = elevator_no
     @letter = 97 + elevator_no
-    @elevator_letter = letter.chr
+    @elevator_letter = (letter.chr).capitalize
     @status = status
     @elevator_floor = elevator_floor
     @elevator_direction = elevator_direction
@@ -195,20 +147,20 @@ class Elevator
         floor_list.pop
       elsif requested_floor < elevator_floor
         @status = 'moving'
-        puts("---Elevator #{elevator_letter.capitalize} #{status}---")
+        puts("---Elevator #{elevator_letter} #{status}---")
         @elevator_direction = 'DOWN'
         move_down(requested_floor)
         @status = 'stopped'
-        puts("---Elevator #{elevator_letter.capitalize} #{status}---")
+        puts("---Elevator #{elevator_letter} #{status}---")
         open_door
         floor_list.pop
       elsif requested_floor > elevator_floor
         @status = 'moving'
-        puts("---Elevator #{elevator_letter.capitalize} #{status}---")
+        puts("---Elevator #{elevator_letter} #{status}---")
         @elevator_direction = 'UP'
         move_up(requested_floor)
         @status = 'stopped'
-        puts("---Elevator #{elevator_letter.capitalize} #{status}---")
+        puts("---Elevator #{elevator_letter} #{status}---")
         open_door
         floor_list.pop
       end
@@ -312,12 +264,53 @@ def scenario3
   puts '##### Scenario 3 Ended ! #####'
 end
 
+def scenariorandom
+  numberbuildingfloors = rand(5..10)                                      # To have between 5 and 10 floors
+  numberofelevators = rand(2..5)                                          # To have between 2 and 5 elevators
+  numberofcalls = rand(2..5)                                              # To have between 2 and 5 calls
+  elevatorlistofdirections = ["DOWN", "IDLE", "UP"]                       # Array of elevator directions on creation
+
+  column = Column.new(numberbuildingfloors, numberofelevators)            # Creates the new Column
+
+  puts("##### Scenario Random Started ! #####")                           # Console log the start and list the random number for the program
+  puts(">>> Scenario with : #{numberbuildingfloors} floors #{numberofelevators} elevators and #{numberofcalls} calls <<<")
+  sleep(2)
+  numberofelevators.times do |i|                                          # Change elevators floors and direction created in program and console.log data
+    column.elevator_list[i].elevator_floor = rand(1..numberbuildingfloors)
+    column.elevator_list[i].elevator_direction = elevatorlistofdirections[rand(0..2)]
+    if column.elevator_list[i].elevator_direction == "IDLE"
+      puts(">>> Elevator #{column.elevator_list[i].elevator_letter} is on floor #{column.elevator_list[i].elevator_floor} on #{column.elevator_list[i].elevator_direction}<<<")
+    else
+      puts(">>> Elevator #{column.elevator_list[i].elevator_letter} is on floor #{column.elevator_list[i].elevator_floor} in #{column.elevator_list[i].elevator_direction} direction <<<")
+    end
+  end
+  sleep(2)
+  numberofcalls.times do                                           #Creates different call from users
+    startfloor = rand(1..numberbuildingfloors)
+    wantedfloor = rand(1..numberbuildingfloors)
+    wanteddirection = "IDLE"
+    while wantedfloor == startfloor                                   #To be sure that a user doesn't call a floor he's already on
+      wantedfloor = rand(1..numberbuildingfloors)
+    end
+    if startfloor > wantedfloor
+      wanteddirection = "DOWN"
+    else
+      wanteddirection = "UP"
+    end
+    called_elevator = column.request_elevator(startfloor, wanteddirection)     #User call on floor with direction
+    column.request_floor(called_elevator, wantedfloor)                             #User call inside elevator
+  end
+
+  print("##### Scenario Random Ended ! #####")
+end
+
 # SCENARIOS
 
 # UNCOMMENT, RUN and RELAX watching CONSOLE :)
 
-scenario1
+# scenario1
 # scenario2
 # scenario3
+scenariorandom
 
 # HAVE A NICE DAY !
