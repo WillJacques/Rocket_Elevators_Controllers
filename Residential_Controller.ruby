@@ -1,298 +1,319 @@
-print ("Hello World")
-
 # SCENARIO CHOICES ARE AT THE END OF THE PROGRAM, YOU ONLY HAVE TO UNCOMMENT THE WANTED ONE ! THANK YOU !
 
-import time
+class Column
+  attr_accessor :nb_of_floor, :nb_of_elevator, :elevator_list
+  def initialize(nb_of_floor, nb_of_elevator)
+    @nb_of_floor = nb_of_floor
+    @nb_of_elevator = nb_of_elevator
+    @elevator_list = []
+    create_elevators
+    # puts "#{@elevator_list[0].status}"
+  end
 
-class Column:
-    def __init__(self, nb_of_floor, nb_of_elevator):
-        self.nb_of_floor = nb_of_floor
-        self.nb_of_elevator = nb_of_elevator
-        self.elevator_list = []
-        for i in range(nb_of_elevator):
-            self.elevator_list.append(Elevator(i, "IDLE", 1, "IDLE"))
+  def create_elevators
+    @nb_of_elevator.times do |i|
+      @elevator_list.append(Elevator.new(i, 'IDLE', 1, 'IDLE'))
+    end
+  end
 
-    # Request elevator function with find best elevator
+  # Request elevator function with find best elevator
 
-    def RequestElevator(self, FloorNumber, Direction):
-        time.sleep(1)
-        print(f">>> User request an elevator at floor",
-              FloorNumber, "to go", Direction, "<<<")
-        time.sleep(1)
-        print(f"*Call Button Light On*")
-        time.sleep(1)
+  def request_elevator(floor_number, direction)
+    # time.sleep(1)
+    puts(">>> User request an elevator at floor #{floor_number} to go #{direction} <<<")
+    # time.sleep(1)
+    puts('*Call Button Light On*')
+    #  time.sleep(1)
 
-        request_elevator = self.find_best_elevator(FloorNumber, Direction)
-        request_elevator.send_request(FloorNumber)
-        return request_elevator
+    request_elevator = find_best_elevator(floor_number, direction)
+    request_elevator.send_request(floor_number)
+    request_elevator
+  end
 
-    # Request floor inside elevator
+  # Request floor inside elevator
 
-    def RequestFloor(self, elevator_object, RequestedFloor):
-        time.sleep(1)
-        print(f">>> User wants to go to floor", RequestedFloor, "<<<")
-        time.sleep(1)
-        print(f"*Request Button Light On*")
-        time.sleep(1)
-        elevator_object.send_request(RequestedFloor)
+  def request_floor(elevator_object, requested_floor)
+    # time.sleep(1)
+    puts(">>> User wants to go to floor #{requested_floor} <<<")
+    # time.sleep(1)
+    puts('*Request Button Light On*')
+    # time.sleep(1)
+    elevator_object.send_request(requested_floor)
+  end
 
-    # Best elevator Function()
+  # Best elevator Function
 
-    def find_best_elevator(self, FloorNumber, Direction):
-        print(f"Searching for best elevator to go to floor",
-              FloorNumber, "in", Direction, "direction.")
-        if FloorNumber == 10:
-            Direction = "UP"
-        elif FloorNumber == 1:
-            Direction = "DOWN"
-        if Direction == "UP":
-            resultArray = []
-            scoreArray = []
-            b_elevator = None
-            bestElevator = None
-            for i in range(len(self.elevator_list)):
-                elevator_i = self.elevator_list[i]
-                if (elevator_i.elevator_direction == "UP") and (elevator_i.elevator_floor < FloorNumber):
-                    resultArray.append(i)
-                    score = abs(elevator_i.elevator_floor - FloorNumber)
-                    scoreArray.append(score)
+  def find_best_elevator(floor_number, direction)
+    puts("Searching for best elevator to go to floor #{floor_number} in #{direction} direction.")
+    if floor_number == 10
+      direction = 'UP'
+    end
+    if floor_number == 1
+      direction = 'DOWN'
+    end
+    if direction == 'UP'
+      result_array = []
+      score_array = []
+      b_elevator = nil
+      best_elevator = nil
+      elevator_list.length.times do |i|
+        elevator_i = elevator_list[i]
+        if elevator_i.elevator_direction == 'UP' && elevator_i.elevator_floor < floor_number
+          result_array.append(i)
+          score = elevator_i.elevator_floor - floor_number
+          score_array.append(score.abs)
+        end
+      end
 
-            if scoreArray == []:
-                for i in range(len(self.elevator_list)):
-                    elevator_i = self.elevator_list[i]
-                    if (elevator_i.elevator_direction == "IDLE"):
-                        resultArray.append(i)
-                        score = abs(elevator_i.elevator_floor - FloorNumber)
-                        scoreArray.append(score)
+      if score_array == []
+        elevator_list.length.times do |i|
+          elevator_i = elevator_list[i]
+            if elevator_i.elevator_direction == 'IDLE'
+              result_array.append(i)
+              score = elevator_i.elevator_floor - floor_number
+              score_array.append(score.abs)
+            end
+        end
+      end
 
-            if scoreArray == []:
-                for i in range(len(self.elevator_list)):
-                    elevator_i = self.elevator_list[i]
-                    resultArray.append(i)
-                    score = abs(elevator_i.elevator_floor - FloorNumber)
-                    scoreArray.append(score)
+      if score_array == []
+        elevator_list.length.times do |i|
+          elevator_i = elevator_list[i]
+          result_array.append(i)
+          score = elevator_i.elevator_floor - floor_number
+          score_array.append(score.abs)
+        end
+      end
 
-            if len(resultArray) > 0:
-                minimum = scoreArray[0]
-                location = 0
-                for i in range(1, len(scoreArray)):
-                    if scoreArray[i] < minimum:
-                        minimum = scoreArray[i]
-                        location = i
-                b_elevator = resultArray[location]
-            bestElevator = self.elevator_list[b_elevator]
-            return bestElevator
-        else:
-            resultArray = []
-            scoreArray = []
-            b_elevator = None
-            bestElevator = None
-            for i in range(len(self.elevator_list)):
-                elevator_i = self.elevator_list[i]
-                if (elevator_i.elevator_direction == "DOWN") and (elevator_i.elevator_floor > FloorNumber):
-                    resultArray.append(i)
-                    score = abs(elevator_i.elevator_floor - FloorNumber)
-                    scoreArray.append(score)
+      if result_array.length > 1
+        minimum = score_array[0]
+        location = 0
+        score_array.length.times do |i|
+          if score_array[i] < minimum
+            minimum = score_array[i]
+            location = i
+          end
+        end
+        b_elevator = result_array[location]
+      end
+      best_elevator = elevator_list[b_elevator]
+      best_elevator
+    else
+      result_array = []
+      score_array = []
+      b_elevator = nil
+      best_elevator = nil
+      elevator_list.length.times do |i|
+        elevator_i = elevator_list[i]
+        if elevator_i.elevator_direction == 'DOWN' && elevator_i.elevator_floor > floor_number
+          result_array.append(i)
+          score = elevator_i.elevator_floor - floor_number
+          score_array.append(score.abs)
+        end
+      end
 
-            if scoreArray == []:
-                for i in range(len(self.elevator_list)):
-                    elevator_i = self.elevator_list[i]
-                    if (elevator_i.elevator_direction == "IDLE"):
-                        resultArray.append(i)
-                        score = abs(elevator_i.elevator_floor - FloorNumber)
-                        scoreArray.append(score)
+      if score_array == []
+        elevator_list.length.times do |i|
+          elevator_i = elevator_list[i]
+            if elevator_i.elevator_direction == 'IDLE'
+              result_array.append(i)
+              score = elevator_i.elevator_floor - floor_number
+              score_array.append(score.abs)
+            end
+        end
+      end
 
-            if scoreArray == []:
-                for i in range(len(self.elevator_list)):
-                    elevator_i = self.elevator_list[i]
-                    resultArray.append(i)
-                    score = abs(elevator_i.elevator_floor - FloorNumber)
-                    scoreArray.append(score)
+      if score_array == []
+        elevator_list.length.times do |i|
+          elevator_i = elevator_list[i]
+          result_array.append(i)
+          score = elevator_i.elevator_floor - floor_number
+          score_array.append(score.abs)
+        end
+      end
 
-            if len(resultArray) > 0:
-                minimum = scoreArray[0]
-                location = 0
-                for i in range(1, len(scoreArray)):
-                    if scoreArray[i] < minimum:
-                        minimum = scoreArray[i]
-                        location = i
-                b_elevator = resultArray[location]
-            bestElevator = self.elevator_list[b_elevator]
-            return bestElevator
+      if result_array.length > 1
+        minimum = score_array[0]
+        location = 0
+        score_array.length.times do |i|
+          if score_array[i] < minimum
+            minimum = score_array[i]
+            location = i
+          end
+        end
+        b_elevator = result_array[location]
+      end
+      best_elevator = elevator_list[b_elevator]
+      best_elevator
+    end
+  end
+end
 
+class Elevator
+  attr_accessor :elevator_no, :status, :elevator_floor, :elevator_direction, :floor_list, :letter, :elevator_letter
+  def initialize (elevator_no, status, elevator_floor, elevator_direction)
+    @elevator_no = elevator_no
+    @letter = 97 + elevator_no
+    @elevator_letter = letter.chr
+    @status = status
+    @elevator_floor = elevator_floor
+    @elevator_direction = elevator_direction
+    @floor_list = []
+  end
 
-class Elevator:
-    def __init__(self, elevator_no, status, elevator_floor, elevator_direction):
-        self.elevator_no = elevator_no
-        self.elevator_letter = chr(97 + elevator_no)
-        self.status = status
-        self.elevator_floor = elevator_floor
-        self.elevator_direction = elevator_direction
-        self.floor_list = []
+  # Send Request then operate
 
-    # Send Request then operate
+  def send_request requested_floor
+    floor_list.append(requested_floor)
+    compute_list
+    operate_elevator(requested_floor)
+  end
 
-    def send_request(self, RequestedFloor):
-        self.floor_list.append(RequestedFloor)
-        self.compute_list()
-        self.operate_elevator(RequestedFloor)
+  # Sort list if the elevator is going 'UP' or 'DOWN'
 
-    # Sort list if the elevator is going "UP" or "DOWN"
+  def compute_list
+    if elevator_direction == 'UP'
+      floor_list.sort
+    elsif elevator_direction == 'DOWN'
+      floor_list.sort
+      floor_list.reverse
+    end
+    floor_list
+  end
 
-    def compute_list(self):
-        if self.elevator_direction == "UP":
-            self.floor_list.sort()                  # NORMAL SORT
-        elif self.elevator_direction == "DOWN":
-            self.floor_list.sort(reverse=True)      # REVERSE SORT
-        return self.floor_list
+  # System operation
 
-    # System operation
+  def operate_elevator(requested_floor)
+    while floor_list.length > 0
+      if requested_floor == elevator_floor
+        open_door
+        @status = 'moving'
+        floor_list.pop
+      elsif requested_floor < elevator_floor
+        @status = 'moving'
+        puts("---Elevator #{elevator_letter.capitalize} #{status}---")
+        @elevator_direction = 'DOWN'
+        move_down(requested_floor)
+        @status = 'stopped'
+        puts("---Elevator #{elevator_letter.capitalize} #{status}---")
+        open_door
+        floor_list.pop
+      elsif requested_floor > elevator_floor
+        @status = 'moving'
+        puts("---Elevator #{elevator_letter.capitalize} #{status}---")
+        @elevator_direction = 'UP'
+        move_up(requested_floor)
+        @status = 'stopped'
+        puts("---Elevator #{elevator_letter.capitalize} #{status}---")
+        open_door
+        floor_list.pop
+      end
+    end
+    elevator_direction = 'IDLE'
+  end
 
-    def operate_elevator(self, RequestedFloor):
-        while len(self.floor_list) > 0:
-            if RequestedFloor == self.elevator_floor:
-                self.Open_door()
-                self.status = "moving"
-                self.floor_list.pop()
-            elif RequestedFloor < self.elevator_floor:
-                self.status = "moving"
-                print(f"---Elevator " +
-                      self.elevator_letter.capitalize(), self.status, "---")
-                self.elevator_direction = "DOWN"
-                self.Move_down(RequestedFloor)
-                self.status = "stopped"
-                print(f"---Elevator " +
-                      self.elevator_letter.capitalize(), self.status, "---")
-                self.Open_door()
-                self.floor_list.pop()
-            elif RequestedFloor > self.elevator_floor:
-                self.status = "moving"
-                print(f"---Elevator " +
-                      self.elevator_letter.capitalize(), self.status, "---")
-                self.elevator_direction = "UP"
-                self.Move_up(RequestedFloor)
-                self.status = "stopped"
-                print(f"---Elevator " +
-                      self.elevator_letter.capitalize(), self.status, "---")
-                self.Open_door()
-                self.floor_list.pop()
+  # OPEN DOORS FUNCTION
 
-        if len(self.floor_list) == 0:
-            self.elevator_direction = "IDLE"
+  def open_door
+    # time.sleep(1)
+    puts('Open Doors')
+    puts('---Opening Doors---')
+    # time.sleep(1)
+    puts('*Button Light Off*')
+    puts('User enters/exits the elevator')
+    # time.sleep(1)
+    puts('---Closing Doors---')
+    # time.sleep(1)
+    close_door
+  end
 
-    # OPEN DOORS FUNCTION
+  # CLOSE DOORS FUNCTION
 
-    def Open_door(self):
-        time.sleep(1)
-        print(f"Open Doors")
-        print(f"---Opening Doors---")
-        time.sleep(1)
-        print(f"*Button Light Off*")
-        print(f"User enters/exits the elevator")
-        time.sleep(1)
-        print(f"---Closing Doors---")
-        time.sleep(1)
-        self.Close_door()
+  def close_door
+    puts('Closed Doors')
+    # time.sleep(1)
+  end
 
-    # CLOSE DOORS FUNCTION
+  # MOVE THE ELEVATOR UP FUNCTION
 
-    def Close_door(self):
+  def move_up(requested_floor)
+    puts("Floor : #{elevator_floor}")
+    # time.sleep(1)
+    while elevator_floor != requested_floor
+      @elevator_floor += 1
+      puts("Floor : #{elevator_floor}")
+      # time.sleep(1)
+    end
+  end
 
-        print(f"Closed Doors")
-        time.sleep(1)
+  # MOVE THE ELEVATOR DOWN FUNCTION
 
-    # MOVE THE ELEVATOR UP FUNCTION
+  def move_down(requested_floor)
+    puts("Floor : #{elevator_floor}")
+    # time.sleep(1)
+    while elevator_floor != requested_floor
+      @elevator_floor -= 1
+      puts("Floor : #{elevator_floor}")
+      # time.sleep(1)
+    end
+  end
+end
 
-    def Move_up(self, RequestedFloor):
-        print(f"Floor : ", self.elevator_floor)
-        time.sleep(1)
-        while self.elevator_floor != RequestedFloor:
-            self.elevator_floor += 1
-            print(f"Floor : ", self.elevator_floor)
-            time.sleep(1)
+def test_elevator1
+  column = Column.new(10, 2)
 
-    # MOVE THE ELEVATOR DOWN FUNCTION
+  puts '##### Scenario 1 Started ! #####'
 
-    def Move_down(self, RequestedFloor):
-        print(f"Floor : ", self.elevator_floor)
-        time.sleep(1)
-        while self.elevator_floor != RequestedFloor:
-            self.elevator_floor -= 1
-            print(f"Floor : ", self.elevator_floor)
-            time.sleep(1)
+  column.elevator_list[0].elevator_floor = 2 # set elevator 1 floor
+  column.elevator_list[1].elevator_floor = 6 # set elevator 2 floor
 
+  called_elevator = column.request_elevator(3, 'UP') # User call on floor with direction
+  column.request_floor(called_elevator, 7) # User call inside elevator
 
-def test_elevator1():
-    column = Column(10, 2)
+  puts '##### Scenario 1 Ended ! #####'
+end
 
-    print("##### Scenario 1 Started ! #####")
-    # set elevator 1 floor
-    column.elevator_list[0].elevator_floor = 2
-    # set elevator 2 floor
-    column.elevator_list[1].elevator_floor = 6
+def test_elevator2
+  column = Column.new(10, 2)
 
-    # User call on floor with direction
-    called_elevator = column.RequestElevator(3, "UP")
-    # User call inside elevator
-    column.RequestFloor(called_elevator, 7)
+  puts '##### Scenario 2 Started ! #####'
+  
+  column.elevator_list[0].elevator_floor = 10 # set elevator 1 floor  
+  column.elevator_list[1].elevator_floor = 3 # set elevator 2 floor
 
-    print("##### Scenario 1 Ended ! #####")
+  called_elevator = column.request_elevator(1, 'UP') # User call on floor with direction
+  column.request_floor(called_elevator, 6) # User call inside elevator
+  called_elevator = column.request_elevator(3, 'UP') # User call on floor with direction
+  column.request_floor(called_elevator, 5) # User call inside elevator
+  called_elevator = column.request_elevator(9, 'DOWN') # User call on floor with direction
+  column.request_floor(called_elevator, 2) # User call inside elevator
 
+  puts '##### Scenario 2 Ended ! #####'
+end
 
-def test_elevator2():
-    column = Column(10, 2)
+def test_elevator3
+  column = Column.new(10, 2)
 
-    print("##### Scenario 2 Started ! #####")
-    # set elevator 1 floor
-    column.elevator_list[0].elevator_floor = 10
-    # set elevator 2 floor
-    column.elevator_list[1].elevator_floor = 3
+  puts '##### Scenario 3 Started ! #####'
 
-    # User call on floor with direction
-    called_elevator = column.RequestElevator(1, "UP")
-    # User call inside elevator
-    column.RequestFloor(called_elevator, 6)
-    # User call on floor with direction
-    called_elevator = column.RequestElevator(3, "UP")
-    # User call inside elevator
-    column.RequestFloor(called_elevator, 5)
-    # User call on floor with direction
-    called_elevator = column.RequestElevator(9, "DOWN")
-    # User call inside elevator
-    column.RequestFloor(called_elevator, 2)
+  column.elevator_list[0].elevator_floor = 10       # set elevator 1 floor
+  column.elevator_list[1].elevator_floor = 6        # set elevator 2 floor
+  column.elevator_list[1].elevator_direction = 'UP' # set elevator 2 direction
 
-    print("##### Scenario 2 Ended ! #####")
+  called_elevator = column.request_elevator(3, 'DOWN')    # User call on floor with direction  
+  column.request_floor(called_elevator, 2)                # User call inside elevator
+  called_elevator = column.request_elevator(10, 'DOWN')   # User call on floor with direction
+  column.request_floor(called_elevator, 3)                # User call inside elevator
 
+  puts '##### Scenario 3 Ended ! #####'
+end
 
-def test_elevator3():
-    column = Column(10, 2)
+# SCENARIOS
 
-    print("##### Scenario 3 Started ! #####")
-    # set elevator 1 floor
-    column.elevator_list[0].elevator_floor = 10
-    # set elevator 2 floor
-    column.elevator_list[1].elevator_floor = 6
-    # set elevator 2 direction
-    column.elevator_list[1].elevator_direction = "UP"
+# UNCOMMENT, RUN and RELAX watching CONSOLE :)
 
-    # User call on floor with direction
-    called_elevator = column.RequestElevator(3, "DOWN")
-    # User call inside elevator
-    column.RequestFloor(called_elevator, 2)
-    # User call on floor with direction
-    called_elevator = column.RequestElevator(10, "DOWN")
-    # User call inside elevator
-    column.RequestFloor(called_elevator, 3)
+test_elevator1
+# test_elevator2
+# test_elevator3
 
-    print("##### Scenario 3 Ended ! #####")
-
-
-######## SCENARIOS ########
-
-### UNCOMMENT, RUN and RELAX watching CONSOLE :) ###
-
-#test_elevator1()
-#test_elevator2()
-#test_elevator3()
-
-#### HAVE A NICE DAY ! ####
+# HAVE A NICE DAY !
