@@ -12,7 +12,6 @@ Press a scenario Button and look at Console.
 Uncomment wanted scenario at the end of program
 */
 
-
 function scenario1() {
     var column = new Column(10, 2)
     var user1 = "William Sinclair"
@@ -124,6 +123,12 @@ function shuffleArray(array) {
         var temp = array[i];
         array[i] = array[j];
         array[j] = temp;
+    }
+}
+
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    while ((new Date().getTime() - start) < milliseconds) {
     }
 }
 
@@ -367,14 +372,6 @@ Elevator.prototype.Move_down = function (RequestedFloor) {
         this.elevator_floor -= 1;
         console.log("Floor : " + this.elevator_floor);
         sleep(500);
-    }
-}
-
-// Creates a sleep function() to put waiting times in program
-
-function sleep(milliseconds) {
-    var start = new Date().getTime();
-    while ((new Date().getTime() - start) < milliseconds) {
     }
 }
 
