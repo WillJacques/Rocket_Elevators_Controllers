@@ -14,12 +14,12 @@ class Column:
     # Request elevator function with find best elevator
 
     def RequestElevator(self, FloorNumber, Direction):
-        time.sleep(1)
+        time.sleep(0.5)
         print("####################################")
         print(f">>> User request an elevator at floor", FloorNumber, "to go", Direction, "<<<")
-        time.sleep(1)
+        time.sleep(0.5)
         print(f"*Call Button Light On*")
-        time.sleep(1)
+        time.sleep(0.5)
 
         request_elevator = self.find_best_elevator(FloorNumber, Direction)
         request_elevator.send_request(FloorNumber)
@@ -28,11 +28,11 @@ class Column:
     # Request floor inside elevator
 
     def RequestFloor(self, elevator_object, RequestedFloor):
-        time.sleep(1)
+        time.sleep(0.5)
         print(f">>> User wants to go to floor", RequestedFloor, "<<<")
-        time.sleep(1)
+        time.sleep(0.5)
         print(f"*Request Button Light On*")
-        time.sleep(1)
+        time.sleep(0.5)
         elevator_object.send_request(RequestedFloor)
 
     # Best elevator Function()
@@ -40,7 +40,7 @@ class Column:
     def find_best_elevator(self, FloorNumber, Direction):
         print(f"Searching for best elevator to go to floor",
               FloorNumber, "in", Direction, "direction.")
-        if FloorNumber == 10:
+        if FloorNumber == self.nb_of_floor:
             Direction = "UP"
         elif FloorNumber == 1:
             Direction = "DOWN"
@@ -48,39 +48,72 @@ class Column:
         scoreArray = []
         b_elevator = None
         bestElevator = None
-        for i in range(len(self.elevator_list)):
-            elevator_i = self.elevator_list[i]
-            if (elevator_i.elevator_direction == Direction) and (elevator_i.elevator_floor < FloorNumber):
-                resultArray.append(i)
-                score = abs(elevator_i.elevator_floor - FloorNumber)
-                scoreArray.append(score)
-
-        if scoreArray == []:
+        if Direction == "UP":
             for i in range(len(self.elevator_list)):
                 elevator_i = self.elevator_list[i]
-                if (elevator_i.elevator_direction == "IDLE"):
+                if (elevator_i.elevator_direction == "UP") and (elevator_i.elevator_floor <= FloorNumber):
                     resultArray.append(i)
                     score = abs(elevator_i.elevator_floor - FloorNumber)
                     scoreArray.append(score)
 
-        if scoreArray == []:
+            if scoreArray == []:
+                for i in range(len(self.elevator_list)):
+                    elevator_i = self.elevator_list[i]
+                    if (elevator_i.elevator_direction == "IDLE"):
+                        resultArray.append(i)
+                        score = abs(elevator_i.elevator_floor - FloorNumber)
+                        scoreArray.append(score)
+
+            if scoreArray == []:
+                for i in range(len(self.elevator_list)):
+                    elevator_i = self.elevator_list[i]
+                    resultArray.append(i)
+                    score = abs(elevator_i.elevator_floor - FloorNumber)
+                    scoreArray.append(score)
+
+            if len(resultArray) > 0:
+                minimum = scoreArray[0]
+                location = 0
+                for i in range(1, len(scoreArray)):
+                    if scoreArray[i] < minimum:
+                        minimum = scoreArray[i]
+                        location = i
+                b_elevator = resultArray[location]
+            bestElevator = self.elevator_list[b_elevator]
+            return bestElevator
+        else :
             for i in range(len(self.elevator_list)):
                 elevator_i = self.elevator_list[i]
-                resultArray.append(i)
-                score = abs(elevator_i.elevator_floor - FloorNumber)
-                scoreArray.append(score)
+                if (elevator_i.elevator_direction == "DOWN") and (elevator_i.elevator_floor >= FloorNumber):
+                    resultArray.append(i)
+                    score = abs(elevator_i.elevator_floor - FloorNumber)
+                    scoreArray.append(score)
 
-        if len(resultArray) > 0:
-            minimum = scoreArray[0]
-            location = 0
-            for i in range(1, len(scoreArray)):
-                if scoreArray[i] < minimum:
-                    minimum = scoreArray[i]
-                    location = i
-            b_elevator = resultArray[location]
-        bestElevator = self.elevator_list[b_elevator]
-        return bestElevator
-        
+            if scoreArray == []:
+                for i in range(len(self.elevator_list)):
+                    elevator_i = self.elevator_list[i]
+                    if (elevator_i.elevator_direction == "IDLE"):
+                        resultArray.append(i)
+                        score = abs(elevator_i.elevator_floor - FloorNumber)
+                        scoreArray.append(score)
+
+            if scoreArray == []:
+                for i in range(len(self.elevator_list)):
+                    elevator_i = self.elevator_list[i]
+                    resultArray.append(i)
+                    score = abs(elevator_i.elevator_floor - FloorNumber)
+                    scoreArray.append(score)
+
+            if len(resultArray) > 0:
+                minimum = scoreArray[0]
+                location = 0
+                for i in range(1, len(scoreArray)):
+                    if scoreArray[i] < minimum:
+                        minimum = scoreArray[i]
+                        location = i
+                b_elevator = resultArray[location]
+            bestElevator = self.elevator_list[b_elevator]
+            return bestElevator
 
 
 class Elevator:
@@ -139,15 +172,15 @@ class Elevator:
     # OPEN DOORS FUNCTION
 
     def Open_door(self):
-        time.sleep(1)
+        time.sleep(0.5)
         print(f"Open Doors")
         print(f"---Opening Doors---")
-        time.sleep(1)
+        time.sleep(0.5)
         print(f"*Button Light Off*")
         print(f"User enters/exits the elevator")
-        time.sleep(1)
+        time.sleep(0.5)
         print(f"---Closing Doors---")
-        time.sleep(1)
+        time.sleep(0.5)
         self.Close_door()
 
     # CLOSE DOORS FUNCTION
@@ -155,27 +188,27 @@ class Elevator:
     def Close_door(self):
 
         print(f"Closed Doors")
-        time.sleep(1)
+        time.sleep(0.5)
 
     # MOVE THE ELEVATOR UP FUNCTION
 
     def Move_up(self, RequestedFloor):
         print(f"Floor : ", self.elevator_floor)
-        time.sleep(1)
+        time.sleep(0.5)
         while self.elevator_floor != RequestedFloor:
             self.elevator_floor += 1
             print(f"Floor : ", self.elevator_floor)
-            time.sleep(1)
+            time.sleep(0.5)
 
     # MOVE THE ELEVATOR DOWN FUNCTION
 
     def Move_down(self, RequestedFloor):
         print(f"Floor : ", self.elevator_floor)
-        time.sleep(1)
+        time.sleep(0.5)
         while self.elevator_floor != RequestedFloor:
             self.elevator_floor -= 1
             print(f"Floor : ", self.elevator_floor)
-            time.sleep(1)
+            time.sleep(0.5)
 
 
 def scenario1():
@@ -239,6 +272,10 @@ def scenariorandom():
     for i in range(numberofelevators):                                      #Change elevators floors and direction created in program and console.log data
         column.elevator_list[i].elevator_floor = random.randint(1, numberbuildingfloors)
         column.elevator_list[i].elevator_direction = elevatorlistofdirections[random.randint(0, 2)]
+        if (column.elevator_list[i].elevator_floor == 1):
+            column.elevator_list[i].elevator_direction = "IDLE"
+        if (column.elevator_list[i].elevator_floor == numberbuildingfloors):
+            column.elevator_list[i].elevator_direction = "IDLE"
         if (column.elevator_list[i].elevator_direction == "IDLE"):
             print(f">>> Elevator", column.elevator_list[i].elevator_letter, "is on floor", 
             column.elevator_list[i].elevator_floor, "on", column.elevator_list[i].elevator_direction, "<<<")
@@ -290,6 +327,6 @@ def scenarioinput():
 #scenario2()
 #scenario3()
 #scenariorandom()
-scenarioinput()
+#scenarioinput()
 
 #### HAVE A NICE DAY ! ####

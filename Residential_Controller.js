@@ -19,11 +19,11 @@ function scenario1() {
 
     console.log("##### Scenario 1 Started ! #####");
 
-    column.elevator_list[0].elevator_floor = 2;                 // set elevator 1 floor
-    column.elevator_list[1].elevator_floor = 6;                 // set elevator 2 floor
+    column.elevator_list[0].elevator_floor = 2;                         // set elevator 1 floor
+    column.elevator_list[1].elevator_floor = 6;                         // set elevator 2 floor
 
-    var called_elevator = column.RequestElevator(3, "UP", user1);      // User call on floor with direction
-    column.RequestFloor(called_elevator, 7, user1);                    // User call inside elevator
+    var called_elevator = column.RequestElevator(3, "UP", user1);       // User call on floor with direction
+    column.RequestFloor(called_elevator, 7, user1);                     // User call inside elevator
 
     console.log("##### Scenario 1 Ended ! #####");
 }
@@ -36,15 +36,15 @@ function scenario2() {
 
     console.log("##### Scenario 2 Started ! #####");
 
-    column.elevator_list[0].elevator_floor = 10;                // set elevator 1 floor
-    column.elevator_list[1].elevator_floor = 3;                 // set elevator 2 floor
+    column.elevator_list[0].elevator_floor = 10;                        // set elevator 1 floor
+    column.elevator_list[1].elevator_floor = 3;                         // set elevator 2 floor
 
-    var called_elevator = column.RequestElevator(1, "UP", user1);      // User call on floor with direction
-    column.RequestFloor(called_elevator, 6, user1);                    // User call inside elevator
-    called_elevator = column.RequestElevator(3, "UP", user2);          // User call on floor with direction
-    column.RequestFloor(called_elevator, 5, user2);                    // User call inside elevator
-    called_elevator = column.RequestElevator(9, "DOWN", user3);        // User call on floor with direction
-    column.RequestFloor(called_elevator, 2, user3);                    // User call inside elevator
+    var called_elevator = column.RequestElevator(1, "UP", user1);       // User call on floor with direction
+    column.RequestFloor(called_elevator, 6, user1);                     // User call inside elevator
+    called_elevator = column.RequestElevator(3, "UP", user2);           // User call on floor with direction
+    column.RequestFloor(called_elevator, 5, user2);                     // User call inside elevator
+    called_elevator = column.RequestElevator(9, "DOWN", user3);         // User call on floor with direction
+    column.RequestFloor(called_elevator, 2, user3);                     // User call inside elevator
 
     console.log("##### Scenario 2 ended ! #####");
 }
@@ -56,14 +56,14 @@ function scenario3() {
 
     console.log("##### Scenario 3 Started ! #####");
 
-    column.elevator_list[0].elevator_floor = 10;                // set elevator 1 floor
-    column.elevator_list[1].elevator_floor = 6;                 // set elevator 2 floor
-    column.elevator_list[1].elevator_direction = "UP";          // set elevator 2 direction
+    column.elevator_list[0].elevator_floor = 10;                        // set elevator 1 floor
+    column.elevator_list[1].elevator_floor = 6;                         // set elevator 2 floor
+    column.elevator_list[1].elevator_direction = "UP";                  // set elevator 2 direction
 
-    var called_elevator = column.RequestElevator(3, "DOWN", user1);    // User call on floor with direction
-    column.RequestFloor(called_elevator, 2, user1);                    // User call inside elevator
-    called_elevator = column.RequestElevator(10, "DOWN", user2);       // User call on floor with direction
-    column.RequestFloor(called_elevator, 3, user2);                    // User call inside elevator
+    var called_elevator = column.RequestElevator(3, "DOWN", user1);     // User call on floor with direction
+    column.RequestFloor(called_elevator, 2, user1);                     // User call inside elevator
+    called_elevator = column.RequestElevator(10, "DOWN", user2);        // User call on floor with direction
+    column.RequestFloor(called_elevator, 3, user2);                     // User call inside elevator
 
     console.log("##### Scenario 3 ended ! #####")
 }
@@ -73,19 +73,22 @@ function scenariorandom() {
     var numberofelevators = Math.ceil(Math.random()*3+2);                       //To have between 2 and 5 elevators
     var numberofcalls = Math.ceil(Math.random()*3+2);                           //To have between 2 and 5 calls
     var elevatorlistofdirections = ["DOWN", "IDLE", "UP"]                       //Array of elevator directions on creation
-    var username = ["Andie Jacques", "Nellie Jacques", "Coralie Jacques", "Lexie Jacques", "Billie Jacques"]
+    var username = ["Andie Jacques", "Nellie Jacques", "Coralie Jacques", "Lexie Jacques", "Billie Jacques"] //List of my daughters !! :)
     
-
     var column = new Column(numberbuildingfloors, numberofelevators)            //Creates the new Column
 
     console.log("##### Scenario Random Started ! #####");                       //Console log the start and list the random number for the program
     console.log(">>> Scenario with :", numberbuildingfloors, "floors, ", numberofelevators, "elevators and", numberofcalls, "calls <<<");
-    sleep(2000);
-    for (var i = 0; i < numberofelevators; i++) {                               //Change elevatora floors and direction created in program and console.log data
+    sleep(3000);
+    for (var i = 0; i < numberofelevators; i++) {                               //Change elevators floors and direction created in program and console.log data
         column.elevator_list[i].elevator_floor = Math.ceil(Math.random()*numberbuildingfloors)
         column.elevator_list[i].elevator_direction = elevatorlistofdirections[Math.floor(Math.random()*3)]
-        
-
+        if (column.elevator_list[i].elevator_floor === 1){
+            column.elevator_list[i].elevator_direction = "IDLE";
+        }
+        if (column.elevator_list[i].elevator_floor === numberbuildingfloors){
+            column.elevator_list[i].elevator_direction = "IDLE";
+        }
         if (column.elevator_list[i].elevator_direction === "IDLE") {
             console.log(">>> Elevator", column.elevator_list[i].elevator_letter, "is on floor", 
             column.elevator_list[i].elevator_floor, "on", column.elevator_list[i].elevator_direction, "<<<");
@@ -94,7 +97,7 @@ function scenariorandom() {
             column.elevator_list[i].elevator_floor, "in", column.elevator_list[i].elevator_direction, "direction <<<");
         }
     }
-    sleep(2000)
+    sleep(3000)
     for (var i = 0; i < numberofcalls; i++) {                                   //Creates different call from users
         var startfloor = Math.ceil(Math.random()*numberbuildingfloors)
         var wantedfloor = Math.ceil(Math.random()*numberbuildingfloors)
@@ -112,7 +115,6 @@ function scenariorandom() {
         var called_elevator = column.RequestElevator(startfloor, wanteddirection, clientname);     // User call on floor with direction
         column.RequestFloor(called_elevator, wantedfloor, clientname);                             // User call inside elevator
     }
-
     console.log("##### Scenario Random Ended ! #####")
 }
 
@@ -167,7 +169,7 @@ Column.prototype.RequestFloor = function (elevator_object, RequestedFloor, clien
 
 Column.prototype.find_best_elevator = function (FloorNumber, Direction) {
     console.log("Searching for best elevator to go to floor", FloorNumber, "in", Direction, "direction.");
-    if (FloorNumber === 10) {
+    if (FloorNumber === this.nb_of_floor) {
         Direction = "UP"
     } else if (FloorNumber === 1) {
         Direction = "DOWN"
@@ -176,43 +178,83 @@ Column.prototype.find_best_elevator = function (FloorNumber, Direction) {
     var scoreArray = [];
     var b_elevator = null;
     var bestElevator = null;
-    for (var i = 0; i < this.elevator_list.length; i++) {
-        var elevator_i = this.elevator_list[i];
-        if ((elevator_i.elevator_direction === Direction) && (elevator_i.elevator_floor < FloorNumber)) {
-            resultArray.push(i);
-            var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
-            scoreArray.push(score);
-        };
-    };
-    if (scoreArray.length === 0) {
+    if (Direction === "UP") {
         for (var i = 0; i < this.elevator_list.length; i++) {
             var elevator_i = this.elevator_list[i];
-            if (elevator_i.elevator_direction === "IDLE") {
+            if ((elevator_i.elevator_direction === "UP") && (elevator_i.elevator_floor <= FloorNumber)) {
                 resultArray.push(i);
                 var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
                 scoreArray.push(score);
             };
         };
-    };
-    if (scoreArray.length === 0) {
-        for (var i = 0; i < this.elevator_list.length; i++) {
-            var elevator_i = this.elevator_list[i];
-            resultArray.push(i);
-            var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
-            scoreArray.push(score);
-        };
-    };
-    if (resultArray.length > 0) {
-        var minimum = scoreArray[0];
-        var location = 0
-        for (var i = 1; i < scoreArray.length; i++) {
-            if (scoreArray[i] < minimum) {
-                minimum = scoreArray[i]
-                location = i
+        if (scoreArray.length === 0) {
+            for (var i = 0; i < this.elevator_list.length; i++) {
+                var elevator_i = this.elevator_list[i];
+                if (elevator_i.elevator_direction === "IDLE") {
+                    resultArray.push(i);
+                    var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
+                    scoreArray.push(score);
+                };
             };
         };
-        b_elevator = resultArray[location]
-    };
+        if (scoreArray.length === 0) {
+            for (var i = 0; i < this.elevator_list.length; i++) {
+                var elevator_i = this.elevator_list[i];
+                resultArray.push(i);
+                var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
+                scoreArray.push(score);
+            };
+        };
+        if (resultArray.length > 0) {
+            var minimum = scoreArray[0];
+            var location = 0
+            for (var i = 1; i < scoreArray.length; i++) {
+                if (scoreArray[i] < minimum) {
+                    minimum = scoreArray[i]
+                    location = i
+                };
+            };
+            b_elevator = resultArray[location]
+        };
+    } else {
+        for (var i = 0; i < this.elevator_list.length; i++) {
+            var elevator_i = this.elevator_list[i];
+            if ((elevator_i.elevator_direction === "DOWN") && (elevator_i.elevator_floor > FloorNumber)) {
+                resultArray.push(i);
+                var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
+                scoreArray.push(score);
+            };
+        };
+        if (scoreArray.length === 0) {
+            for (var i = 0; i < this.elevator_list.length; i++) {
+                var elevator_i = this.elevator_list[i];
+                if (elevator_i.elevator_direction === "IDLE") {
+                    resultArray.push(i);
+                    var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
+                    scoreArray.push(score);
+                };
+            };
+        };
+        if (scoreArray.length === 0) {
+            for (var i = 0; i < this.elevator_list.length; i++) {
+                var elevator_i = this.elevator_list[i];
+                resultArray.push(i);
+                var score = Math.abs(elevator_i.elevator_floor - FloorNumber);
+                scoreArray.push(score);
+            };
+        };
+        if (resultArray.length > 0) {
+            var minimum = scoreArray[0];
+            var location = 0
+            for (var i = 1; i < scoreArray.length; i++) {
+                if (scoreArray[i] < minimum) {
+                    minimum = scoreArray[i]
+                    location = i
+                };
+            };
+            b_elevator = resultArray[location]
+        };
+    }
     bestElevator = this.elevator_list[b_elevator];
     return bestElevator;
 }
