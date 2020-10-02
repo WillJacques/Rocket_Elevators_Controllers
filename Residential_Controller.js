@@ -15,38 +15,44 @@ Uncomment wanted scenario at the end of program
 
 function scenario1() {
     var column = new Column(10, 2)
+    var user1 = "William Sinclair"
 
     console.log("##### Scenario 1 Started ! #####");
 
     column.elevator_list[0].elevator_floor = 2;                 // set elevator 1 floor
     column.elevator_list[1].elevator_floor = 6;                 // set elevator 2 floor
 
-    var called_elevator = column.RequestElevator(3, "UP");      // User call on floor with direction
-    column.RequestFloor(called_elevator, 7);                    // User call inside elevator
+    var called_elevator = column.RequestElevator(3, "UP", user1);      // User call on floor with direction
+    column.RequestFloor(called_elevator, 7, user1);                    // User call inside elevator
 
     console.log("##### Scenario 1 Ended ! #####");
 }
 
 function scenario2() {
     var column = new Column(10, 2)
+    var user1 = "Nicolas Genest"
+    var user2 = "Mathieu Houde"
+    var user3 = "Patrick Thibault"
 
     console.log("##### Scenario 2 Started ! #####");
 
     column.elevator_list[0].elevator_floor = 10;                // set elevator 1 floor
     column.elevator_list[1].elevator_floor = 3;                 // set elevator 2 floor
 
-    var called_elevator = column.RequestElevator(1, "UP");      // User call on floor with direction
-    column.RequestFloor(called_elevator, 6);                    // User call inside elevator
-    called_elevator = column.RequestElevator(3, "UP");          // User call on floor with direction
-    column.RequestFloor(called_elevator, 5);                    // User call inside elevator
-    called_elevator = column.RequestElevator(9, "DOWN");        // User call on floor with direction
-    column.RequestFloor(called_elevator, 2);                    // User call inside elevator
+    var called_elevator = column.RequestElevator(1, "UP", user1);      // User call on floor with direction
+    column.RequestFloor(called_elevator, 6, user1);                    // User call inside elevator
+    called_elevator = column.RequestElevator(3, "UP", user2);          // User call on floor with direction
+    column.RequestFloor(called_elevator, 5, user2);                    // User call inside elevator
+    called_elevator = column.RequestElevator(9, "DOWN", user3);        // User call on floor with direction
+    column.RequestFloor(called_elevator, 2, user3);                    // User call inside elevator
 
     console.log("##### Scenario 2 ended ! #####");
 }
 
 function scenario3() {
     var column = new Column(10, 2)
+    var user1 = "David Larochelle"
+    var user2 = "Mathieu R.Lortie"
 
     console.log("##### Scenario 3 Started ! #####");
 
@@ -54,10 +60,10 @@ function scenario3() {
     column.elevator_list[1].elevator_floor = 6;                 // set elevator 2 floor
     column.elevator_list[1].elevator_direction = "UP";          // set elevator 2 direction
 
-    var called_elevator = column.RequestElevator(3, "DOWN");    // User call on floor with direction
-    column.RequestFloor(called_elevator, 2);                    // User call inside elevator
-    called_elevator = column.RequestElevator(10, "DOWN");       // User call on floor with direction
-    column.RequestFloor(called_elevator, 3);                    // User call inside elevator
+    var called_elevator = column.RequestElevator(3, "DOWN", user1);    // User call on floor with direction
+    column.RequestFloor(called_elevator, 2, user1);                    // User call inside elevator
+    called_elevator = column.RequestElevator(10, "DOWN", user2);       // User call on floor with direction
+    column.RequestFloor(called_elevator, 3, user2);                    // User call inside elevator
 
     console.log("##### Scenario 3 ended ! #####")
 }
@@ -67,6 +73,8 @@ function scenariorandom() {
     var numberofelevators = Math.ceil(Math.random()*3+2);                       //To have between 2 and 5 elevators
     var numberofcalls = Math.ceil(Math.random()*3+2);                           //To have between 2 and 5 calls
     var elevatorlistofdirections = ["DOWN", "IDLE", "UP"]                       //Array of elevator directions on creation
+    var username = ["Andie Jacques", "Nellie Jacques", "Coralie Jacques", "Lexie Jacques", "Billie Jacques"]
+    
 
     var column = new Column(numberbuildingfloors, numberofelevators)            //Creates the new Column
 
@@ -76,6 +84,8 @@ function scenariorandom() {
     for (var i = 0; i < numberofelevators; i++) {                               //Change elevatora floors and direction created in program and console.log data
         column.elevator_list[i].elevator_floor = Math.ceil(Math.random()*numberbuildingfloors)
         column.elevator_list[i].elevator_direction = elevatorlistofdirections[Math.floor(Math.random()*3)]
+        
+
         if (column.elevator_list[i].elevator_direction === "IDLE") {
             console.log(">>> Elevator", column.elevator_list[i].elevator_letter, "is on floor", 
             column.elevator_list[i].elevator_floor, "on", column.elevator_list[i].elevator_direction, "<<<");
@@ -96,11 +106,23 @@ function scenariorandom() {
         } else {
             wanteddirection = "UP";
         }
-        var called_elevator = column.RequestElevator(startfloor, wanteddirection);     // User call on floor with direction
-        column.RequestFloor(called_elevator, wantedfloor);                             // User call inside elevator
+        shuffleArray(username);
+        clientname = username[0];
+        username.shift();
+        var called_elevator = column.RequestElevator(startfloor, wanteddirection, clientname);     // User call on floor with direction
+        column.RequestFloor(called_elevator, wantedfloor, clientname);                             // User call inside elevator
     }
 
     console.log("##### Scenario Random Ended ! #####")
+}
+
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
 }
 
 // Column Class definition
@@ -117,12 +139,13 @@ var Column = function (nb_of_floor, nb_of_elevator) {
 
 //  Request elevator function with find best elevator
 
-Column.prototype.RequestElevator = function (FloorNumber, Direction) {
-    sleep(1000);
-    console.log(">>> User request an elevator at floor", FloorNumber, "to go", Direction, "<<<");
-    sleep(1000);
+Column.prototype.RequestElevator = function (FloorNumber, Direction, clientname) {
+    sleep(1);
+    console.log("####################################");
+    console.log(">>>", clientname, "request an elevator at floor", FloorNumber, "to go", Direction, "<<<");
+    sleep(1);
     console.log("*Call Button Light On*");
-    sleep(1000);
+    sleep(1);
 
     var request_elevator = this.find_best_elevator(FloorNumber, Direction);
     request_elevator.send_request(FloorNumber);
@@ -131,12 +154,12 @@ Column.prototype.RequestElevator = function (FloorNumber, Direction) {
 
 // Request floor inside elevator
 
-Column.prototype.RequestFloor = function (elevator_object, RequestedFloor) {
-    sleep(1000);
-    console.log(">>> User wants to go to floor", RequestedFloor, "<<<");
-    sleep(1000);
+Column.prototype.RequestFloor = function (elevator_object, RequestedFloor, clientname) {
+    sleep(1);
+    console.log(">>>", clientname, "wants to go to floor", RequestedFloor, "<<<");
+    sleep(1);
     console.log("*Request Button Light On*");
-    sleep(1000);
+    sleep(1);
     elevator_object.send_request(RequestedFloor);
 }
 
@@ -203,6 +226,7 @@ var Elevator = function (elevator_no, status, elevator_floor, elevator_direction
     this.elevator_floor = elevator_floor;
     this.elevator_direction = elevator_direction;
     this.floor_list = [];
+    this.elevator_user = null
 }
 
 // Send Request then operate
@@ -260,15 +284,15 @@ Elevator.prototype.operate_elevator = function (RequestedFloor) {
 // OPEN DOORS FUNCTION
 
 Elevator.prototype.Open_door = function () {
-    sleep(1000);
+    sleep(1);
     console.log("Open Doors");
     console.log("---Opening Doors---");
-    sleep(1000);
+    sleep(1);
     console.log("*Button Light Off*");
     console.log("User enters/exits the elevator");
-    sleep(1000);
+    sleep(1);
     console.log("---Closing Doors---");
-    sleep(1000);
+    sleep(1);
     this.Close_door();
 }
 
@@ -277,18 +301,18 @@ Elevator.prototype.Open_door = function () {
 Elevator.prototype.Close_door = function () {
 
     console.log("Closed Doors");
-    sleep(1000);
+    sleep(1);
 }
 
 // MOVE THE ELEVATOR UP FUNCTION
 
 Elevator.prototype.Move_up = function (RequestedFloor) {
     console.log("Floor : " + this.elevator_floor);
-    sleep(1000);
+    sleep(1);
     while (this.elevator_floor !== RequestedFloor) {
         this.elevator_floor += 1;
         console.log("Floor : " + this.elevator_floor);
-        sleep(1000);
+        sleep(1);
     }
 }
 
@@ -296,11 +320,11 @@ Elevator.prototype.Move_up = function (RequestedFloor) {
 
 Elevator.prototype.Move_down = function (RequestedFloor) {
     console.log("Floor : " + this.elevator_floor);
-    sleep(1000);
+    sleep(1);
     while (this.elevator_floor !== RequestedFloor) {
         this.elevator_floor -= 1;
         console.log("Floor : " + this.elevator_floor);
-        sleep(1000);
+        sleep(1);
     }
 }
 
@@ -316,9 +340,9 @@ function sleep(milliseconds) {
 
 //### UNCOMMENT, RUN and RELAX watching CONSOLE :) ###
 
-//scenario1()
-//scenario2()
-//scenario3()
-//scenariorandom()
+scenario1()
+scenario2()
+scenario3()
+scenariorandom()
 
 //#### HAVE A NICE DAY ! ####
