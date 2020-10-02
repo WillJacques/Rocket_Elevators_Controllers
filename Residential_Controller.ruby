@@ -308,9 +308,9 @@ end
 
 # UNCOMMENT, RUN and RELAX watching CONSOLE :)
 
-# scenario1
-# scenario2
-# scenario3
-scenariorandom
+#scenario1
+#scenario2
+#scenario3
+#scenariorandom
 
 # HAVE A NICE DAY !
