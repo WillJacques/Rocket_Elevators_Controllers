@@ -26,6 +26,7 @@ class Column
 
   def request_elevator(floor_number, direction)
     sleep(1)
+    puts("####################################")
     puts(">>> User request an elevator at floor #{floor_number} to go #{direction} <<<")
     sleep(1)
     puts('*Call Button Light On*')
@@ -308,7 +309,7 @@ end
 
 # UNCOMMENT, RUN and RELAX watching CONSOLE :)
 
-#scenario1
+scenario1
 #scenario2
 #scenario3
 #scenariorandom

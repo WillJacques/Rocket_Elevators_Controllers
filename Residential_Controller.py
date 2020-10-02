@@ -15,6 +15,7 @@ class Column:
 
     def RequestElevator(self, FloorNumber, Direction):
         time.sleep(1)
+        print("####################################")
         print(f">>> User request an elevator at floor", FloorNumber, "to go", Direction, "<<<")
         time.sleep(1)
         print(f"*Call Button Light On*")
@@ -260,6 +261,27 @@ def scenariorandom():
 
     print("##### Scenario Random Ended ! #####")
 
+def scenarioinput():
+
+    print("Welcome to my JavaScript application !")
+    print("Please choose your scenario from list :")
+    print("1- Scenario 1")
+    print("2- Scenario 2")
+    print("3- Scenario 3")
+    print("4- Scenario Random")
+
+    doc = input("Please enter your choice (1,2,3,4) :")
+    if doc == "1":
+        scenario1()
+    elif doc == "2":
+        scenario2()
+    elif doc == "3":
+        scenario3()
+    elif doc == "4":
+        scenariorandom()
+    else:
+        print("Your input is invalid ! Bye !")
+
 ######## SCENARIOS ########
 
 ### UNCOMMENT, RUN and RELAX watching CONSOLE :) ###
@@ -268,5 +290,6 @@ def scenariorandom():
 #scenario2()
 #scenario3()
 #scenariorandom()
+scenarioinput()
 
 #### HAVE A NICE DAY ! ####
