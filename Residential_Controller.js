@@ -140,12 +140,12 @@ var Column = function (nb_of_floor, nb_of_elevator) {
 //  Request elevator function with find best elevator
 
 Column.prototype.RequestElevator = function (FloorNumber, Direction, clientname) {
-    sleep(1);
+    sleep(500);
     console.log("####################################");
     console.log(">>>", clientname, "request an elevator at floor", FloorNumber, "to go", Direction, "<<<");
-    sleep(1);
+    sleep(500);
     console.log("*Call Button Light On*");
-    sleep(1);
+    sleep(500);
 
     var request_elevator = this.find_best_elevator(FloorNumber, Direction);
     request_elevator.send_request(FloorNumber);
@@ -155,11 +155,11 @@ Column.prototype.RequestElevator = function (FloorNumber, Direction, clientname)
 // Request floor inside elevator
 
 Column.prototype.RequestFloor = function (elevator_object, RequestedFloor, clientname) {
-    sleep(1);
+    sleep(500);
     console.log(">>>", clientname, "wants to go to floor", RequestedFloor, "<<<");
-    sleep(1);
+    sleep(500);
     console.log("*Request Button Light On*");
-    sleep(1);
+    sleep(500);
     elevator_object.send_request(RequestedFloor);
 }
 
@@ -284,15 +284,15 @@ Elevator.prototype.operate_elevator = function (RequestedFloor) {
 // OPEN DOORS FUNCTION
 
 Elevator.prototype.Open_door = function () {
-    sleep(1);
+    sleep(500);
     console.log("Open Doors");
     console.log("---Opening Doors---");
-    sleep(1);
+    sleep(500);
     console.log("*Button Light Off*");
     console.log("User enters/exits the elevator");
-    sleep(1);
+    sleep(500);
     console.log("---Closing Doors---");
-    sleep(1);
+    sleep(500);
     this.Close_door();
 }
 
@@ -301,18 +301,18 @@ Elevator.prototype.Open_door = function () {
 Elevator.prototype.Close_door = function () {
 
     console.log("Closed Doors");
-    sleep(1);
+    sleep(500);
 }
 
 // MOVE THE ELEVATOR UP FUNCTION
 
 Elevator.prototype.Move_up = function (RequestedFloor) {
     console.log("Floor : " + this.elevator_floor);
-    sleep(1);
+    sleep(500);
     while (this.elevator_floor !== RequestedFloor) {
         this.elevator_floor += 1;
         console.log("Floor : " + this.elevator_floor);
-        sleep(1);
+        sleep(500);
     }
 }
 
@@ -320,11 +320,11 @@ Elevator.prototype.Move_up = function (RequestedFloor) {
 
 Elevator.prototype.Move_down = function (RequestedFloor) {
     console.log("Floor : " + this.elevator_floor);
-    sleep(1);
+    sleep(500);
     while (this.elevator_floor !== RequestedFloor) {
         this.elevator_floor -= 1;
         console.log("Floor : " + this.elevator_floor);
-        sleep(1);
+        sleep(500);
     }
 }
 
@@ -340,9 +340,9 @@ function sleep(milliseconds) {
 
 //### UNCOMMENT, RUN and RELAX watching CONSOLE :) ###
 
-scenario1()
-scenario2()
-scenario3()
-scenariorandom()
+//scenario1()
+//scenario2()
+//scenario3()
+//scenariorandom()
 
 //#### HAVE A NICE DAY ! ####
