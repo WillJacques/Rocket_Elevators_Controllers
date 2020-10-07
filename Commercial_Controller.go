@@ -8,18 +8,20 @@ type Battery struct {
 	columnList []Column
 }
 
-// createBattery creates the battery for the program
-func createBattery(batteryNo int) Battery {
-	b := Battery{
-		batteryNo: batteryNo, 
-		columnList: make([]Column,0),
-	}
-	return b
+// createColumn creates the battery for the program
+func (b *Battery) createColumn(batteryNo int) {
+	b.columnList = append(b.columnList, Column{1,-6,0,5,[]Elevator{}})
+	b.columnList[0].createElevator(5)
+	b.columnList = append(b.columnList, Column{2,0,19,5,[]Elevator{}})
+	b.columnList[1].createElevator(5)
+	b.columnList = append(b.columnList, Column{3,20,39,5,[]Elevator{}})
+	b.columnList[2].createElevator(5)
+	b.columnList = append(b.columnList, Column{4,40,59,5,[]Elevator{}})
+	b.columnList[3].createElevator(5)
 }
 
 //Column have elevators inside
 type Column struct{
-	Battery Battery
 	id int
 	nbElevators int
 	lowFloor int
@@ -27,16 +29,11 @@ type Column struct{
 	elevatorList []Elevator
 }
 
-//createColumn creates all Columns and put them in battery column list
-func (b Battery) createColumn(){
-	var column1 = Column{b, 1, -6, 0, 5, []Elevator{}}
-	b.columnList = append(b.columnList, column1)
-	var column2 = Column{b, 2, 0, 19, 5, []Elevator{}}
-	b.columnList = append(b.columnList, column2)
-	var column3 = Column{b, 3, 20, 39, 5, []Elevator{}}
-	b.columnList = append(b.columnList, column3)
-	var column4 = Column{b, 4, 40, 59, 5, []Elevator{}}
-	b.columnList = append(b.columnList, column4)
+//createElevator creates all Columns and put them in battery column list
+func (c *Column) createElevator(numElevators int){
+	for i := 0 ; i < numElevators ; i++ {
+		c.elevatorList = append(c.elevatorList, Elevator{i,"IDLE",1,"IDLE",[]int{}})
+	}
 }
 
 //Elevator takes passenger to the floor level wanted added in floorList array
@@ -48,15 +45,9 @@ type Elevator struct{
 	floorList []int
 }
 
-//NewElevator create elevator and puts them into elevator list
-func (c *Column) createElevator(){
-	for i := 1; i <= c.nbElevators; i++ {
-		elevator := Elevator{i,"IDLE", 1, "IDLE", []int{}}
-		c.elevatorList = append(c.elevatorList, elevator)
-	}
-}
-
 func main() {
 	fmt.Println("Hello World !")
-	createBattery(1)
+	battery := &Battery{1, []Column{}}
+	battery.createColumn(1)
+	fmt.Println("Battery1 id is", battery.batteryNo)
 }       
