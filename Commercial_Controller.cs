@@ -115,9 +115,9 @@ namespace Commercial_Controller
                 Console.WriteLine("##################");
                 var reqElevator = Battery.column_list[2].RequestElevator(0, "UP", 'C');         // User call on floor with direction
                 Battery.column_list[2].RequestFloor(reqElevator, 35, 'C');                      // User call inside elevator
-                for (int i = 0 ; i < Battery.column_list[1].elevator_list.Count; i++ )
+                for (int i = 0 ; i < Battery.column_list[2].elevator_list.Count; i++ )
                 {
-                    Battery.column_list[1].elevator_list[i].operOtherElevator('C');
+                    Battery.column_list[2].elevator_list[i].operOtherElevator('C');
                 }
                 Console.WriteLine("##################");
                 Console.WriteLine("Elevator C" + Battery.column_list[2].elevator_list[0].elevator_no + " is on floor " + Battery.column_list[2].elevator_list[0].elevator_floor + " is on " + Battery.column_list[2].elevator_list[0].elevator_direction);
@@ -168,9 +168,9 @@ namespace Commercial_Controller
                 Console.WriteLine("##################");
                 var reqElevator = Battery.column_list[3].RequestElevator(53, "DOWN", 'D');         // User call on floor with direction
                 Battery.column_list[3].RequestFloor(reqElevator, 0, 'D');                      // User call inside elevator
-                for (int i = 0 ; i < Battery.column_list[1].elevator_list.Count; i++ )
+                for (int i = 0 ; i < Battery.column_list[3].elevator_list.Count; i++ )
                 {
-                    Battery.column_list[1].elevator_list[i].operOtherElevator('D');
+                    Battery.column_list[3].elevator_list[i].operOtherElevator('D');
                 }
                 Console.WriteLine("##################");
                 Console.WriteLine("Elevator D" + Battery.column_list[3].elevator_list[0].elevator_no + " is on floor " + Battery.column_list[3].elevator_list[0].elevator_floor + " is on " + Battery.column_list[3].elevator_list[0].elevator_direction);
@@ -218,10 +218,10 @@ namespace Commercial_Controller
                 Console.WriteLine("Elevator A" + Battery.column_list[0].elevator_list[4].elevator_no + " is on floor " + Battery.column_list[0].elevator_list[4].elevator_floor + " going " + Battery.column_list[0].elevator_list[4].elevator_direction);
                 Console.WriteLine("##################");
                 var reqElevator = Battery.column_list[0].RequestElevator(-3, "UP", 'A');         // User call on floor with direction
-                Battery.column_list[0].RequestFloor(reqElevator, 1, 'A');                      // User call inside elevator
-                for (int i = 0 ; i < Battery.column_list[1].elevator_list.Count; i++ )
+                Battery.column_list[0].RequestFloor(reqElevator, 0, 'A');                      // User call inside elevator
+                for (int i = 0 ; i < Battery.column_list[0].elevator_list.Count; i++ )
                 {
-                    Battery.column_list[1].elevator_list[i].operOtherElevator('A');
+                    Battery.column_list[0].elevator_list[i].operOtherElevator('A');
                 }
                 Console.WriteLine("##################");
                 Console.WriteLine("Elevator A" + Battery.column_list[0].elevator_list[0].elevator_no + " is on floor " + Battery.column_list[0].elevator_list[0].elevator_floor + " is on " + Battery.column_list[0].elevator_list[0].elevator_direction);
@@ -407,14 +407,6 @@ namespace Commercial_Controller
             public void send_1request(int RequestedFloor, char column_char)
             {
                 floor_list.Add(RequestedFloor);
-                for (int i = 0 ; i < this.floor_list.Count; i++ )
-                {
-                    for (int j = 0 ; j < this.floor_list.Count; j++ )
-                    {
-                        if (floor_list[i] == floor_list[j] && i != j)
-                        floor_list.RemoveAt(i);
-                    }
-                }
                 if (RequestedFloor >= elevator_floor)
                 {
                     floor_list.Sort((a, b) => a.CompareTo(b));
@@ -473,41 +465,39 @@ namespace Commercial_Controller
                 this.elevator_direction = "IDLE";
             }
             public void Operate_elevator(int RequestedFloor, char column_char)
-        {
-            if (RequestedFloor == elevator_floor)
             {
-                opendoor();
-                this.status = "MOVING";
-                this.floor_list.Remove(0);
-            }
-            else if (RequestedFloor < this.elevator_floor)
-            {
-                Thread.Sleep(500);
-                status = "MOVING";
-                Console.WriteLine("*Button Light Off*");
-                Console.WriteLine("--- Column : " + column_char + " // Elevator : " + this.elevator_no + " " + status + " ---");
-                this.elevator_direction = "DOWN";
-                Move_down(RequestedFloor, column_char);
-                this.status = "STOPPED";
-                Console.WriteLine("--- Column : " + column_char + " // Elevator : " + this.elevator_no + " " + status + " ---");
-                this.opendoor();
-                this.floor_list.Remove(0);
-            }
-            else if (RequestedFloor > this.elevator_floor)
-            {
-                Thread.Sleep(500);
-                this.status = "MOVING";
-                Console.WriteLine("*Button Light Off*");
-                Console.WriteLine("--- Column : " + column_char + " // Elevator : " + this.elevator_no + " " + status + " ---");
-                this.elevator_direction = "UP";
-                this.Move_up(RequestedFloor, column_char);
-                this.status = "STOPPED";
-                Console.WriteLine("--- Column : " + column_char + " // Elevator : " + this.elevator_no + " " + status + " ---");
-                this.opendoor();
-                this.floor_list.Remove(0);
-            }
+                if (RequestedFloor == elevator_floor)
+                {
+                    opendoor();
+                    this.status = "MOVING";
+                    this.floor_list.Remove(0);
+                }
+                else if (RequestedFloor < this.elevator_floor)
+                {
+                    Thread.Sleep(500);
+                    status = "MOVING";
+                    Console.WriteLine("*Button Light Off*");
+                    Console.WriteLine("--- Column : " + column_char + " // Elevator : " + this.elevator_no + " " + status + " ---");
+                    this.elevator_direction = "DOWN";
+                    Move_down(RequestedFloor, column_char);
+                    this.status = "STOPPED";
+                    Console.WriteLine("--- Column : " + column_char + " // Elevator : " + this.elevator_no + " " + status + " ---");
+                    this.opendoor();
+                }
+                else if (RequestedFloor > this.elevator_floor)
+                {
+                    Thread.Sleep(500);
+                    this.status = "MOVING";
+                    Console.WriteLine("*Button Light Off*");
+                    Console.WriteLine("--- Column : " + column_char + " // Elevator : " + this.elevator_no + " " + status + " ---");
+                    this.elevator_direction = "UP";
+                    this.Move_up(RequestedFloor, column_char);
+                    this.status = "STOPPED";
+                    Console.WriteLine("--- Column : " + column_char + " // Elevator : " + this.elevator_no + " " + status + " ---");
+                    this.opendoor();
+                }
 
-        }
+            }
             public void opendoor()
             {
                 Thread.Sleep(500);
