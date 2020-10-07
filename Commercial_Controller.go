@@ -14,7 +14,6 @@ func createBattery(batteryNo int) Battery {
 		batteryNo: batteryNo, 
 		columnList: make([]Column,0),
 	}
-	b.columnList = b.createColumn()
 	return b
 }
 
@@ -50,7 +49,7 @@ type Elevator struct{
 }
 
 //NewElevator create elevator and puts them into elevator list
-func (c *Column) NewElevator(){
+func (c *Column) createElevator(){
 	for i := 1; i <= c.nbElevators; i++ {
 		elevator := Elevator{i,"IDLE", 1, "IDLE", []int{}}
 		c.elevatorList = append(c.elevatorList, elevator)
@@ -59,5 +58,5 @@ func (c *Column) NewElevator(){
 
 func main() {
 	fmt.Println("Hello World !")
-	scenarioBattery := createBattery(1)
+	createBattery(1)
 }       
