@@ -487,7 +487,7 @@ func (e *Elevator) moveDown(requestedFloor int, columnChar string){
 
 func main() {
 	b := Battery{1, 4, []Column{}}
-	//b.scenario1()
+	b.scenario1()
 	//b.scenario2()
 	//b.scenario3()
 	//b.scenario4()
