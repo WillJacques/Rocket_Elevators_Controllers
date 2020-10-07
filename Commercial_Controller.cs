@@ -54,8 +54,24 @@ namespace Commercial_Controller
                 Console.WriteLine("##################");
                 Console.WriteLine("Scenario 1 Started");
                 Console.WriteLine("##################");
+                Console.WriteLine("Elevator B" + Battery.column_list[1].elevator_list[0].elevator_no + " is on floor " + Battery.column_list[1].elevator_list[0].elevator_floor + " going " + Battery.column_list[1].elevator_list[0].elevator_direction);
+                Console.WriteLine("Elevator B" + Battery.column_list[1].elevator_list[1].elevator_no + " is on floor " + Battery.column_list[1].elevator_list[1].elevator_floor + " going " + Battery.column_list[1].elevator_list[1].elevator_direction); 
+                Console.WriteLine("Elevator B" + Battery.column_list[1].elevator_list[2].elevator_no + " is on floor " + Battery.column_list[1].elevator_list[2].elevator_floor + " going " + Battery.column_list[1].elevator_list[2].elevator_direction); 
+                Console.WriteLine("Elevator B" + Battery.column_list[1].elevator_list[3].elevator_no + " is on floor " + Battery.column_list[1].elevator_list[3].elevator_floor + " going " + Battery.column_list[1].elevator_list[3].elevator_direction); 
+                Console.WriteLine("Elevator B" + Battery.column_list[1].elevator_list[4].elevator_no + " is on floor " + Battery.column_list[1].elevator_list[4].elevator_floor + " going " + Battery.column_list[1].elevator_list[4].elevator_direction);
+                Console.WriteLine("##################");
                 var reqElevator = Battery.column_list[1].RequestElevator(0, "UP", 'B');         // User call on floor with direction
-                Battery.column_list[1].RequestFloor(reqElevator, 20, 'B');                      // User call inside elevator
+                Battery.column_list[1].RequestFloor(reqElevator, 19, 'B');                      // User call inside elevator
+                for (int i = 0 ; i < Battery.column_list[1].elevator_list.Count; i++ )
+                {
+                    Battery.column_list[1].elevator_list[i].operOtherElevator('B');
+                }
+                Console.WriteLine("##################");
+                Console.WriteLine("Elevator B" + Battery.column_list[1].elevator_list[0].elevator_no + " is on floor " + Battery.column_list[1].elevator_list[0].elevator_floor + " is on " + Battery.column_list[1].elevator_list[0].elevator_direction);
+                Console.WriteLine("Elevator B" + Battery.column_list[1].elevator_list[1].elevator_no + " is on floor " + Battery.column_list[1].elevator_list[1].elevator_floor + " is on " + Battery.column_list[1].elevator_list[1].elevator_direction); 
+                Console.WriteLine("Elevator B" + Battery.column_list[1].elevator_list[2].elevator_no + " is on floor " + Battery.column_list[1].elevator_list[2].elevator_floor + " is on " + Battery.column_list[1].elevator_list[2].elevator_direction); 
+                Console.WriteLine("Elevator B" + Battery.column_list[1].elevator_list[3].elevator_no + " is on floor " + Battery.column_list[1].elevator_list[3].elevator_floor + " is on " + Battery.column_list[1].elevator_list[3].elevator_direction); 
+                Console.WriteLine("Elevator B" + Battery.column_list[1].elevator_list[4].elevator_no + " is on floor " + Battery.column_list[1].elevator_list[4].elevator_floor + " is on " + Battery.column_list[1].elevator_list[4].elevator_direction);
                 Console.WriteLine("##################");
                 Console.WriteLine("Scenario 1 Ended");
                 Console.WriteLine("##################");
@@ -91,8 +107,24 @@ namespace Commercial_Controller
                 Console.WriteLine("##################");
                 Console.WriteLine("Scenario 2 Started");
                 Console.WriteLine("##################");
+                Console.WriteLine("Elevator C" + Battery.column_list[2].elevator_list[0].elevator_no + " is on floor " + Battery.column_list[2].elevator_list[0].elevator_floor + " going " + Battery.column_list[2].elevator_list[0].elevator_direction);
+                Console.WriteLine("Elevator C" + Battery.column_list[2].elevator_list[1].elevator_no + " is on floor " + Battery.column_list[2].elevator_list[1].elevator_floor + " going " + Battery.column_list[2].elevator_list[1].elevator_direction); 
+                Console.WriteLine("Elevator C" + Battery.column_list[2].elevator_list[2].elevator_no + " is on floor " + Battery.column_list[2].elevator_list[2].elevator_floor + " going " + Battery.column_list[2].elevator_list[2].elevator_direction); 
+                Console.WriteLine("Elevator C" + Battery.column_list[2].elevator_list[3].elevator_no + " is on floor " + Battery.column_list[2].elevator_list[3].elevator_floor + " going " + Battery.column_list[2].elevator_list[3].elevator_direction); 
+                Console.WriteLine("Elevator C" + Battery.column_list[2].elevator_list[4].elevator_no + " is on floor " + Battery.column_list[2].elevator_list[4].elevator_floor + " going " + Battery.column_list[2].elevator_list[4].elevator_direction);
+                Console.WriteLine("##################");
                 var reqElevator = Battery.column_list[2].RequestElevator(0, "UP", 'C');         // User call on floor with direction
                 Battery.column_list[2].RequestFloor(reqElevator, 35, 'C');                      // User call inside elevator
+                for (int i = 0 ; i < Battery.column_list[1].elevator_list.Count; i++ )
+                {
+                    Battery.column_list[1].elevator_list[i].operOtherElevator('C');
+                }
+                Console.WriteLine("##################");
+                Console.WriteLine("Elevator C" + Battery.column_list[2].elevator_list[0].elevator_no + " is on floor " + Battery.column_list[2].elevator_list[0].elevator_floor + " is on " + Battery.column_list[2].elevator_list[0].elevator_direction);
+                Console.WriteLine("Elevator C" + Battery.column_list[2].elevator_list[1].elevator_no + " is on floor " + Battery.column_list[2].elevator_list[1].elevator_floor + " is on " + Battery.column_list[2].elevator_list[1].elevator_direction); 
+                Console.WriteLine("Elevator C" + Battery.column_list[2].elevator_list[2].elevator_no + " is on floor " + Battery.column_list[2].elevator_list[2].elevator_floor + " is on " + Battery.column_list[2].elevator_list[2].elevator_direction); 
+                Console.WriteLine("Elevator C" + Battery.column_list[2].elevator_list[3].elevator_no + " is on floor " + Battery.column_list[2].elevator_list[3].elevator_floor + " is on " + Battery.column_list[2].elevator_list[3].elevator_direction); 
+                Console.WriteLine("Elevator C" + Battery.column_list[2].elevator_list[4].elevator_no + " is on floor " + Battery.column_list[2].elevator_list[4].elevator_floor + " is on " + Battery.column_list[2].elevator_list[4].elevator_direction);
                 Console.WriteLine("##################");
                 Console.WriteLine("Scenario 2 Ended");
                 Console.WriteLine("##################");
@@ -101,35 +133,51 @@ namespace Commercial_Controller
             {
                 Battery Battery = new Battery(1);
 
-                Battery.column_list[2].elevator_list[0].elevator_floor = 57;
-                Battery.column_list[2].elevator_list[0].elevator_direction = "DOWN";
-                Battery.column_list[2].elevator_list[0].status = "MOVING";
-                Battery.column_list[2].elevator_list[0].floor_list.Add(0);
+                Battery.column_list[3].elevator_list[0].elevator_floor = 57;
+                Battery.column_list[3].elevator_list[0].elevator_direction = "DOWN";
+                Battery.column_list[3].elevator_list[0].status = "MOVING";
+                Battery.column_list[3].elevator_list[0].floor_list.Add(0);
 
-                Battery.column_list[2].elevator_list[1].elevator_floor = 49;
-                Battery.column_list[2].elevator_list[1].elevator_direction = "UP";
-                Battery.column_list[2].elevator_list[1].status = "MOVING";
-                Battery.column_list[2].elevator_list[1].floor_list.Add(59);
+                Battery.column_list[3].elevator_list[1].elevator_floor = 49;
+                Battery.column_list[3].elevator_list[1].elevator_direction = "UP";
+                Battery.column_list[3].elevator_list[1].status = "MOVING";
+                Battery.column_list[3].elevator_list[1].floor_list.Add(59);
 
-                Battery.column_list[2].elevator_list[2].elevator_floor = 45;
-                Battery.column_list[2].elevator_list[2].elevator_direction = "UP";
+                Battery.column_list[3].elevator_list[2].elevator_floor = 45;
+                Battery.column_list[3].elevator_list[2].elevator_direction = "UP";
                 Battery.column_list[2].elevator_list[2].status = "MOVING";
-                Battery.column_list[2].elevator_list[2].floor_list.Add(57);
+                Battery.column_list[3].elevator_list[2].floor_list.Add(57);
 
-                Battery.column_list[2].elevator_list[3].elevator_floor = 0;
-                Battery.column_list[2].elevator_list[3].elevator_direction = "UP";
-                Battery.column_list[2].elevator_list[3].status = "MOVING";
-                Battery.column_list[2].elevator_list[3].floor_list.Add(53);
+                Battery.column_list[3].elevator_list[3].elevator_floor = 0;
+                Battery.column_list[3].elevator_list[3].elevator_direction = "UP";
+                Battery.column_list[3].elevator_list[3].status = "MOVING";
+                Battery.column_list[3].elevator_list[3].floor_list.Add(53);
 
-                Battery.column_list[2].elevator_list[4].elevator_floor = 59;
-                Battery.column_list[2].elevator_list[4].elevator_direction = "DOWN";
-                Battery.column_list[2].elevator_list[4].status = "MOVING";
-                Battery.column_list[2].elevator_list[4].floor_list.Add(0);
+                Battery.column_list[3].elevator_list[4].elevator_floor = 59;
+                Battery.column_list[3].elevator_list[4].elevator_direction = "DOWN";
+                Battery.column_list[3].elevator_list[4].status = "MOVING";
+                Battery.column_list[3].elevator_list[4].floor_list.Add(0);
                 Console.WriteLine("##################");
                 Console.WriteLine("Scenario 3 Started");
                 Console.WriteLine("##################");
-                var reqElevator = Battery.column_list[2].RequestElevator(53, "DOWN", 'D');         // User call on floor with direction
-                Battery.column_list[2].RequestFloor(reqElevator, 0, 'D');                      // User call inside elevator
+                Console.WriteLine("Elevator D" + Battery.column_list[3].elevator_list[0].elevator_no + " is on floor " + Battery.column_list[3].elevator_list[0].elevator_floor + " going " + Battery.column_list[3].elevator_list[0].elevator_direction);
+                Console.WriteLine("Elevator D" + Battery.column_list[3].elevator_list[1].elevator_no + " is on floor " + Battery.column_list[3].elevator_list[1].elevator_floor + " going " + Battery.column_list[3].elevator_list[1].elevator_direction); 
+                Console.WriteLine("Elevator D" + Battery.column_list[3].elevator_list[2].elevator_no + " is on floor " + Battery.column_list[3].elevator_list[2].elevator_floor + " going " + Battery.column_list[3].elevator_list[2].elevator_direction); 
+                Console.WriteLine("Elevator D" + Battery.column_list[3].elevator_list[3].elevator_no + " is on floor " + Battery.column_list[3].elevator_list[3].elevator_floor + " going " + Battery.column_list[3].elevator_list[3].elevator_direction); 
+                Console.WriteLine("Elevator D" + Battery.column_list[3].elevator_list[4].elevator_no + " is on floor " + Battery.column_list[3].elevator_list[4].elevator_floor + " going " + Battery.column_list[3].elevator_list[4].elevator_direction);
+                Console.WriteLine("##################");
+                var reqElevator = Battery.column_list[3].RequestElevator(53, "DOWN", 'D');         // User call on floor with direction
+                Battery.column_list[3].RequestFloor(reqElevator, 0, 'D');                      // User call inside elevator
+                for (int i = 0 ; i < Battery.column_list[1].elevator_list.Count; i++ )
+                {
+                    Battery.column_list[1].elevator_list[i].operOtherElevator('D');
+                }
+                Console.WriteLine("##################");
+                Console.WriteLine("Elevator D" + Battery.column_list[3].elevator_list[0].elevator_no + " is on floor " + Battery.column_list[3].elevator_list[0].elevator_floor + " is on " + Battery.column_list[3].elevator_list[0].elevator_direction);
+                Console.WriteLine("Elevator D" + Battery.column_list[3].elevator_list[1].elevator_no + " is on floor " + Battery.column_list[3].elevator_list[1].elevator_floor + " is on " + Battery.column_list[3].elevator_list[1].elevator_direction); 
+                Console.WriteLine("Elevator D" + Battery.column_list[3].elevator_list[2].elevator_no + " is on floor " + Battery.column_list[3].elevator_list[2].elevator_floor + " is on " + Battery.column_list[3].elevator_list[2].elevator_direction); 
+                Console.WriteLine("Elevator D" + Battery.column_list[3].elevator_list[3].elevator_no + " is on floor " + Battery.column_list[3].elevator_list[3].elevator_floor + " is on " + Battery.column_list[3].elevator_list[3].elevator_direction); 
+                Console.WriteLine("Elevator D" + Battery.column_list[3].elevator_list[4].elevator_no + " is on floor " + Battery.column_list[3].elevator_list[4].elevator_floor + " is on " + Battery.column_list[3].elevator_list[4].elevator_direction);
                 Console.WriteLine("##################");
                 Console.WriteLine("Scenario 3 Ended");
                 Console.WriteLine("##################");
@@ -138,33 +186,49 @@ namespace Commercial_Controller
             {
                 Battery Battery = new Battery(1);
 
-                Battery.column_list[3].elevator_list[0].elevator_floor = -4;
-                Battery.column_list[3].elevator_list[0].elevator_direction = "IDLE";
-                Battery.column_list[3].elevator_list[0].status = "IDLE";
+                Battery.column_list[0].elevator_list[0].elevator_floor = -4;
+                Battery.column_list[0].elevator_list[0].elevator_direction = "IDLE";
+                Battery.column_list[0].elevator_list[0].status = "IDLE";
 
-                Battery.column_list[3].elevator_list[1].elevator_floor = 0;
-                Battery.column_list[3].elevator_list[1].elevator_direction = "IDLE";
-                Battery.column_list[3].elevator_list[1].status = "IDLE";
+                Battery.column_list[0].elevator_list[1].elevator_floor = 0;
+                Battery.column_list[0].elevator_list[1].elevator_direction = "IDLE";
+                Battery.column_list[0].elevator_list[1].status = "IDLE";
 
-                Battery.column_list[3].elevator_list[2].elevator_floor = -3;
-                Battery.column_list[3].elevator_list[2].elevator_direction = "DOWN";
-                Battery.column_list[3].elevator_list[2].status = "MOVING";
-                Battery.column_list[3].elevator_list[2].floor_list.Add(-5);
+                Battery.column_list[0].elevator_list[2].elevator_floor = -3;
+                Battery.column_list[0].elevator_list[2].elevator_direction = "DOWN";
+                Battery.column_list[0].elevator_list[2].status = "MOVING";
+                Battery.column_list[0].elevator_list[2].floor_list.Add(-5);
 
-                Battery.column_list[3].elevator_list[3].elevator_floor = -6;
-                Battery.column_list[3].elevator_list[3].elevator_direction = "UP";
-                Battery.column_list[3].elevator_list[3].status = "MOVING";
-                Battery.column_list[3].elevator_list[3].floor_list.Add(0);
+                Battery.column_list[0].elevator_list[3].elevator_floor = -6;
+                Battery.column_list[0].elevator_list[3].elevator_direction = "UP";
+                Battery.column_list[0].elevator_list[3].status = "MOVING";
+                Battery.column_list[0].elevator_list[3].floor_list.Add(0);
 
-                Battery.column_list[3].elevator_list[4].elevator_floor = -1;
-                Battery.column_list[3].elevator_list[4].elevator_direction = "DOWN";
-                Battery.column_list[3].elevator_list[4].status = "MOVING";
-                Battery.column_list[3].elevator_list[4].floor_list.Add(-6);
+                Battery.column_list[0].elevator_list[4].elevator_floor = -1;
+                Battery.column_list[0].elevator_list[4].elevator_direction = "DOWN";
+                Battery.column_list[0].elevator_list[4].status = "MOVING";
+                Battery.column_list[0].elevator_list[4].floor_list.Add(-6);
                 Console.WriteLine("##################");
                 Console.WriteLine("Scenario 4 Started");
                 Console.WriteLine("##################");
-                var reqElevator = Battery.column_list[3].RequestElevator(-3, "UP", 'A');         // User call on floor with direction
-                Battery.column_list[3].RequestFloor(reqElevator, 0, 'A');                      // User call inside elevator
+                Console.WriteLine("Elevator A" + Battery.column_list[0].elevator_list[0].elevator_no + " is on floor " + Battery.column_list[0].elevator_list[0].elevator_floor + " going " + Battery.column_list[0].elevator_list[0].elevator_direction);
+                Console.WriteLine("Elevator A" + Battery.column_list[0].elevator_list[1].elevator_no + " is on floor " + Battery.column_list[0].elevator_list[1].elevator_floor + " going " + Battery.column_list[0].elevator_list[1].elevator_direction); 
+                Console.WriteLine("Elevator A" + Battery.column_list[0].elevator_list[2].elevator_no + " is on floor " + Battery.column_list[0].elevator_list[2].elevator_floor + " going " + Battery.column_list[0].elevator_list[2].elevator_direction); 
+                Console.WriteLine("Elevator A" + Battery.column_list[0].elevator_list[3].elevator_no + " is on floor " + Battery.column_list[0].elevator_list[3].elevator_floor + " going " + Battery.column_list[0].elevator_list[3].elevator_direction); 
+                Console.WriteLine("Elevator A" + Battery.column_list[0].elevator_list[4].elevator_no + " is on floor " + Battery.column_list[0].elevator_list[4].elevator_floor + " going " + Battery.column_list[0].elevator_list[4].elevator_direction);
+                Console.WriteLine("##################");
+                var reqElevator = Battery.column_list[0].RequestElevator(-3, "UP", 'A');         // User call on floor with direction
+                Battery.column_list[0].RequestFloor(reqElevator, 1, 'A');                      // User call inside elevator
+                for (int i = 0 ; i < Battery.column_list[1].elevator_list.Count; i++ )
+                {
+                    Battery.column_list[1].elevator_list[i].operOtherElevator('A');
+                }
+                Console.WriteLine("##################");
+                Console.WriteLine("Elevator A" + Battery.column_list[0].elevator_list[0].elevator_no + " is on floor " + Battery.column_list[0].elevator_list[0].elevator_floor + " is on " + Battery.column_list[0].elevator_list[0].elevator_direction);
+                Console.WriteLine("Elevator A" + Battery.column_list[0].elevator_list[1].elevator_no + " is on floor " + Battery.column_list[0].elevator_list[1].elevator_floor + " is on " + Battery.column_list[0].elevator_list[1].elevator_direction); 
+                Console.WriteLine("Elevator A" + Battery.column_list[0].elevator_list[2].elevator_no + " is on floor " + Battery.column_list[0].elevator_list[2].elevator_floor + " is on " + Battery.column_list[0].elevator_list[2].elevator_direction); 
+                Console.WriteLine("Elevator A" + Battery.column_list[0].elevator_list[3].elevator_no + " is on floor " + Battery.column_list[0].elevator_list[3].elevator_floor + " is on " + Battery.column_list[0].elevator_list[3].elevator_direction); 
+                Console.WriteLine("Elevator A" + Battery.column_list[0].elevator_list[4].elevator_no + " is on floor " + Battery.column_list[0].elevator_list[4].elevator_floor + " is on " + Battery.column_list[0].elevator_list[4].elevator_direction);
                 Console.WriteLine("##################");
                 Console.WriteLine("Scenario 4 Ended");
                 Console.WriteLine("##################");
@@ -200,7 +264,7 @@ namespace Commercial_Controller
                 Console.WriteLine("*Call Button Light On*");
 
                 Elevator request_elevator = this.find_Best_Elevator(FloorNumber, Direction);
-                request_elevator.send_request(FloorNumber, column_char);
+                request_elevator.send_1request(FloorNumber, column_char);
                 return request_elevator;
             }
             public void RequestFloor (Elevator request_elevator, int RequestedFloor, char column_char)
@@ -210,7 +274,7 @@ namespace Commercial_Controller
                 Thread.Sleep(200);
                 Console.WriteLine("Call Button Light On");
                 Thread.Sleep(200);
-                request_elevator.send_request(RequestedFloor, column_char);
+                request_elevator.send_2request(RequestedFloor, column_char);
             }
             public Elevator find_Best_Elevator(int FloorNumber, string Direction)
             {
@@ -340,10 +404,18 @@ namespace Commercial_Controller
                 this.elevator_direction = elevator_direction;
                 this.floor_list = new List<int>();                  //queue list filled by requested floor
             }
-            public void send_request(int RequestedFloor, char column_char)
+            public void send_1request(int RequestedFloor, char column_char)
             {
                 floor_list.Add(RequestedFloor);
-                if (RequestedFloor > elevator_floor)
+                for (int i = 0 ; i < this.floor_list.Count; i++ )
+                {
+                    for (int j = 0 ; j < this.floor_list.Count; j++ )
+                    {
+                        if (floor_list[i] == floor_list[j] && i != j)
+                        floor_list.RemoveAt(i);
+                    }
+                }
+                if (RequestedFloor >= elevator_floor)
                 {
                     floor_list.Sort((a, b) => a.CompareTo(b));
                 }
@@ -351,8 +423,54 @@ namespace Commercial_Controller
                 {
                     floor_list.Sort((a, b) => -1 * a.CompareTo(b));
                 }
-
-                Operate_elevator(RequestedFloor, column_char);
+                int floorlistpop = floor_list[0];
+                floor_list.RemoveAt(0);
+                Operate_elevator(floorlistpop, column_char);
+            }
+            public void send_2request(int RequestedFloor, char column_char)
+            {
+                floor_list.Add(RequestedFloor);
+                for (int i = 0 ; i < this.floor_list.Count; i++ )
+                {
+                    for (int j = 0 ; j < this.floor_list.Count; j++ )
+                    {
+                        if (floor_list[i] == floor_list[j] && i != j)
+                        floor_list.RemoveAt(j);
+                    }
+                }
+                while (floor_list.Count > 0)
+                {
+                    if (RequestedFloor >= elevator_floor)
+                    {
+                        floor_list.Sort((a, b) => a.CompareTo(b));
+                    }
+                    else if (RequestedFloor < elevator_floor)
+                    {
+                        floor_list.Sort((a, b) => -1 * a.CompareTo(b));
+                    }
+                    int floorlistpop = floor_list[0];
+                    floor_list.RemoveAt(0);
+                    Operate_elevator(floorlistpop, column_char);
+                }
+                this.elevator_direction = "IDLE";
+            }
+            public void operOtherElevator (char column_char)
+            {
+                while (floor_list.Count > 0)
+                {
+                    if (floor_list[0] >= elevator_floor)
+                    {
+                        floor_list.Sort((a, b) => a.CompareTo(b));
+                    }
+                    else if (floor_list[0] < elevator_floor)
+                    {
+                        floor_list.Sort((a, b) => -1 * a.CompareTo(b));
+                    }
+                    int floorlistpop = floor_list[0];
+                    floor_list.RemoveAt(0);
+                    Operate_elevator(floorlistpop, column_char);
+                }
+                this.elevator_direction = "IDLE";
             }
             public void Operate_elevator(int RequestedFloor, char column_char)
         {
@@ -431,10 +549,10 @@ namespace Commercial_Controller
         }
         static void Main(string[] args)
         {
-            Battery.Scenario1();
-            Battery.Scenario2();
-            Battery.Scenario3();
-            Battery.Scenario4();
+            //Battery.Scenario1();
+            //Battery.Scenario2();
+            //Battery.Scenario3();
+            //Battery.Scenario4();
         }
     }
 }
