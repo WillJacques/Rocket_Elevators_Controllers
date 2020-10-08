@@ -7,7 +7,7 @@
     {
         "type": "mix_task",
         "request": "launch",
-        "name": "mix task",
+        "name": "Debug Elixir",
         "task": "task",
         "taskArgs": [],
         "projectDir": "${workspaceRoot}"
