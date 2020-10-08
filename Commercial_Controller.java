@@ -580,6 +580,6 @@ public class Commercial_Controller {
         //Battery.Scenario1();
         //Battery.Scenario2();
         //Battery.Scenario3();
-        //Battery.Scenario4();
+        Battery.Scenario4();
     }
 }
