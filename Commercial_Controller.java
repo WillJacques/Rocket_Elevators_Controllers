@@ -67,8 +67,7 @@ public class Commercial_Controller {
                     + " is on floor " + Battery.column_list.get(1).elevator_list.get(4).elevator_floor + " going "
                     + Battery.column_list.get(1).elevator_list.get(4).elevator_direction);
             System.out.println("##################");
-            var reqElevator = Battery.column_list.get(1).RequestElevator(0, "UP", 'B'); // User call on floor with
-                                                                                        // direction
+            var reqElevator = Battery.column_list.get(1).RequestElevator(0, "UP", 'B'); // User call on floor with direction
             Battery.column_list.get(1).RequestFloor(reqElevator, 19, 'B'); // User call inside elevator
             for (int i = 0; i < Battery.column_list.get(1).elevator_list.size(); i++) {
                 Battery.column_list.get(1).elevator_list.get(i).operOtherElevator('B');
