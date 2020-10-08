@@ -579,7 +579,7 @@ public class Commercial_Controller {
 
     public static void main(String[] args) {
         //Battery.Scenario1();
-        Battery.Scenario2();
+        //Battery.Scenario2();
         //Battery.Scenario3();
         //Battery.Scenario4();
     }
