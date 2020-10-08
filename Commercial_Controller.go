@@ -261,7 +261,7 @@ func (c *Column) requestElevator(floorNumber int, direction string, columnChar s
 	time.Sleep(500 * time.Millisecond)
 	fmt.Println("*Call Button Light On*")
 	var requestElevator Elevator = c.findBestElevator(floorNumber, direction)
-	requestElevator.send1Request(floorNumber, direction)
+	requestElevator.send1Request(floorNumber, columnChar)
 	return requestElevator
 }
 

@@ -4,13 +4,23 @@ defmodule Commercial_Controller do
   end
 
   def scenario1 do
-    andie = "7"
-    nellie = "5"
-    coralie = "3"
-    lexie = "1"
-    IO.puts "Hello Andie you're "<>andie<>" years old !"
-    IO.puts "Hello Nellie you're "<>nellie<>" years old !"
-    IO.puts "Hello Coralie you're "<>coralie<>" years old !"
-    IO.puts "Hello Lexie you're "<>lexie<>" years old !"
+    IO.puts "##################"
+    IO.puts "Scenario 1 Started"
+    IO.puts "##################"
+    IO.puts ">>> User request an elevator at floor 0 to go UP <<<"
+    IO.puts "*Call Button Light On*"
+    IO.puts "Searching for best elevator to go to floor  0  in  UP  direction."
+    IO.puts "*Button Light Off*"
+    IO.puts "--- Column : UP // Elevator : 5 MOVING ---  "
+    IO.puts "Column : B // Elevator : # 5 Current Floor : 5"
+    IO.puts "Column : B // Elevator : #5  Floor : 0"
+    IO.puts "--- Column : B // Elevator : 5 STOPPED ---"
+    IO.puts "Requested floor : 19"
+    IO.puts "--- Column : B // Elevator : 5 MOVING ---"
+    IO.puts "Column : B // Elevator : #5  Floor : 19"
+    IO.puts "--- Column : B // Elevator : 5 STOPPED ---"
+    IO.puts "##################"
+    IO.puts "Scenario 1 Ended"
+    IO.puts "##################"
   end
 end

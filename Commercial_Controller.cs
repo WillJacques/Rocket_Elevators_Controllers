@@ -538,10 +538,10 @@ namespace Commercial_Controller
         }
         static void Main(string[] args)
         {
-            //Battery.Scenario1();
+            Battery.Scenario1();
             //Battery.Scenario2();
             //Battery.Scenario3();
-            Battery.Scenario4();
+            //Battery.Scenario4();
         }
     }
 }
