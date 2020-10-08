@@ -12,49 +12,48 @@
         "taskArgs": [],
         "projectDir": "${workspaceRoot}"
     },
-    
-        /*{
-            "name": "Launch",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "remotePath": "",
-            "port": 2345,
-            "host": "127.0.0.1",
-            "program": "${fileDirname}",
-            "env": {},
-            "args": [],
-            "showLog": true,
-        }*/
-        {/*
-            "type": "java",
-            "name": "CodeLens (Launch) - Commercial_Controller",
-            "request": "launch",
-            "mainClass": "Commercial_Controller",
-            "projectName": "Rocket_Elevators_Controllers_3f02c040"
-        },
-        {
-            "type": "java",
-            "name": "Debug (Launch)",
-            "request": "launch",
-            "mainClass": ""
-        }*/
-        /*{
-            "name": ".NET Core Launch (console)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/Rocket_Elevators_Controllers.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
-            "stopAtEntry": false
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
-        }*/
+    {
+        "name": "Launch",
+        "type": "go",
+        "request": "launch",
+        "mode": "debug",
+        "remotePath": "",
+        "port": 2345,
+        "host": "127.0.0.1",
+        "program": "${fileDirname}",
+        "env": {},
+        "args": [],
+        "showLog": true,
+    },
+    {
+        "type": "java",
+        "name": "CodeLens (Launch) - Commercial_Controller",
+        "request": "launch",
+        "mainClass": "Commercial_Controller",
+        "projectName": "Rocket_Elevators_Controllers_3f02c040"
+    },
+    {
+        "type": "java",
+        "name": "Debug (Launch)",
+        "request": "launch",
+        "mainClass": ""
+    }
+    {
+        "name": ".NET Core Launch (console)",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/Rocket_Elevators_Controllers.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}",
+        "console": "internalConsole",
+        "stopAtEntry": false
+    },
+    {
+        "name": ".NET Core Attach",
+        "type": "coreclr",
+        "request": "attach",
+        "processId": "${command:pickProcess}"
+    }
     ]
 }
