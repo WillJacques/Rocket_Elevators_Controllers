@@ -22,6 +22,7 @@ defmodule Commercial_Controller do
     IO.puts "##################"
     IO.puts "Scenario 1 Ended"
     IO.puts "##################"
+    IO.puts "---!! CHECK COMMENTS !!---"
   end
 end
 
