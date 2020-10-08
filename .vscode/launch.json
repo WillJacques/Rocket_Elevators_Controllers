@@ -27,14 +27,14 @@
     },
     {
         "type": "java",
-        "name": "Debug JAVA1",
+        "name": "Debug JAVA mainClass",
         "request": "launch",
         "mainClass": "Commercial_Controller",
         "projectName": "Rocket_Elevators_Controllers_3f02c040"
     },
     {
         "type": "java",
-        "name": "Debug JAVA2",
+        "name": "Debug JAVA",
         "request": "launch",
         "mainClass": ""
     },
