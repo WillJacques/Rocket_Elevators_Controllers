@@ -4,7 +4,13 @@ defmodule Commercial_Controller do
   end
 
   def scenario1 do
-    my_int =123
-    IO.puts "Integer #{is_integer(my_int)}"
+    andie = "7"
+    nellie = "5"
+    coralie = "3"
+    lexie = "1"
+    IO.puts "Hello Andie you're "<>andie<>" years old !"
+    IO.puts "Hello Nellie you're "<>nellie<>" years old !"
+    IO.puts "Hello Coralie you're "<>coralie<>" years old !"
+    IO.puts "Hello Lexie you're "<>lexie<>" years old !"
   end
 end
