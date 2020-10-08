@@ -470,7 +470,6 @@ namespace Commercial_Controller
                 {
                     opendoor();
                     this.status = "MOVING";
-                    this.floor_list.Remove(0);
                 }
                 else if (RequestedFloor < this.elevator_floor)
                 {

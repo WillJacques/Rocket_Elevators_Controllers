@@ -140,8 +140,7 @@ public class Commercial_Controller {
                     + " is on floor " + Battery.column_list.get(2).elevator_list.get(4).elevator_floor + " going "
                     + Battery.column_list.get(2).elevator_list.get(4).elevator_direction);
             System.out.println("##################");
-            var reqElevator = Battery.column_list.get(2).RequestElevator(0, "UP", 'C'); // User call on floor with
-                                                                                        // direction
+            var reqElevator = Battery.column_list.get(2).RequestElevator(0, "UP", 'C'); // User call on floor with direction
             Battery.column_list.get(2).RequestFloor(reqElevator, 35, 'C'); // User call inside elevator
             for (int i = 0; i < Battery.column_list.get(2).elevator_list.size(); i++) {
                 Battery.column_list.get(2).elevator_list.get(i).operOtherElevator('C');
@@ -513,7 +512,6 @@ public class Commercial_Controller {
             if (RequestedFloor == elevator_floor) {
                 opendoor();
                 this.status = "MOVING";
-                this.floor_list.remove(0);
             } else if (RequestedFloor < this.elevator_floor) {
                 try {TimeUnit.SECONDS.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}
                 status = "MOVING";

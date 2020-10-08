@@ -425,7 +425,6 @@ func (e *Elevator) operateElevator(requestedFloor int, columnChar string){
 	if requestedFloor == e.elevatorFloor{
 		e.openDoor()
 		e.status = "MOVING"
-		e.floorList = remove(e.floorList, 0)
 	} else if requestedFloor < e.elevatorFloor{
 		time.Sleep(500 * time.Millisecond)
 		e.status = "MOVING"
