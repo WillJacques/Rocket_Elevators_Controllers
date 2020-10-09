@@ -105,8 +105,3 @@ defmodule Commercial_Controller do
 end
 
 Commercial_Controller.main
-
-# Au lieu de d'essayer de faire un projet tout croche et à essayer un nouveau langage sur la fin de la semaine,
-# J'ai trouvé ça plus interressant de faire une petite blague...:)
-# J'ai profiter du reste de la semaine pour aider les gens qui étaient dans le besoin ! :)
-# Bonne fin de semaine !
