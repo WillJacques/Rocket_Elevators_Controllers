@@ -1,32 +1,31 @@
 defmodule Battery do
-  defstruct [:id, :number_column, :column_list]
+  defstruct [:id, :column_list]
 end
 
 defmodule Column do
-  defstruct [:battery, :id_char, :lowfloor, :highfloor, :nb_elevators, :elevator_list]
+  defstruct [:id_char, :lowfloor, :highfloor, :nb_elevators, :elevator_list]
+end
+
+defmodule Elevator do
+  defstruct [:elevator_id, :status, :elevator_floor, :elevator_direction, :floor_list]
 end
 
 defmodule Commercial_Controller do
   def main do
-    #battery1 = %Battery{id: 1, number_column: 4}
-    column1 = %Column{battery: 1, id_char: 'A', lowfloor: -6, highfloor: 0, nb_elevators: 5}
-    column2 = %Column{battery: 1, id_char: 'B', lowfloor: 0, highfloor: 19, nb_elevators: 5}
-    column3 = %Column{battery: 1, id_char: 'C', lowfloor: 20, highfloor: 39, nb_elevators: 5}
-    column4 = %Column{battery: 1, id_char: 'D', lowfloor: 40, highfloor: 59, nb_elevators: 5}
+    elevator1 = %Elevator{elevator_id: 1, status: "IDLE", elevator_floor: 1, elevator_direction: "IDLE"}
+    elevator2 = %Elevator{elevator_id: 2, status: "IDLE", elevator_floor: 1, elevator_direction: "IDLE"}
+    elevator3 = %Elevator{elevator_id: 3, status: "IDLE", elevator_floor: 1, elevator_direction: "IDLE"}
+    elevator4 = %Elevator{elevator_id: 4, status: "IDLE", elevator_floor: 1, elevator_direction: "IDLE"}
+    elevator5 = %Elevator{elevator_id: 5, status: "IDLE", elevator_floor: 1, elevator_direction: "IDLE"}
+    elevator_list = [elevator1, elevator2, elevator3, elevator4, elevator5]
+    column1 = %Column{id_char: 'A', lowfloor: -6, highfloor: 0, elevator_list: elevator_list}
+    column2 = %Column{id_char: 'B', lowfloor: 0, highfloor: 19, elevator_list: elevator_list}
+    column3 = %Column{id_char: 'C', lowfloor: 20, highfloor: 39, elevator_list: elevator_list}
+    column4 = %Column{id_char: 'D', lowfloor: 40, highfloor: 59, elevator_list: elevator_list}
     column_list = [column1, column2, column3, column4]
-    IO.inspect column_list
-    battery1 = %Battery{id: 1, number_column: 4, column_list: 1}
-    #IO.puts battery1.id
-    #IO.puts column1.id_char
-    #IO.puts column2.id_char
-    #IO.puts column3.id_char
-    #IO.puts column4.id_char
-    #IO.inspect battery1
-    #IO.inspect column1
-    #IO.inspect column2
-    #IO.inspect column3
-    #IO.inspect column4
-    #IO.inspect battery1.column_list
+    battery1 = %Battery{id: 1, column_list: column_list}
+    IO.inspect battery1
+    IO.puts (battery1.column_list(1).id_char)
     scenario1()
   end
 
