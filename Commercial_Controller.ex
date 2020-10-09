@@ -18,10 +18,10 @@ end
 
 defmodule Commercial_Controller do
   def main do
-    scenario1()
+    #scenario1()
     #scenario2()
     #scenario3()
-    #scenario4()
+    scenario4()
   end
 
   def scenario1 do
