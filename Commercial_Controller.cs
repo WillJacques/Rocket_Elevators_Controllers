@@ -76,7 +76,7 @@ namespace Commercial_Controller
                 Console.WriteLine("Scenario 1 Ended");
                 Console.WriteLine("##################");
             }
-            public static void Scenario2() //Define parameter for scenario 2
+            public static void Scenario2()                  //Define parameter for scenario 2
             {
                 Battery Battery = new Battery(1);
 
@@ -129,7 +129,7 @@ namespace Commercial_Controller
                 Console.WriteLine("Scenario 2 Ended");
                 Console.WriteLine("##################");
             }
-            public static void Scenario3() //Define parameter for scenario 3
+            public static void Scenario3()                  //Define parameter for scenario 3
             {
                 Battery Battery = new Battery(1);
 
@@ -255,7 +255,7 @@ namespace Commercial_Controller
                 }
             }
             
-            public Elevator RequestElevator(int FloorNumber, string Direction, char column_char)
+            public Elevator RequestElevator(int FloorNumber, string Direction, char column_char) //Sends the floor request to the column
             {
                 Thread.Sleep(500);
                 Console.WriteLine("####################################");
@@ -267,7 +267,7 @@ namespace Commercial_Controller
                 request_elevator.send_1request(FloorNumber, column_char);
                 return request_elevator;
             }
-            public void RequestFloor (Elevator request_elevator, int RequestedFloor, char column_char)
+            public void RequestFloor (Elevator request_elevator, int RequestedFloor, char column_char) //user makes a request inside the elevator
             {
                 Thread.Sleep(200);
                 Console.WriteLine("Requested floor : " + RequestedFloor);
@@ -407,7 +407,7 @@ namespace Commercial_Controller
                 this.elevator_direction = elevator_direction;
                 this.floor_list = new List<int>();                  //queue list filled by requested floor
             }
-            public void send_1request(int RequestedFloor, char column_char)
+            public void send_1request(int RequestedFloor, char column_char) // elevator receive his first request, from the floor call
             {
                 floor_list.Add(RequestedFloor);
                 if (RequestedFloor >= elevator_floor)
@@ -422,7 +422,7 @@ namespace Commercial_Controller
                 floor_list.RemoveAt(0);
                 Operate_elevator(floorlistpop, column_char);
             }
-            public void send_2request(int RequestedFloor, char column_char)
+            public void send_2request(int RequestedFloor, char column_char) // elevator receive his second call from inside the elevator
             {
                 floor_list.Add(RequestedFloor);
                 for (int i = 0 ; i < this.floor_list.Count; i++ )
@@ -449,7 +449,7 @@ namespace Commercial_Controller
                 }
                 this.elevator_direction = "IDLE";
             }
-            public void operOtherElevator (char column_char)
+            public void operOtherElevator (char column_char) // function that sends other elevator to their destinations
             {
                 while (floor_list.Count > 0)
                 {
@@ -467,7 +467,7 @@ namespace Commercial_Controller
                 }
                 this.elevator_direction = "IDLE";
             }
-            public void Operate_elevator(int RequestedFloor, char column_char)
+            public void Operate_elevator(int RequestedFloor, char column_char) // function that takes the request and dertermine if the elevator has to move up or down
             {
                 if (RequestedFloor == elevator_floor)
                 {
@@ -500,7 +500,7 @@ namespace Commercial_Controller
                 }
 
             }
-            public void opendoor()
+            public void opendoor() // small list of log to simulate opening and closing doors
             {
                 Thread.Sleep(500);
                 Console.WriteLine("Open Doors");
@@ -514,7 +514,7 @@ namespace Commercial_Controller
                 Console.WriteLine("Closed Doors");
                 Thread.Sleep(500);
             }
-            public void Move_up(int RequestedFloor, char column_char)
+            public void Move_up(int RequestedFloor, char column_char) // function to move up the elevator
             {
                 Console.WriteLine("Column : " + column_char + " // Elevator : #" + elevator_no + "  Current Floor : " + this.elevator_floor);
                 Thread.Sleep(500);
@@ -526,7 +526,7 @@ namespace Commercial_Controller
                 }
 
             }
-            public void Move_down(int RequestedFloor, char column_char)
+            public void Move_down(int RequestedFloor, char column_char) // function to move down the elevator
             {
                 Console.WriteLine("Column : " + column_char + " // Elevator : #" + elevator_no + "  Current Floor : " + this.elevator_floor);
                 Thread.Sleep(500);
@@ -539,7 +539,7 @@ namespace Commercial_Controller
 
             }
         }
-        static void Main(string[] args)
+        static void Main(string[] args) //scenario log
         {
             //Battery.Scenario1();
             //Battery.Scenario2();
