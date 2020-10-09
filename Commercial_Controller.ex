@@ -12,26 +12,29 @@ end
 
 defmodule Commercial_Controller do
   def main do
+
     elevator1 = %Elevator{elevator_id: 1, status: "IDLE", elevator_floor: 1, elevator_direction: "IDLE"}
     elevator2 = %Elevator{elevator_id: 2, status: "IDLE", elevator_floor: 1, elevator_direction: "IDLE"}
     elevator3 = %Elevator{elevator_id: 3, status: "IDLE", elevator_floor: 1, elevator_direction: "IDLE"}
     elevator4 = %Elevator{elevator_id: 4, status: "IDLE", elevator_floor: 1, elevator_direction: "IDLE"}
     elevator5 = %Elevator{elevator_id: 5, status: "IDLE", elevator_floor: 1, elevator_direction: "IDLE"}
     elevator_list = [elevator1, elevator2, elevator3, elevator4, elevator5]
+    #wantedelevator = Enum.at(elevator_list, 2)
     column1 = %Column{id_char: 'A', lowfloor: -6, highfloor: 0, elevator_list: elevator_list}
     column2 = %Column{id_char: 'B', lowfloor: 0, highfloor: 19, elevator_list: elevator_list}
     column3 = %Column{id_char: 'C', lowfloor: 20, highfloor: 39, elevator_list: elevator_list}
     column4 = %Column{id_char: 'D', lowfloor: 40, highfloor: 59, elevator_list: elevator_list}
     column_list = [column1, column2, column3, column4]
+    #wantedcolumn = Enum.at(column_list, 3)
     battery1 = %Battery{id: 1, column_list: column_list}
     IO.inspect battery1
-    IO.puts (battery1.column_list(1).id_char)
+    #IO.puts (battery1.column_list.lowfloor)
     scenario1()
   end
 
   def scenario1 do
-    requested_floor = 8
-    elevator_floor = 2
+    #requested_floor = 8
+    #elevator_floor = 2
     #operate(requested_floor, column_char)
     IO.puts("##################")
     IO.puts("Scenario 1 Started")
@@ -99,3 +102,80 @@ Commercial_Controller.main
 # J'ai trouvé ça plus interressant de faire une petite blague...:)
 # J'ai profiter du reste de la semaine pour aider les gens qui étaient dans le besoin ! :)
 # Bonne fin de semaine !
+
+
+
+%{
+  "conferences" => [
+    %{
+      "alias" => "EASTERN",
+      "divisions" => [
+        %{
+          "alias" => "SOUTHEAST",
+          "id" => "54dc7348-c1d2-40d8-88b3-c4c0138e085d",
+          "name" => "Southeast",
+          "teams" => [
+            %{
+              "alias" => "WAS",
+              "id" => "583ec8d4-fb46-11e1-82cb-f4ce4684ea4c",
+              "market" => "Washington",
+              "name" => "Wizards",
+              "reference" => "1610612764",
+              "sr_id" => "sr:team:3431",
+              "venue" => %{
+                "address" => "601 F St. N.W.",
+                "capacity" => 20356,
+                "city" => "Washington",
+                "country" => "USA",
+                "id" => "f62d5b49-d646-56e9-ba60-a875a00830f8",
+                "name" => "Capital One Arena",
+                "state" => "DC",
+                "zip" => "20004"
+              }
+            }
+          ]
+        },
+      ],
+      "id" => "3960cfac-7361-4b30-bc25-8d393de6f62f",
+      "name" => "EASTERN CONFERENCE"
+    },
+    %{
+      "alias" => "WESTERN",
+      "divisions" => [
+        %{
+          "alias" => "NORTHWEST",
+          "id" => "12bf14ba-eb16-4c6f-8275-e801b6947c1e",
+          "name" => "Northwest",
+          "teams" => [
+            %{
+              "alias" => "DEN",
+              "id" => "583ed102-fb46-11e1-82cb-f4ce4684ea4c",
+              "market" => "Denver",
+              "name" => "Nuggets",
+              "reference" => "1610612743",
+              "sr_id" => "sr:team:3417",
+              "venue" => %{
+                "address" => "1000 Chopper Circle",
+                "capacity" => 19155,
+                "city" => "Denver",
+                "country" => "USA",
+                "id" => "1a28ef88-76c9-5bcc-b4ee-51d30ca98f4f",
+                "name" => "Pepsi Center",
+                "sr_id" => "sr:venue:5976",
+                "state" => "CO",
+                "zip" => "80204"
+              }
+            }
+          ]
+        }
+      ],
+      "id" => "7fe7e212-de01-4f8f-a31d-b9f0a95731e3",
+      "name" => "WESTERN CONFERENCE"
+    }
+  ],
+  "league" => %{
+    "alias" => "NBA",
+    "id" => "4353138d-4c22-4396-95d8-5f587d2df25c",
+    "name" => "NBA"
+  }
+}
