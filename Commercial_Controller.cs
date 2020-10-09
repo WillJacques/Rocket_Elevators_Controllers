@@ -6,12 +6,12 @@ namespace Commercial_Controller
 {
     class Program
     {
-        public class Battery
+        public class Battery                                //Define how battery is made
         {
             public int battery_no;
             public List<Column> column_list;
             public Battery(int battery_no)
-            {
+            {                                                //Define all columns and and them to column_list
                 this.battery_no = battery_no;
                 column_list = new List<Column>();
                 Column column1 = new Column('A', -6, 0, 5);
@@ -23,7 +23,7 @@ namespace Commercial_Controller
                 Column column4 = new Column('D', 40, 59, 5);                
                 column_list.Add(column4);
             }
-            public static void Scenario1()
+            public static void Scenario1()                  //Define parameter for scenario 1
             {
                 Battery Battery = new Battery(1);
 
@@ -76,7 +76,7 @@ namespace Commercial_Controller
                 Console.WriteLine("Scenario 1 Ended");
                 Console.WriteLine("##################");
             }
-            public static void Scenario2()
+            public static void Scenario2() //Define parameter for scenario 2
             {
                 Battery Battery = new Battery(1);
 
@@ -129,7 +129,7 @@ namespace Commercial_Controller
                 Console.WriteLine("Scenario 2 Ended");
                 Console.WriteLine("##################");
             }
-            public static void Scenario3()
+            public static void Scenario3() //Define parameter for scenario 3
             {
                 Battery Battery = new Battery(1);
 
@@ -182,7 +182,7 @@ namespace Commercial_Controller
                 Console.WriteLine("Scenario 3 Ended");
                 Console.WriteLine("##################");
             }
-            public static void Scenario4()
+            public static void Scenario4() //Define parameter for scenario 4
             {
                 Battery Battery = new Battery(1);
 
@@ -234,7 +234,7 @@ namespace Commercial_Controller
                 Console.WriteLine("##################");
             }
         }
-        public class Column
+        public class Column                             //Define how columns are made
         {
             public int column_char;
             public int nbElevators;
@@ -242,7 +242,7 @@ namespace Commercial_Controller
             public int highFloor;
             public List<Elevator> elevator_list;
             public Column(char column_char, int lowFloor, int highFloor, int nbElevators)
-            {
+            {                                               // Creates all elevators and add them to each columns
                 this.column_char = column_char;
                 this.lowFloor = lowFloor;
                 this.highFloor = highFloor;
@@ -276,7 +276,9 @@ namespace Commercial_Controller
                 Thread.Sleep(200);
                 request_elevator.send_2request(RequestedFloor, column_char);
             }
-            public Elevator find_Best_Elevator(int FloorNumber, string Direction)
+
+            // find_Best_Elevator seeks for the best elevator from elevator list in column, it look at direction and distance between floors
+            public Elevator find_Best_Elevator(int FloorNumber, string Direction)       
             {
                 Console.WriteLine("Searching for best elevator to go to floor " + FloorNumber + " in " + Direction + " direction.");
                 if (FloorNumber == this.lowFloor)
@@ -291,6 +293,7 @@ namespace Commercial_Controller
                 List<int> scoreArray = new List<int>();
                 int b_elevator;
                 Elevator bestelevator;
+                // If direction is up, function search for "UP" direction elevators, after for "IDLE" one , after any elevator.
                 if (Direction == "UP")
                 {
                     for (int i = 0 ; i < this.elevator_list.Count; i++ )
