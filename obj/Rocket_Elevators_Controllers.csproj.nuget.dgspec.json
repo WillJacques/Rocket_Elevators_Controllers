@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\willy\\Documents\\GitHub\\Rocket_Elevators_Controllers\\Rocket_Elevators_Controllers.csproj": {}
+    "c:\\Users\\willy\\Documents\\GitHub\\Rocket_Elevators_Controllers\\Rocket_Elevators_Controllers.csproj": {}
   },
   "projects": {
-    "C:\\Users\\willy\\Documents\\GitHub\\Rocket_Elevators_Controllers\\Rocket_Elevators_Controllers.csproj": {
+    "c:\\Users\\willy\\Documents\\GitHub\\Rocket_Elevators_Controllers\\Rocket_Elevators_Controllers.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\willy\\Documents\\GitHub\\Rocket_Elevators_Controllers\\Rocket_Elevators_Controllers.csproj",
+        "projectUniqueName": "c:\\Users\\willy\\Documents\\GitHub\\Rocket_Elevators_Controllers\\Rocket_Elevators_Controllers.csproj",
         "projectName": "Rocket_Elevators_Controllers",
-        "projectPath": "C:\\Users\\willy\\Documents\\GitHub\\Rocket_Elevators_Controllers\\Rocket_Elevators_Controllers.csproj",
+        "projectPath": "c:\\Users\\willy\\Documents\\GitHub\\Rocket_Elevators_Controllers\\Rocket_Elevators_Controllers.csproj",
         "packagesPath": "C:\\Users\\willy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\willy\\Documents\\GitHub\\Rocket_Elevators_Controllers\\obj\\",
+        "outputPath": "c:\\Users\\willy\\Documents\\GitHub\\Rocket_Elevators_Controllers\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\willy\\AppData\\Roaming\\NuGet\\NuGet.Config",
