@@ -1,27 +1,26 @@
-
 package main
 
 import (
 	"fmt"
-	"time"
 	"sort"
+	"time"
 )
 
 func positive(n int) int {
-    if n < 0 {
-        n *= -1
-    }
-    return n
+	if n < 0 {
+		n *= -1
+	}
+	return n
 }
 
 func remove(slice []int, s int) []int {
-    return append(slice[:s], slice[s+1:]...)
+	return append(slice[:s], slice[s+1:]...)
 }
 
 //Battery contains all the object for the program
 type Battery struct {
-	batteryNo int
-	nbColumns int
+	batteryNo  int
+	nbColumns  int
 	columnList []Column
 }
 
@@ -31,7 +30,7 @@ func (b *Battery) createColumn() {
 	b.columnList = append(b.columnList, Column{"B", 0, 19, 5, []Elevator{}})
 	b.columnList = append(b.columnList, Column{"C", 20, 39, 5, []Elevator{}})
 	b.columnList = append(b.columnList, Column{"D", 40, 59, 5, []Elevator{}})
-	for i := 0 ; i < b.nbColumns ; i++ {
+	for i := 0; i < b.nbColumns; i++ {
 		b.columnList[i].createElevator()
 	}
 }
@@ -65,26 +64,26 @@ func (b *Battery) scenario1() {
 	fmt.Println("##################")
 	fmt.Println("Scenario 1 Started")
 	fmt.Println("##################")
-	fmt.Println("Elevator B",b.columnList[1].elevatorList[0].elevatorNo,"is on floor",b.columnList[1].elevatorList[0].elevatorFloor,"going",b.columnList[1].elevatorList[0].elevatorDirection)
-	fmt.Println("Elevator B",b.columnList[1].elevatorList[1].elevatorNo,"is on floor",b.columnList[1].elevatorList[1].elevatorFloor,"going",b.columnList[1].elevatorList[1].elevatorDirection)
-	fmt.Println("Elevator B",b.columnList[1].elevatorList[2].elevatorNo,"is on floor",b.columnList[1].elevatorList[2].elevatorFloor,"going",b.columnList[1].elevatorList[2].elevatorDirection)
-	fmt.Println("Elevator B",b.columnList[1].elevatorList[3].elevatorNo,"is on floor",b.columnList[1].elevatorList[3].elevatorFloor,"going",b.columnList[1].elevatorList[3].elevatorDirection)
-	fmt.Println("Elevator B",b.columnList[1].elevatorList[4].elevatorNo,"is on floor",b.columnList[1].elevatorList[4].elevatorFloor,"going",b.columnList[1].elevatorList[4].elevatorDirection)
-	fmt.Println("##################");
-	var reqElevator Elevator = b.columnList[1].requestElevator(0, "UP", "B")         // User call on floor with direction
-	b.columnList[1].requestFloor(reqElevator, 19, "B")                      // User call inside elevator
+	fmt.Println("Elevator B", b.columnList[1].elevatorList[0].elevatorNo, "is on floor", b.columnList[1].elevatorList[0].elevatorFloor, "going", b.columnList[1].elevatorList[0].elevatorDirection)
+	fmt.Println("Elevator B", b.columnList[1].elevatorList[1].elevatorNo, "is on floor", b.columnList[1].elevatorList[1].elevatorFloor, "going", b.columnList[1].elevatorList[1].elevatorDirection)
+	fmt.Println("Elevator B", b.columnList[1].elevatorList[2].elevatorNo, "is on floor", b.columnList[1].elevatorList[2].elevatorFloor, "going", b.columnList[1].elevatorList[2].elevatorDirection)
+	fmt.Println("Elevator B", b.columnList[1].elevatorList[3].elevatorNo, "is on floor", b.columnList[1].elevatorList[3].elevatorFloor, "going", b.columnList[1].elevatorList[3].elevatorDirection)
+	fmt.Println("Elevator B", b.columnList[1].elevatorList[4].elevatorNo, "is on floor", b.columnList[1].elevatorList[4].elevatorFloor, "going", b.columnList[1].elevatorList[4].elevatorDirection)
+	fmt.Println("##################")
+	var reqElevator Elevator = b.columnList[1].requestElevator(0, "UP", "B") // User call on floor with direction
+	b.columnList[1].requestFloor(reqElevator, 19, "B")                       // User call inside elevator
 	//for i := 0 ; i < len(b.columnList[1].elevatorList) ; i++ {
 	//	b.columnList[1].elevatorList[i].operOtherElevator("B")
 	//}
-	fmt.Println("##################");
-	fmt.Println("Elevator B",b.columnList[1].elevatorList[0].elevatorNo,"is on floor",b.columnList[1].elevatorList[0].elevatorFloor,"is on",b.columnList[1].elevatorList[0].elevatorDirection)
-	fmt.Println("Elevator B",b.columnList[1].elevatorList[1].elevatorNo,"is on floor",b.columnList[1].elevatorList[1].elevatorFloor,"is on",b.columnList[1].elevatorList[1].elevatorDirection)
-	fmt.Println("Elevator B",b.columnList[1].elevatorList[2].elevatorNo,"is on floor",b.columnList[1].elevatorList[2].elevatorFloor,"is on",b.columnList[1].elevatorList[2].elevatorDirection)
-	fmt.Println("Elevator B",b.columnList[1].elevatorList[3].elevatorNo,"is on floor",b.columnList[1].elevatorList[3].elevatorFloor,"is on",b.columnList[1].elevatorList[3].elevatorDirection)
-	fmt.Println("Elevator B",b.columnList[1].elevatorList[4].elevatorNo,"is on floor",b.columnList[1].elevatorList[4].elevatorFloor,"is on",b.columnList[1].elevatorList[4].elevatorDirection)
-	fmt.Println("##################");
-	fmt.Println("Scenario 1 Ended");
-	fmt.Println("##################");
+	fmt.Println("##################")
+	fmt.Println("Elevator B", b.columnList[1].elevatorList[0].elevatorNo, "is on floor", b.columnList[1].elevatorList[0].elevatorFloor, "is on", b.columnList[1].elevatorList[0].elevatorDirection)
+	fmt.Println("Elevator B", b.columnList[1].elevatorList[1].elevatorNo, "is on floor", b.columnList[1].elevatorList[1].elevatorFloor, "is on", b.columnList[1].elevatorList[1].elevatorDirection)
+	fmt.Println("Elevator B", b.columnList[1].elevatorList[2].elevatorNo, "is on floor", b.columnList[1].elevatorList[2].elevatorFloor, "is on", b.columnList[1].elevatorList[2].elevatorDirection)
+	fmt.Println("Elevator B", b.columnList[1].elevatorList[3].elevatorNo, "is on floor", b.columnList[1].elevatorList[3].elevatorFloor, "is on", b.columnList[1].elevatorList[3].elevatorDirection)
+	fmt.Println("Elevator B", b.columnList[1].elevatorList[4].elevatorNo, "is on floor", b.columnList[1].elevatorList[4].elevatorFloor, "is on", b.columnList[1].elevatorList[4].elevatorDirection)
+	fmt.Println("##################")
+	fmt.Println("Scenario 1 Ended")
+	fmt.Println("##################")
 }
 
 func (b *Battery) scenario2() {
@@ -116,26 +115,26 @@ func (b *Battery) scenario2() {
 	fmt.Println("##################")
 	fmt.Println("Scenario 2 Started")
 	fmt.Println("##################")
-	fmt.Println("Elevator C",b.columnList[2].elevatorList[0].elevatorNo,"is on floor",b.columnList[2].elevatorList[0].elevatorFloor,"going",b.columnList[2].elevatorList[0].elevatorDirection)
-	fmt.Println("Elevator C",b.columnList[2].elevatorList[1].elevatorNo,"is on floor",b.columnList[2].elevatorList[1].elevatorFloor,"going",b.columnList[2].elevatorList[1].elevatorDirection)
-	fmt.Println("Elevator C",b.columnList[2].elevatorList[2].elevatorNo,"is on floor",b.columnList[2].elevatorList[2].elevatorFloor,"going",b.columnList[2].elevatorList[2].elevatorDirection)
-	fmt.Println("Elevator C",b.columnList[2].elevatorList[3].elevatorNo,"is on floor",b.columnList[2].elevatorList[3].elevatorFloor,"going",b.columnList[2].elevatorList[3].elevatorDirection)
-	fmt.Println("Elevator C",b.columnList[2].elevatorList[4].elevatorNo,"is on floor",b.columnList[2].elevatorList[4].elevatorFloor,"going",b.columnList[2].elevatorList[4].elevatorDirection)
-	fmt.Println("##################");
-	var reqElevator Elevator = b.columnList[2].requestElevator(0, "UP", "C")         // User call on floor with direction
-	b.columnList[2].requestFloor(reqElevator, 35, "C")                      // User call inside elevator
+	fmt.Println("Elevator C", b.columnList[2].elevatorList[0].elevatorNo, "is on floor", b.columnList[2].elevatorList[0].elevatorFloor, "going", b.columnList[2].elevatorList[0].elevatorDirection)
+	fmt.Println("Elevator C", b.columnList[2].elevatorList[1].elevatorNo, "is on floor", b.columnList[2].elevatorList[1].elevatorFloor, "going", b.columnList[2].elevatorList[1].elevatorDirection)
+	fmt.Println("Elevator C", b.columnList[2].elevatorList[2].elevatorNo, "is on floor", b.columnList[2].elevatorList[2].elevatorFloor, "going", b.columnList[2].elevatorList[2].elevatorDirection)
+	fmt.Println("Elevator C", b.columnList[2].elevatorList[3].elevatorNo, "is on floor", b.columnList[2].elevatorList[3].elevatorFloor, "going", b.columnList[2].elevatorList[3].elevatorDirection)
+	fmt.Println("Elevator C", b.columnList[2].elevatorList[4].elevatorNo, "is on floor", b.columnList[2].elevatorList[4].elevatorFloor, "going", b.columnList[2].elevatorList[4].elevatorDirection)
+	fmt.Println("##################")
+	var reqElevator Elevator = b.columnList[2].requestElevator(0, "UP", "C") // User call on floor with direction
+	b.columnList[2].requestFloor(reqElevator, 35, "C")                       // User call inside elevator
 	//for i := 0 ; i < len(b.columnList[2].elevatorList) ; i++ {
 	//	b.columnList[2].elevatorList[i].operOtherElevator("C")
 	//}
-	fmt.Println("##################");
-	fmt.Println("Elevator C",b.columnList[2].elevatorList[0].elevatorNo,"is on floor",b.columnList[2].elevatorList[0].elevatorFloor,"is on",b.columnList[2].elevatorList[0].elevatorDirection)
-	fmt.Println("Elevator C",b.columnList[2].elevatorList[1].elevatorNo,"is on floor",b.columnList[2].elevatorList[1].elevatorFloor,"is on",b.columnList[2].elevatorList[1].elevatorDirection)
-	fmt.Println("Elevator C",b.columnList[2].elevatorList[2].elevatorNo,"is on floor",b.columnList[2].elevatorList[2].elevatorFloor,"is on",b.columnList[2].elevatorList[2].elevatorDirection)
-	fmt.Println("Elevator C",b.columnList[2].elevatorList[3].elevatorNo,"is on floor",b.columnList[2].elevatorList[3].elevatorFloor,"is on",b.columnList[2].elevatorList[3].elevatorDirection)
-	fmt.Println("Elevator C",b.columnList[2].elevatorList[4].elevatorNo,"is on floor",b.columnList[2].elevatorList[4].elevatorFloor,"is on",b.columnList[2].elevatorList[4].elevatorDirection)
-	fmt.Println("##################");
-	fmt.Println("Scenario 2 Ended");
-	fmt.Println("##################");
+	fmt.Println("##################")
+	fmt.Println("Elevator C", b.columnList[2].elevatorList[0].elevatorNo, "is on floor", b.columnList[2].elevatorList[0].elevatorFloor, "is on", b.columnList[2].elevatorList[0].elevatorDirection)
+	fmt.Println("Elevator C", b.columnList[2].elevatorList[1].elevatorNo, "is on floor", b.columnList[2].elevatorList[1].elevatorFloor, "is on", b.columnList[2].elevatorList[1].elevatorDirection)
+	fmt.Println("Elevator C", b.columnList[2].elevatorList[2].elevatorNo, "is on floor", b.columnList[2].elevatorList[2].elevatorFloor, "is on", b.columnList[2].elevatorList[2].elevatorDirection)
+	fmt.Println("Elevator C", b.columnList[2].elevatorList[3].elevatorNo, "is on floor", b.columnList[2].elevatorList[3].elevatorFloor, "is on", b.columnList[2].elevatorList[3].elevatorDirection)
+	fmt.Println("Elevator C", b.columnList[2].elevatorList[4].elevatorNo, "is on floor", b.columnList[2].elevatorList[4].elevatorFloor, "is on", b.columnList[2].elevatorList[4].elevatorDirection)
+	fmt.Println("##################")
+	fmt.Println("Scenario 2 Ended")
+	fmt.Println("##################")
 }
 
 func (b *Battery) scenario3() {
@@ -167,26 +166,26 @@ func (b *Battery) scenario3() {
 	fmt.Println("##################")
 	fmt.Println("Scenario 3 Started")
 	fmt.Println("##################")
-	fmt.Println("Elevator D",b.columnList[3].elevatorList[0].elevatorNo,"is on floor",b.columnList[3].elevatorList[0].elevatorFloor,"going",b.columnList[3].elevatorList[0].elevatorDirection)
-	fmt.Println("Elevator D",b.columnList[3].elevatorList[1].elevatorNo,"is on floor",b.columnList[3].elevatorList[1].elevatorFloor,"going",b.columnList[3].elevatorList[1].elevatorDirection)
-	fmt.Println("Elevator D",b.columnList[3].elevatorList[2].elevatorNo,"is on floor",b.columnList[3].elevatorList[2].elevatorFloor,"going",b.columnList[3].elevatorList[2].elevatorDirection)
-	fmt.Println("Elevator D",b.columnList[3].elevatorList[3].elevatorNo,"is on floor",b.columnList[3].elevatorList[3].elevatorFloor,"going",b.columnList[3].elevatorList[3].elevatorDirection)
-	fmt.Println("Elevator D",b.columnList[3].elevatorList[4].elevatorNo,"is on floor",b.columnList[3].elevatorList[4].elevatorFloor,"going",b.columnList[3].elevatorList[4].elevatorDirection)
-	fmt.Println("##################");
-	var reqElevator Elevator = b.columnList[3].requestElevator(53, "DOWN", "D")         // User call on floor with direction
-	b.columnList[3].requestFloor(reqElevator, 0, "D")                      // User call inside elevator
+	fmt.Println("Elevator D", b.columnList[3].elevatorList[0].elevatorNo, "is on floor", b.columnList[3].elevatorList[0].elevatorFloor, "going", b.columnList[3].elevatorList[0].elevatorDirection)
+	fmt.Println("Elevator D", b.columnList[3].elevatorList[1].elevatorNo, "is on floor", b.columnList[3].elevatorList[1].elevatorFloor, "going", b.columnList[3].elevatorList[1].elevatorDirection)
+	fmt.Println("Elevator D", b.columnList[3].elevatorList[2].elevatorNo, "is on floor", b.columnList[3].elevatorList[2].elevatorFloor, "going", b.columnList[3].elevatorList[2].elevatorDirection)
+	fmt.Println("Elevator D", b.columnList[3].elevatorList[3].elevatorNo, "is on floor", b.columnList[3].elevatorList[3].elevatorFloor, "going", b.columnList[3].elevatorList[3].elevatorDirection)
+	fmt.Println("Elevator D", b.columnList[3].elevatorList[4].elevatorNo, "is on floor", b.columnList[3].elevatorList[4].elevatorFloor, "going", b.columnList[3].elevatorList[4].elevatorDirection)
+	fmt.Println("##################")
+	var reqElevator Elevator = b.columnList[3].requestElevator(53, "DOWN", "D") // User call on floor with direction
+	b.columnList[3].requestFloor(reqElevator, 0, "D")                           // User call inside elevator
 	//for i := 0 ; i < len(b.columnList[3].elevatorList) ; i++ {
 	//	b.columnList[3].elevatorList[i].operOtherElevator("D")
 	//}
-	fmt.Println("##################");
-	fmt.Println("Elevator D",b.columnList[3].elevatorList[0].elevatorNo,"is on floor",b.columnList[3].elevatorList[0].elevatorFloor,"is on",b.columnList[3].elevatorList[0].elevatorDirection)
-	fmt.Println("Elevator D",b.columnList[3].elevatorList[1].elevatorNo,"is on floor",b.columnList[3].elevatorList[1].elevatorFloor,"is on",b.columnList[3].elevatorList[1].elevatorDirection)
-	fmt.Println("Elevator D",b.columnList[3].elevatorList[2].elevatorNo,"is on floor",b.columnList[3].elevatorList[2].elevatorFloor,"is on",b.columnList[3].elevatorList[2].elevatorDirection)
-	fmt.Println("Elevator D",b.columnList[3].elevatorList[3].elevatorNo,"is on floor",b.columnList[3].elevatorList[3].elevatorFloor,"is on",b.columnList[3].elevatorList[3].elevatorDirection)
-	fmt.Println("Elevator D",b.columnList[3].elevatorList[4].elevatorNo,"is on floor",b.columnList[3].elevatorList[4].elevatorFloor,"is on",b.columnList[3].elevatorList[4].elevatorDirection)
-	fmt.Println("##################");
-	fmt.Println("Scenario 3 Ended");
-	fmt.Println("##################");
+	fmt.Println("##################")
+	fmt.Println("Elevator D", b.columnList[3].elevatorList[0].elevatorNo, "is on floor", b.columnList[3].elevatorList[0].elevatorFloor, "is on", b.columnList[3].elevatorList[0].elevatorDirection)
+	fmt.Println("Elevator D", b.columnList[3].elevatorList[1].elevatorNo, "is on floor", b.columnList[3].elevatorList[1].elevatorFloor, "is on", b.columnList[3].elevatorList[1].elevatorDirection)
+	fmt.Println("Elevator D", b.columnList[3].elevatorList[2].elevatorNo, "is on floor", b.columnList[3].elevatorList[2].elevatorFloor, "is on", b.columnList[3].elevatorList[2].elevatorDirection)
+	fmt.Println("Elevator D", b.columnList[3].elevatorList[3].elevatorNo, "is on floor", b.columnList[3].elevatorList[3].elevatorFloor, "is on", b.columnList[3].elevatorList[3].elevatorDirection)
+	fmt.Println("Elevator D", b.columnList[3].elevatorList[4].elevatorNo, "is on floor", b.columnList[3].elevatorList[4].elevatorFloor, "is on", b.columnList[3].elevatorList[4].elevatorDirection)
+	fmt.Println("##################")
+	fmt.Println("Scenario 3 Ended")
+	fmt.Println("##################")
 }
 
 func (b *Battery) scenario4() {
@@ -216,48 +215,48 @@ func (b *Battery) scenario4() {
 	fmt.Println("##################")
 	fmt.Println("Scenario 4 Started")
 	fmt.Println("##################")
-	fmt.Println("Elevator A",b.columnList[0].elevatorList[0].elevatorNo,"is on floor",b.columnList[0].elevatorList[0].elevatorFloor,"going",b.columnList[0].elevatorList[0].elevatorDirection)
-	fmt.Println("Elevator A",b.columnList[0].elevatorList[1].elevatorNo,"is on floor",b.columnList[0].elevatorList[1].elevatorFloor,"going",b.columnList[0].elevatorList[1].elevatorDirection)
-	fmt.Println("Elevator A",b.columnList[0].elevatorList[2].elevatorNo,"is on floor",b.columnList[0].elevatorList[2].elevatorFloor,"going",b.columnList[0].elevatorList[2].elevatorDirection)
-	fmt.Println("Elevator A",b.columnList[0].elevatorList[3].elevatorNo,"is on floor",b.columnList[0].elevatorList[3].elevatorFloor,"going",b.columnList[0].elevatorList[3].elevatorDirection)
-	fmt.Println("Elevator A",b.columnList[0].elevatorList[4].elevatorNo,"is on floor",b.columnList[0].elevatorList[4].elevatorFloor,"going",b.columnList[0].elevatorList[4].elevatorDirection)
-	fmt.Println("##################");
-	var reqElevator Elevator = b.columnList[0].requestElevator(-3, "UP", "A")         // User call on floor with direction
-	b.columnList[0].requestFloor(reqElevator, 0, "A")                      // User call inside elevator
+	fmt.Println("Elevator A", b.columnList[0].elevatorList[0].elevatorNo, "is on floor", b.columnList[0].elevatorList[0].elevatorFloor, "going", b.columnList[0].elevatorList[0].elevatorDirection)
+	fmt.Println("Elevator A", b.columnList[0].elevatorList[1].elevatorNo, "is on floor", b.columnList[0].elevatorList[1].elevatorFloor, "going", b.columnList[0].elevatorList[1].elevatorDirection)
+	fmt.Println("Elevator A", b.columnList[0].elevatorList[2].elevatorNo, "is on floor", b.columnList[0].elevatorList[2].elevatorFloor, "going", b.columnList[0].elevatorList[2].elevatorDirection)
+	fmt.Println("Elevator A", b.columnList[0].elevatorList[3].elevatorNo, "is on floor", b.columnList[0].elevatorList[3].elevatorFloor, "going", b.columnList[0].elevatorList[3].elevatorDirection)
+	fmt.Println("Elevator A", b.columnList[0].elevatorList[4].elevatorNo, "is on floor", b.columnList[0].elevatorList[4].elevatorFloor, "going", b.columnList[0].elevatorList[4].elevatorDirection)
+	fmt.Println("##################")
+	var reqElevator Elevator = b.columnList[0].requestElevator(-3, "UP", "A") // User call on floor with direction
+	b.columnList[0].requestFloor(reqElevator, 0, "A")                         // User call inside elevator
 	//for i := 0 ; i < len(b.columnList[0].elevatorList) ; i++ {
 	//	b.columnList[0].elevatorList[i].operOtherElevator("A")
 	//}
-	fmt.Println("##################");
-	fmt.Println("Elevator A",b.columnList[0].elevatorList[0].elevatorNo,"is on floor",b.columnList[0].elevatorList[0].elevatorFloor,"is on",b.columnList[0].elevatorList[0].elevatorDirection)
-	fmt.Println("Elevator A",b.columnList[0].elevatorList[1].elevatorNo,"is on floor",b.columnList[0].elevatorList[1].elevatorFloor,"is on",b.columnList[0].elevatorList[1].elevatorDirection)
-	fmt.Println("Elevator A",b.columnList[0].elevatorList[2].elevatorNo,"is on floor",b.columnList[0].elevatorList[2].elevatorFloor,"is on",b.columnList[0].elevatorList[2].elevatorDirection)
-	fmt.Println("Elevator A",b.columnList[0].elevatorList[3].elevatorNo,"is on floor",b.columnList[0].elevatorList[3].elevatorFloor,"is on",b.columnList[0].elevatorList[3].elevatorDirection)
-	fmt.Println("Elevator A",b.columnList[0].elevatorList[4].elevatorNo,"is on floor",b.columnList[0].elevatorList[4].elevatorFloor,"is on",b.columnList[0].elevatorList[4].elevatorDirection)
-	fmt.Println("##################");
-	fmt.Println("Scenario 4 Ended");
-	fmt.Println("##################");
+	fmt.Println("##################")
+	fmt.Println("Elevator A", b.columnList[0].elevatorList[0].elevatorNo, "is on floor", b.columnList[0].elevatorList[0].elevatorFloor, "is on", b.columnList[0].elevatorList[0].elevatorDirection)
+	fmt.Println("Elevator A", b.columnList[0].elevatorList[1].elevatorNo, "is on floor", b.columnList[0].elevatorList[1].elevatorFloor, "is on", b.columnList[0].elevatorList[1].elevatorDirection)
+	fmt.Println("Elevator A", b.columnList[0].elevatorList[2].elevatorNo, "is on floor", b.columnList[0].elevatorList[2].elevatorFloor, "is on", b.columnList[0].elevatorList[2].elevatorDirection)
+	fmt.Println("Elevator A", b.columnList[0].elevatorList[3].elevatorNo, "is on floor", b.columnList[0].elevatorList[3].elevatorFloor, "is on", b.columnList[0].elevatorList[3].elevatorDirection)
+	fmt.Println("Elevator A", b.columnList[0].elevatorList[4].elevatorNo, "is on floor", b.columnList[0].elevatorList[4].elevatorFloor, "is on", b.columnList[0].elevatorList[4].elevatorDirection)
+	fmt.Println("##################")
+	fmt.Println("Scenario 4 Ended")
+	fmt.Println("##################")
 }
 
 //Column have elevators inside
-type Column struct{
-	id string
-	lowFloor int
-	highFloor int
-	nbElevators int
+type Column struct {
+	id           string
+	lowFloor     int
+	highFloor    int
+	nbElevators  int
 	elevatorList []Elevator
 }
 
 //createElevator creates all Columns and put them in battery column list
-func (c *Column) createElevator(){
-	for i := 1 ; i <= c.nbElevators ; i++ {
-		c.elevatorList = append(c.elevatorList, Elevator{i,"IDLE",1,"IDLE",[]int{}})
+func (c *Column) createElevator() {
+	for i := 1; i <= c.nbElevators; i++ {
+		c.elevatorList = append(c.elevatorList, Elevator{i, "IDLE", 1, "IDLE", []int{}})
 	}
 }
 
-func (c *Column) requestElevator(floorNumber int, direction string, columnChar string) Elevator {	//Sends the floor request to the column
+func (c *Column) requestElevator(floorNumber int, direction string, columnChar string) Elevator { //Sends the floor request to the column
 	time.Sleep(500 * time.Millisecond)
 	fmt.Println("####################################")
-	fmt.Println(">>> User request an elevator at floor",floorNumber,"to go",direction,"<<<")
+	fmt.Println(">>> User request an elevator at floor", floorNumber, "to go", direction, "<<<")
 	time.Sleep(500 * time.Millisecond)
 	fmt.Println("*Call Button Light On*")
 	var requestElevator Elevator = c.findBestElevator(floorNumber, direction)
@@ -265,9 +264,9 @@ func (c *Column) requestElevator(floorNumber int, direction string, columnChar s
 	return requestElevator
 }
 
-func (c *Column) requestFloor(requestElevator Elevator, requestedFloor int, columnChar string){	//user makes a request inside the elevator
+func (c *Column) requestFloor(requestElevator Elevator, requestedFloor int, columnChar string) { //user makes a request inside the elevator
 	time.Sleep(500 * time.Millisecond)
-	fmt.Println("Requested floor :",requestedFloor)
+	fmt.Println("Requested floor :", requestedFloor)
 	time.Sleep(500 * time.Millisecond)
 	fmt.Println("Call Button Light On")
 	time.Sleep(500 * time.Millisecond)
@@ -275,33 +274,33 @@ func (c *Column) requestFloor(requestElevator Elevator, requestedFloor int, colu
 }
 
 // find_Best_Elevator seeks for the best elevator from elevator list in column, it look at direction and distance between floors
-func (c *Column) findBestElevator(floorNumber int, direction string) Elevator{
-	fmt.Println("Searching for best elevator to go to floor",floorNumber,"in",direction,"direction.")
-	if floorNumber == c.lowFloor{
+func (c *Column) findBestElevator(floorNumber int, direction string) Elevator {
+	fmt.Println("Searching for best elevator to go to floor", floorNumber, "in", direction, "direction.")
+	if floorNumber == c.lowFloor {
 		direction = "DOWN"
-	} else if floorNumber == 0{
+	} else if floorNumber == 0 {
 		direction = "DOWN"
-	} else if floorNumber == c.highFloor{
-		direction = "UP";
+	} else if floorNumber == c.highFloor {
+		direction = "UP"
 	}
 	var resultArray []int
 	var scoreArray []int
 	var bElevator int
 	var bestelevator Elevator
 	// If direction is up, function search for "UP" direction elevators, after for "IDLE" one , after any elevator.
-	if direction == "UP"{
-		for i := 0 ; i < len(c.elevatorList) ; i++ {
+	if direction == "UP" {
+		for i := 0; i < len(c.elevatorList); i++ {
 			var elevatorI = c.elevatorList[i]
-			if (elevatorI.elevatorDirection == "UP" && elevatorI.elevatorFloor <= floorNumber) || (elevatorI.elevatorFloor == floorNumber && floorNumber == 0){
+			if (elevatorI.elevatorDirection == "UP" && elevatorI.elevatorFloor <= floorNumber) || (elevatorI.elevatorFloor == floorNumber && floorNumber == 0) {
 				resultArray = append(resultArray, i)
 				var score int = positive(elevatorI.elevatorFloor - floorNumber)
 				scoreArray = append(scoreArray, score)
 			}
 		}
 		if len(scoreArray) == 0 {
-			for i := 0 ; i < len(c.elevatorList) ; i++ {
+			for i := 0; i < len(c.elevatorList); i++ {
 				var elevatorI = c.elevatorList[i]
-				if elevatorI.elevatorDirection == "IDLE"{
+				if elevatorI.elevatorDirection == "IDLE" {
 					resultArray = append(resultArray, i)
 					var score int = positive(elevatorI.elevatorFloor - floorNumber)
 					scoreArray = append(scoreArray, score)
@@ -309,7 +308,7 @@ func (c *Column) findBestElevator(floorNumber int, direction string) Elevator{
 			}
 		}
 		if len(scoreArray) == 0 {
-			for i := 0 ; i < len(c.elevatorList) ; i++ {
+			for i := 0; i < len(c.elevatorList); i++ {
 				var elevatorI = c.elevatorList[i]
 				resultArray = append(resultArray, i)
 				var score int = positive(elevatorI.elevatorFloor - floorNumber)
@@ -318,26 +317,26 @@ func (c *Column) findBestElevator(floorNumber int, direction string) Elevator{
 		}
 		var minimum int = scoreArray[0]
 		var location int = 0
-		for i := 0 ; i < len(scoreArray) ; i++{
-			if scoreArray[i] < minimum{
+		for i := 0; i < len(scoreArray); i++ {
+			if scoreArray[i] < minimum {
 				minimum = scoreArray[i]
 				location = i
 			}
 		}
-		bElevator = resultArray[location]	
+		bElevator = resultArray[location]
 	} else {
-		for i := 0 ; i < len(c.elevatorList) ; i++ {
+		for i := 0; i < len(c.elevatorList); i++ {
 			var elevatorI = c.elevatorList[i]
-			if (elevatorI.elevatorDirection == "DOWN" && elevatorI.elevatorFloor >= floorNumber) || (elevatorI.elevatorFloor == floorNumber && floorNumber == 0){
+			if (elevatorI.elevatorDirection == "DOWN" && elevatorI.elevatorFloor >= floorNumber) || (elevatorI.elevatorFloor == floorNumber && floorNumber == 0) {
 				resultArray = append(resultArray, i)
 				var score int = positive(elevatorI.elevatorFloor - floorNumber)
 				scoreArray = append(scoreArray, score)
 			}
 		}
 		if len(scoreArray) == 0 {
-			for i := 0 ; i < len(c.elevatorList) ; i++ {
+			for i := 0; i < len(c.elevatorList); i++ {
 				var elevatorI = c.elevatorList[i]
-				if elevatorI.elevatorDirection == "IDLE"{
+				if elevatorI.elevatorDirection == "IDLE" {
 					resultArray = append(resultArray, i)
 					var score int = positive(elevatorI.elevatorFloor - floorNumber)
 					scoreArray = append(scoreArray, score)
@@ -345,7 +344,7 @@ func (c *Column) findBestElevator(floorNumber int, direction string) Elevator{
 			}
 		}
 		if len(scoreArray) == 0 {
-			for i := 0 ; i < len(c.elevatorList) ; i++ {
+			for i := 0; i < len(c.elevatorList); i++ {
 				var elevatorI = c.elevatorList[i]
 				resultArray = append(resultArray, i)
 				var score int = positive(elevatorI.elevatorFloor - floorNumber)
@@ -354,8 +353,8 @@ func (c *Column) findBestElevator(floorNumber int, direction string) Elevator{
 		}
 		var minimum int = scoreArray[0]
 		var location int = 0
-		for i := 0 ; i < len(scoreArray) ; i++{
-			if scoreArray[i] < minimum{
+		for i := 0; i < len(scoreArray); i++ {
+			if scoreArray[i] < minimum {
 				minimum = scoreArray[i]
 				location = i
 			}
@@ -363,23 +362,23 @@ func (c *Column) findBestElevator(floorNumber int, direction string) Elevator{
 		bElevator = resultArray[location]
 	}
 	bestelevator = c.elevatorList[bElevator]
-    return bestelevator
+	return bestelevator
 }
 
 //Elevator takes passenger to the floor level wanted added in floorList array
-type Elevator struct{
-	elevatorNo int
-	status string
-	elevatorFloor int
+type Elevator struct {
+	elevatorNo        int
+	status            string
+	elevatorFloor     int
 	elevatorDirection string
-	floorList []int
+	floorList         []int
 }
 
-func (e *Elevator) send1Request(requestedFloor int, columnChar string){	 // elevator receive his first request, from the floor call
+func (e *Elevator) send1Request(requestedFloor int, columnChar string) { // elevator receive his first request, from the floor call
 	e.floorList = append(e.floorList, requestedFloor)
-	if requestedFloor >= e.elevatorFloor{
+	if requestedFloor >= e.elevatorFloor {
 		sort.Ints(e.floorList)
-	} else if requestedFloor < e.elevatorFloor{
+	} else if requestedFloor < e.elevatorFloor {
 		sort.Sort(sort.Reverse(sort.IntSlice(e.floorList)))
 	}
 	var floorlistpop int = e.floorList[0]
@@ -387,19 +386,19 @@ func (e *Elevator) send1Request(requestedFloor int, columnChar string){	 // elev
 	e.operateElevator(floorlistpop, columnChar)
 }
 
-func (e *Elevator) send2Request(requestedFloor int, columnChar string){	// elevator receive his second call from inside the elevator
+func (e *Elevator) send2Request(requestedFloor int, columnChar string) { // elevator receive his second call from inside the elevator
 	e.floorList = append(e.floorList, requestedFloor)
-	for i := 0 ; i < len(e.floorList) ; i++ {
-		for j := 0 ; j < len(e.floorList) ; j++ {
-			if e.floorList[i] == e.floorList[j] && i != j{
+	for i := 0; i < len(e.floorList); i++ {
+		for j := 0; j < len(e.floorList); j++ {
+			if e.floorList[i] == e.floorList[j] && i != j {
 				e.floorList = remove(e.floorList, i)
 			}
 		}
 	}
-	for len(e.floorList) > 0{
-		if requestedFloor >= e.elevatorFloor{
+	for len(e.floorList) > 0 {
+		if requestedFloor >= e.elevatorFloor {
 			sort.Ints(e.floorList)
-		} else if requestedFloor < e.elevatorFloor{
+		} else if requestedFloor < e.elevatorFloor {
 			sort.Sort(sort.Reverse(sort.IntSlice(e.floorList)))
 		}
 		var floorlistpop int = e.floorList[0]
@@ -409,11 +408,11 @@ func (e *Elevator) send2Request(requestedFloor int, columnChar string){	// eleva
 	e.elevatorDirection = "IDLE"
 }
 
-func (e *Elevator) operOtherElevator(columnChar string){	// function that sends other elevator to their destinations
-	for len(e.floorList) > 0{
-		if e.floorList[0] >= e.elevatorFloor{
+func (e *Elevator) operOtherElevator(columnChar string) { // function that sends other elevator to their destinations
+	for len(e.floorList) > 0 {
+		if e.floorList[0] >= e.elevatorFloor {
 			sort.Ints(e.floorList)
-		} else if e.floorList[0] < e.elevatorFloor{
+		} else if e.floorList[0] < e.elevatorFloor {
 			sort.Sort(sort.Reverse(sort.IntSlice(e.floorList)))
 		}
 		var floorlistpop int = e.floorList[0]
@@ -423,68 +422,67 @@ func (e *Elevator) operOtherElevator(columnChar string){	// function that sends 
 	e.elevatorDirection = "IDLE"
 }
 
-func (e *Elevator) operateElevator(requestedFloor int, columnChar string){		// function that takes the request and dertermine if the elevator has to move up or down
-	if requestedFloor == e.elevatorFloor{
+func (e *Elevator) operateElevator(requestedFloor int, columnChar string) { // function that takes the request and dertermine if the elevator has to move up or down
+	if requestedFloor == e.elevatorFloor {
 		e.openDoor()
 		e.status = "MOVING"
-	} else if requestedFloor < e.elevatorFloor{
+	} else if requestedFloor < e.elevatorFloor {
 		time.Sleep(500 * time.Millisecond)
 		e.status = "MOVING"
 		fmt.Println("*Button Light Off*")
-		fmt.Println("--- Column :",columnChar,"// Elevator :",e.elevatorNo,e.status,"---")
+		fmt.Println("--- Column :", columnChar, "// Elevator :", e.elevatorNo, e.status, "---")
 		e.elevatorDirection = "DOWN"
 		e.moveDown(requestedFloor, columnChar)
 		e.status = "STOPPED"
-		fmt.Println("--- Column :",columnChar,"// Elevator :",e.elevatorNo,e.status,"---")
+		fmt.Println("--- Column :", columnChar, "// Elevator :", e.elevatorNo, e.status, "---")
 		e.openDoor()
-	} else if requestedFloor > e.elevatorFloor{
+	} else if requestedFloor > e.elevatorFloor {
 		time.Sleep(500 * time.Millisecond)
 		e.status = "MOVING"
 		fmt.Println("*Button Light Off*")
-		fmt.Println("--- Column :",columnChar,"// Elevator :",e.elevatorNo,e.status,"---")
+		fmt.Println("--- Column :", columnChar, "// Elevator :", e.elevatorNo, e.status, "---")
 		e.elevatorDirection = "UP"
 		e.moveUp(requestedFloor, columnChar)
 		e.status = "STOPPED"
-		fmt.Println("--- Column :",columnChar,"// Elevator :",e.elevatorNo,e.status,"---")
+		fmt.Println("--- Column :", columnChar, "// Elevator :", e.elevatorNo, e.status, "---")
 		e.openDoor()
 	}
 }
 
-func (e *Elevator) openDoor(){		// small list of log to simulate opening and closing doors
+func (e *Elevator) openDoor() { // small list of log to simulate opening and closing doors
 	time.Sleep(500 * time.Millisecond)
 	fmt.Println("Open Doors")
 	fmt.Println("---Opening Doors---")
 	time.Sleep(500 * time.Millisecond)
-	time.Sleep(500);
-	fmt.Println("*Button Light Off*");
-	fmt.Println("User enters/exits the elevator");
-	time.Sleep(500);
-	fmt.Println("---Closing Doors---");
-	time.Sleep(500);
-	fmt.Println("Closed Doors");
-	time.Sleep(500);
+	time.Sleep(500)
+	fmt.Println("*Button Light Off*")
+	fmt.Println("User enters/exits the elevator")
+	time.Sleep(500)
+	fmt.Println("---Closing Doors---")
+	time.Sleep(500)
+	fmt.Println("Closed Doors")
+	time.Sleep(500)
 }
 
-func (e *Elevator) moveUp(requestedFloor int, columnChar string){		// function to move up the elevator
-	fmt.Println("Column :",columnChar,"// Elevator : #",e.elevatorNo,"Current Floor :",e.elevatorFloor)
+func (e *Elevator) moveUp(requestedFloor int, columnChar string) { // function to move up the elevator
+	fmt.Println("Column :", columnChar, "// Elevator : #", e.elevatorNo, "Current Floor :", e.elevatorFloor)
 	time.Sleep(500 * time.Millisecond)
-	for e.elevatorFloor != requestedFloor{
-		e.elevatorFloor ++
-		fmt.Println("Column :",columnChar,"// Elevator : #",e.elevatorNo,"Floor :",e.elevatorFloor)
+	for e.elevatorFloor != requestedFloor {
+		e.elevatorFloor++
+		fmt.Println("Column :", columnChar, "// Elevator : #", e.elevatorNo, "Floor :", e.elevatorFloor)
 		time.Sleep(500 * time.Millisecond)
 	}
 }
 
-func (e *Elevator) moveDown(requestedFloor int, columnChar string){		// function to move down the elevator
-	fmt.Println("Column :",columnChar,"// Elevator : #",e.elevatorNo,"Current Floor :",e.elevatorFloor)
+func (e *Elevator) moveDown(requestedFloor int, columnChar string) { // function to move down the elevator
+	fmt.Println("Column :", columnChar, "// Elevator : #", e.elevatorNo, "Current Floor :", e.elevatorFloor)
 	time.Sleep(500 * time.Millisecond)
-	for e.elevatorFloor != requestedFloor{
-		e.elevatorFloor --
-		fmt.Println("Column :",columnChar,"// Elevator : #",e.elevatorNo,"Floor :",e.elevatorFloor)
+	for e.elevatorFloor != requestedFloor {
+		e.elevatorFloor--
+		fmt.Println("Column :", columnChar, "// Elevator : #", e.elevatorNo, "Floor :", e.elevatorFloor)
 		time.Sleep(500 * time.Millisecond)
 	}
 }
-
 
 func main() { //scenario log
 	b := Battery{1, 4, []Column{}}
@@ -492,4 +490,4 @@ func main() { //scenario log
 	//b.scenario2()
 	//b.scenario3()
 	b.scenario4()
-}       
+}
