@@ -254,7 +254,7 @@ func (c *Column) createElevator(){
 	}
 }
 
-func (c *Column) requestElevator(floorNumber int, direction string, columnChar string) Elevator {
+func (c *Column) requestElevator(floorNumber int, direction string, columnChar string) Elevator {	//Sends the floor request to the column
 	time.Sleep(500 * time.Millisecond)
 	fmt.Println("####################################")
 	fmt.Println(">>> User request an elevator at floor",floorNumber,"to go",direction,"<<<")
@@ -265,7 +265,7 @@ func (c *Column) requestElevator(floorNumber int, direction string, columnChar s
 	return requestElevator
 }
 
-func (c *Column) requestFloor(requestElevator Elevator, requestedFloor int, columnChar string){
+func (c *Column) requestFloor(requestElevator Elevator, requestedFloor int, columnChar string){	//user makes a request inside the elevator
 	time.Sleep(500 * time.Millisecond)
 	fmt.Println("Requested floor :",requestedFloor)
 	time.Sleep(500 * time.Millisecond)
@@ -274,6 +274,7 @@ func (c *Column) requestFloor(requestElevator Elevator, requestedFloor int, colu
 	requestElevator.send2Request(requestedFloor, columnChar)
 }
 
+// find_Best_Elevator seeks for the best elevator from elevator list in column, it look at direction and distance between floors
 func (c *Column) findBestElevator(floorNumber int, direction string) Elevator{
 	fmt.Println("Searching for best elevator to go to floor",floorNumber,"in",direction,"direction.")
 	if floorNumber == c.lowFloor{
@@ -287,6 +288,7 @@ func (c *Column) findBestElevator(floorNumber int, direction string) Elevator{
 	var scoreArray []int
 	var bElevator int
 	var bestelevator Elevator
+	// If direction is up, function search for "UP" direction elevators, after for "IDLE" one , after any elevator.
 	if direction == "UP"{
 		for i := 0 ; i < len(c.elevatorList) ; i++ {
 			var elevatorI = c.elevatorList[i]
@@ -373,7 +375,7 @@ type Elevator struct{
 	floorList []int
 }
 
-func (e *Elevator) send1Request(requestedFloor int, columnChar string){
+func (e *Elevator) send1Request(requestedFloor int, columnChar string){	 // elevator receive his first request, from the floor call
 	e.floorList = append(e.floorList, requestedFloor)
 	if requestedFloor >= e.elevatorFloor{
 		sort.Ints(e.floorList)
@@ -385,7 +387,7 @@ func (e *Elevator) send1Request(requestedFloor int, columnChar string){
 	e.operateElevator(floorlistpop, columnChar)
 }
 
-func (e *Elevator) send2Request(requestedFloor int, columnChar string){
+func (e *Elevator) send2Request(requestedFloor int, columnChar string){	// elevator receive his second call from inside the elevator
 	e.floorList = append(e.floorList, requestedFloor)
 	for i := 0 ; i < len(e.floorList) ; i++ {
 		for j := 0 ; j < len(e.floorList) ; j++ {
@@ -407,7 +409,7 @@ func (e *Elevator) send2Request(requestedFloor int, columnChar string){
 	e.elevatorDirection = "IDLE"
 }
 
-func (e *Elevator) operOtherElevator(columnChar string){
+func (e *Elevator) operOtherElevator(columnChar string){	// function that sends other elevator to their destinations
 	for len(e.floorList) > 0{
 		if e.floorList[0] >= e.elevatorFloor{
 			sort.Ints(e.floorList)
@@ -421,7 +423,7 @@ func (e *Elevator) operOtherElevator(columnChar string){
 	e.elevatorDirection = "IDLE"
 }
 
-func (e *Elevator) operateElevator(requestedFloor int, columnChar string){
+func (e *Elevator) operateElevator(requestedFloor int, columnChar string){		// function that takes the request and dertermine if the elevator has to move up or down
 	if requestedFloor == e.elevatorFloor{
 		e.openDoor()
 		e.status = "MOVING"
@@ -448,7 +450,7 @@ func (e *Elevator) operateElevator(requestedFloor int, columnChar string){
 	}
 }
 
-func (e *Elevator) openDoor(){
+func (e *Elevator) openDoor(){		// small list of log to simulate opening and closing doors
 	time.Sleep(500 * time.Millisecond)
 	fmt.Println("Open Doors")
 	fmt.Println("---Opening Doors---")
@@ -463,7 +465,7 @@ func (e *Elevator) openDoor(){
 	time.Sleep(500);
 }
 
-func (e *Elevator) moveUp(requestedFloor int, columnChar string){
+func (e *Elevator) moveUp(requestedFloor int, columnChar string){		// function to move up the elevator
 	fmt.Println("Column :",columnChar,"// Elevator : #",e.elevatorNo,"Current Floor :",e.elevatorFloor)
 	time.Sleep(500 * time.Millisecond)
 	for e.elevatorFloor != requestedFloor{
@@ -473,7 +475,7 @@ func (e *Elevator) moveUp(requestedFloor int, columnChar string){
 	}
 }
 
-func (e *Elevator) moveDown(requestedFloor int, columnChar string){
+func (e *Elevator) moveDown(requestedFloor int, columnChar string){		// function to move down the elevator
 	fmt.Println("Column :",columnChar,"// Elevator : #",e.elevatorNo,"Current Floor :",e.elevatorFloor)
 	time.Sleep(500 * time.Millisecond)
 	for e.elevatorFloor != requestedFloor{
@@ -484,7 +486,7 @@ func (e *Elevator) moveDown(requestedFloor int, columnChar string){
 }
 
 
-func main() {
+func main() { //scenario log
 	b := Battery{1, 4, []Column{}}
 	//b.scenario1()
 	//b.scenario2()

@@ -199,7 +199,7 @@ defmodule Commercial_Controller do
   #  end
   #end
 
-  def opendoors do
+  def opendoors do  #small list of log to simulate opening and closing doors
     IO.puts("Open Doors")
     IO.puts("---Open Doors---")
     IO.puts("*Button Light Off*")
@@ -208,7 +208,7 @@ defmodule Commercial_Controller do
     IO.puts("Closed Doors")
   end
 
-  def moveup(requested_floor, elevator_floor, req_elevator, column_used) do
+  def moveup(requested_floor, elevator_floor, req_elevator, column_used) do #function to move up the elevator
     IO.puts("Column : #{column_used} // Elevator : #{req_elevator.elevator_id} Floor : #{elevator_floor}")
     if requested_floor != elevator_floor do
       elevator_floor = elevator_floor + 1
@@ -218,7 +218,7 @@ defmodule Commercial_Controller do
     end
   end
 
-  def movedown(requested_floor, elevator_floor, req_elevator, column_used) do
+  def movedown(requested_floor, elevator_floor, req_elevator, column_used) do #function to move down the elevator
     IO.puts("Column : #{column_used} // Elevator : #{req_elevator.elevator_id} Current Floor : #{elevator_floor}")
     if requested_floor != elevator_floor do
       elevator_floor = elevator_floor - 1

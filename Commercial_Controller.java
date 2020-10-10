@@ -4,11 +4,11 @@ import java.util.concurrent.TimeUnit;
 
 public class Commercial_Controller {
 
-    public static class Battery {
+    public static class Battery {       //Define how battery is made
         int battery_no;
         ArrayList<Column> column_list;
 
-        Battery(int battery_no) {
+        Battery(int battery_no) {       //Define all columns and and them to column_list
             this.battery_no = battery_no;
             column_list = new ArrayList<>();
             Column column1 = new Column('A', -6, 0, 5);
@@ -21,7 +21,7 @@ public class Commercial_Controller {
             column_list.add(column4);
         }
 
-        public static void Scenario1() {
+        public static void Scenario1() {        //Define parameter for scenario 1
             Battery Battery = new Battery(1);
 
             Battery.column_list.get(1).elevator_list.get(0).elevator_floor = 19;
@@ -93,7 +93,7 @@ public class Commercial_Controller {
             System.out.println("##################");
         }
 
-        public static void Scenario2() {
+        public static void Scenario2() {        //Define parameter for scenario 2
             Battery Battery = new Battery(1);
 
             Battery.column_list.get(2).elevator_list.get(0).elevator_floor = 0;
@@ -165,7 +165,7 @@ public class Commercial_Controller {
             System.out.println("##################");
         }
 
-        public static void Scenario3() {
+        public static void Scenario3() {        //Define parameter for scenario 3
             Battery Battery = new Battery(1);
 
             Battery.column_list.get(3).elevator_list.get(0).elevator_floor = 57;
@@ -238,7 +238,7 @@ public class Commercial_Controller {
             System.out.println("##################");
         }
 
-        public static void Scenario4() {
+        public static void Scenario4() {        //Define parameter for scenario 4
             Battery Battery = new Battery(1);
 
             Battery.column_list.get(0).elevator_list.get(0).elevator_floor = -4;
@@ -310,14 +310,14 @@ public class Commercial_Controller {
         }
     }
 
-    public static class Column {
+    public static class Column {        //Define how columns are made
         int column_char;
         int nbElevators;
         int lowFloor;
         int highFloor;
         ArrayList<Elevator> elevator_list;
 
-        Column(char column_char, int lowFloor, int highFloor, int nbElevators) {
+        Column(char column_char, int lowFloor, int highFloor, int nbElevators) {        // Creates all elevators and add them to each columns
             this.column_char = column_char;
             this.lowFloor = lowFloor;
             this.highFloor = highFloor;
@@ -329,7 +329,7 @@ public class Commercial_Controller {
             }
         }
 
-        public Elevator RequestElevator(int FloorNumber, String Direction, char column_char) {
+        public Elevator RequestElevator(int FloorNumber, String Direction, char column_char) {          //Sends the floor request to the column
             try {TimeUnit.SECONDS.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}
             System.out.println("####################################");
             System.out.println(">>> User request an elevator at floor " + FloorNumber + " to go " + Direction + " <<<");
@@ -341,7 +341,7 @@ public class Commercial_Controller {
             return request_elevator;
         }
 
-        public void RequestFloor(Elevator request_elevator, int RequestedFloor, char column_char) {
+        public void RequestFloor(Elevator request_elevator, int RequestedFloor, char column_char) {     //user makes a request inside the elevator
             try {TimeUnit.SECONDS.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}
             System.out.println("Requested floor : " + RequestedFloor);
             try {TimeUnit.SECONDS.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}
@@ -350,6 +350,7 @@ public class Commercial_Controller {
             request_elevator.send_2request(RequestedFloor, column_char);
         }
 
+        // find_Best_Elevator seeks for the best elevator from elevator list in column, it look at direction and distance between floors
         public Elevator find_Best_Elevator(int FloorNumber, String Direction) {
             System.out.println(
                     "Searching for best elevator to go to floor " + FloorNumber + " in " + Direction + " direction.");
@@ -363,6 +364,7 @@ public class Commercial_Controller {
             ArrayList<Integer> scoreArray = new ArrayList<Integer>();
             int b_elevator;
             Elevator bestelevator;
+            // If direction is up, function search for "UP" direction elevators, after for "IDLE" one , after any elevator.
             if (Direction == "UP") {
                 for (int i = 0; i < this.elevator_list.size(); i++) {
                     Elevator elevator_i = this.elevator_list.get(i);
@@ -460,7 +462,7 @@ public class Commercial_Controller {
             this.floor_list = new ArrayList<Integer>(); // queue list filled by requested floor
         }
 
-        public void send_1request(int RequestedFloor, char column_char) {
+        public void send_1request(int RequestedFloor, char column_char) {  // elevator receive his first request, from the floor call
             floor_list.add(RequestedFloor);
             if (RequestedFloor >= elevator_floor) {
                 Collections.sort(floor_list);
@@ -472,7 +474,7 @@ public class Commercial_Controller {
             Operate_elevator(floorlistpop, column_char);
         }
 
-        public void send_2request(int RequestedFloor, char column_char) {
+        public void send_2request(int RequestedFloor, char column_char) {   // elevator receive his second call from inside the elevator
             floor_list.add(RequestedFloor);
             for (int i = 0; i < this.floor_list.size(); i++) {
                 for (int j = 0; j < this.floor_list.size(); j++) {
@@ -493,7 +495,7 @@ public class Commercial_Controller {
             this.elevator_direction = "IDLE";
         }
 
-        public void operOtherElevator(char column_char) {
+        public void operOtherElevator(char column_char) {       // function that sends other elevator to their destinations
             while (floor_list.size() > 0) {
                 if (floor_list.get(0) >= elevator_floor) {
                     Collections.sort(floor_list);
@@ -507,7 +509,7 @@ public class Commercial_Controller {
             this.elevator_direction = "IDLE";
         }
 
-        public void Operate_elevator(int RequestedFloor, char column_char) {
+        public void Operate_elevator(int RequestedFloor, char column_char) {    // function that takes the request and dertermine if the elevator has to move up or down
             if (RequestedFloor == elevator_floor) {
                 opendoor();
                 this.status = "MOVING";
@@ -536,7 +538,7 @@ public class Commercial_Controller {
             }
 
         }
-        public void opendoor()
+        public void opendoor()  // small list of log to simulate opening and closing doors
         {
             try {TimeUnit.SECONDS.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}
             System.out.println("Open Doors");
@@ -550,7 +552,7 @@ public class Commercial_Controller {
             System.out.println("Closed Doors");
             try {TimeUnit.SECONDS.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}
         }
-        public void Move_up(int RequestedFloor, char column_char)
+        public void Move_up(int RequestedFloor, char column_char) // function to move up the elevator
         {
             System.out.println("Column : " + column_char + " // Elevator : #" + elevator_no + "  Current Floor : " + this.elevator_floor);
             try {TimeUnit.SECONDS.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}
@@ -562,7 +564,7 @@ public class Commercial_Controller {
             }
 
         }
-        public void Move_down(int RequestedFloor, char column_char)
+        public void Move_down(int RequestedFloor, char column_char) // function to move down the elevator
         {
             System.out.println("Column : " + column_char + " // Elevator : #" + elevator_no + "  Current Floor : " + this.elevator_floor);
             try {TimeUnit.SECONDS.sleep(1);} catch (InterruptedException e) {e.printStackTrace();}
@@ -576,7 +578,7 @@ public class Commercial_Controller {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {    //scenario log
         //Battery.Scenario1();
         //Battery.Scenario2();
         //Battery.Scenario3();
